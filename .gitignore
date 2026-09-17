@@ -1,0 +1,39 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Course material distributed by the instructor. Kept out of the repository so
+# that a future `git add -A` cannot publish it. Remove the relevant line if you
+# deliberately want to track one of these.
+Crash Courses/
+Lecture Notes/
+Slides/
+Datasets & Labs/
+STAT 5200 - Syllabus.pdf
+
+# LaTeX build artefacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.synctex.gz
+*.toc
+*.nav
+*.snm
+*.vrb
+
+# R
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+.Rproj.user/
+*.Rproj
