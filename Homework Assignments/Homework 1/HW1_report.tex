@@ -10,7 +10,6 @@
 %     R/q1_loop_sum.R
 %     R/q2_monte_carlo.R
 %     figures/q2_hist_raw.pdf
-%     figures/q2_hist_standardised.pdf
 %==============================================================================
 \documentclass[11pt]{article}
 
@@ -234,81 +233,90 @@ The quiz replaces the original error distribution $\varepsilon \sim t_{10}$ with
 \[
 \varepsilon = v - 20, \qquad v \sim \chi^2(20).
 \]
-Both specifications have mean zero, since $E[v] = 20$. The population object of
-interest is therefore unchanged:
-\[
-\theta_0 = E[y] = \beta_0 + \beta_1 E[x] + \beta_2 E[x^2] + E[\varepsilon]
-        = 1 + 1 + 0.2 \times 5 = 3 .
-\]
-What does change is the error variance, and this is the key to the whole
-exercise: $\operatorname{Var}(t_{10}) = 10/8 = 1.25$, whereas
-$\operatorname{Var}(\chi^2(20)) = 2 \times 20 = 40$. The new errors are also
-right-skewed rather than symmetric.
-
-Since $\hat\theta$ is the mean of $N$ i.i.d.\ draws of $y$, we have
-$\operatorname{Var}(\sqrt{N}\hat\theta) = N \operatorname{Var}(\hat\theta)
-= \operatorname{Var}(y)$ exactly, for every $N$. For $x \sim N(1,4)$ one obtains
-$\operatorname{Var}(x) = 4$, $\operatorname{Var}(x^2) = 48$ and
-$\operatorname{Cov}(x, x^2) = 8$, hence
-\[
-\operatorname{Var}(\beta_1 x + \beta_2 x^2)
- = 4 + 0.2^2 \times 48 + 2 \times 0.2 \times 8 = 9.12,
-\]
-and so $\operatorname{Var}(y) = 9.12 + \operatorname{Var}(\varepsilon)$, giving
-$10.37$ under the $t_{10}$ errors and $49.12$ under the $\chi^2$ errors. These
-two numbers are the benchmarks against which the simulation is read.
+Since $E[v] = 20$, the new error still has mean zero, so the population object
+of interest is unchanged at $\theta_0 = E[y] = 3$. What changes is the error
+variance: $\operatorname{Var}(t_{10}) = 10/8 = 1.25$, whereas
+$\operatorname{Var}(\chi^2(20)) = 2 \times 20 = 40$.
 
 \subsection{Implementation}
 
-Rather than duplicating the lab code, the data generating process takes the
-error specification as an argument, so that the original and the quiz model run
-through identical code paths (Listing~\ref{lst:q2-dgp}). This removes the
-possibility that a difference in results is an artefact of a difference in
-implementation.
+The code follows Lab Notes 01. The lab's \code{generate\_data()} is renamed
+\code{generate\_data\_t\_error()} and left otherwise untouched, and an identical
+copy named \code{generate\_data\_x\_squared\_error()} is added in which the one
+changed line draws the error from a recentred chi-squared distribution
+(Listing~\ref{lst:q2-dgp}). Recentring at $v - 20$ is what preserves
+$E[\varepsilon] = 0$, and hence $E[y] = 3$, across the two populations.
 
-\begin{lstlisting}[style=Rcode,caption={The data generating process, with the
-error distribution as an argument (excerpt from \code{R/q2\_monte\_carlo.R}).},
-label={lst:q2-dgp}]
-draw_error <- function(error = c("t10", "chi2")) {
-  error <- match.arg(error)
-  if (error == "t10") {
-    rt(1, df = 10)               # eps ~ t(10)
-  } else {
-    rchisq(1, df = 20) - 20      # eps = v - 20, v ~ chi^2(20)
+\begin{lstlisting}[style=Rcode,caption={The two data generating processes. Only
+the line drawing \code{e} differs (excerpt from
+\code{R/q2\_monte\_carlo.R}).},label={lst:q2-dgp}]
+generate_data_t_error = function(N = 20){
+  # model parameters
+  beta0 = 1;
+  beta1 = 1;
+  beta2 = 0.2;
+  # simulating data
+  mat_data = matrix(NA, N, 2); # N by 2 matrix to store (y,x) by row
+  for (i in 1:N){
+    e = rt(1, df=10); # e ~ t distribution with degrees of freedom 10
+    x = rnorm(1, mean=1, sd = sqrt(4)); # x~N(1,4)
+    y = beta0 + beta1*x + beta2*x^2 + e; # this is our population model
+    mat_data[i,] = c(y,x);
   }
+  colnames(mat_data) = c("y", "x"); # put column names
+  return(mat_data);
 }
 
-generate_data <- function(N = 20, error = c("t10", "chi2")) {
-  error <- match.arg(error)
-  mat_data <- matrix(NA, N, 2)   # stores (y, x) by row
-  for (i in 1:N) {
-    e <- draw_error(error)
-    x <- rnorm(1, mean = x_mean, sd = sqrt(x_var))
-    y <- beta0 + beta1 * x + beta2 * x^2 + e
-    mat_data[i, ] <- c(y, x)
-  }
-  colnames(mat_data) <- c("y", "x")
-  return(mat_data)
+generate_data_x_squared_error = function(N = 20){
+  # ... identical, except for the error term:
+    e = rchisq(1, df=20) - 20; # e = v-20, v ~ chi-squared with df 20
 }
 \end{lstlisting}
 
-The Monte Carlo loop itself is unchanged from the lab notes: for a given $N$ it
-generates $M = 1000$ data sets, computes the sample mean of $y$ in each, and
-returns the $M$ estimates (Listing~\ref{lst:q2-mc}). The experiment is then run
-on the grid $N \in \{20, 100, 500\}$ for both error specifications.
+The lab's \code{simulation\_sample\_mean()} is likewise duplicated, once per
+population, each copy calling its own generator
+(Listing~\ref{lst:q2-mc}). For a given $N$ it generates $M = 1000$ data sets,
+computes the sample mean of $y$ in each, and returns the $M$ estimates.
 
-\begin{lstlisting}[style=Rcode,caption={The Monte Carlo loop (excerpt from
-\code{R/q2\_monte\_carlo.R}).},label={lst:q2-mc}]
-simulation_sample_mean <- function(N = 20, M = 1000,
-                                   error = c("t10", "chi2")) {
-  error <- match.arg(error)
-  mat_theta_hat <- matrix(NA, M, 1)   # the M sample means
-  for (m in 1:M) {
-    dataset            <- generate_data(N, error)
-    mat_theta_hat[m, ] <- mean(dataset[, "y"])
+\begin{lstlisting}[style=Rcode,caption={The Monte Carlo loop, duplicated once
+per population (excerpt from \code{R/q2\_monte\_carlo.R}).},label={lst:q2-mc}]
+simulation_sample_mean_t_error = function(N=20, M=1000){
+  mat_theta_hat = matrix(NA, M, 1); # placeholder for M sample means
+  for (m in 1:M){
+    dataset = generate_data_t_error(N); # a data set (y,x) of length N
+    theta_hat = mean(dataset[,1]); # compute sample mean of y
+    mat_theta_hat[m,] = theta_hat; # store m-th sample mean
   }
-  return(mat_theta_hat)
+  return(mat_theta_hat);
 }
+
+simulation_sample_mean_x_squared_error = function(N=20, M=1000){
+  # ... identical, except that it calls
+    dataset = generate_data_x_squared_error(N);
+}
+\end{lstlisting}
+
+The $M$ estimates are collected into one matrix per population, with one column
+per value of $N$, so that each half of the quiz is answered by reading across
+the columns of a single object (Listing~\ref{lst:q2-collect}).
+
+\begin{lstlisting}[style=Rcode,caption={Collecting the results, one matrix per
+error distribution (excerpt from
+\code{R/q2\_monte\_carlo.R}).},label={lst:q2-collect}]
+M = 1000; # the number of simulations
+N_grid = c(20, 100, 500); # the lengths of the data sets
+
+mat_theta_hat_t_error = cbind(
+  simulation_sample_mean_t_error(N = N_grid[1], M),
+  simulation_sample_mean_t_error(N = N_grid[2], M),
+  simulation_sample_mean_t_error(N = N_grid[3], M));
+
+col_labels = c("N=20", "N=100", "N=500");
+colnames(mat_theta_hat_t_error) = col_labels;
+
+print(apply(mat_theta_hat_t_error, 2, var));
+print(apply(sweep(mat_theta_hat_t_error, 2,
+                  sqrt(N_grid), "*"), 2, var));
 \end{lstlisting}
 
 \subsection{Results}
@@ -318,9 +326,7 @@ Table~\ref{tab:q2} collects the Monte Carlo results.
 \begin{table}[htbp]
 \centering
 \caption{Monte Carlo properties of the sample mean, $M = 1000$ replications,
-$\theta_0 = 3$. The last column should be compared with
-$\operatorname{Var}(y)$, which equals $10.37$ under $t_{10}$ errors and
-$49.12$ under $\chi^2$ errors.}
+$\theta_0 = 3$.}
 \label{tab:q2}
 \small
 \begin{tabular}{llccc}
@@ -330,14 +336,14 @@ $\operatorname{Var}(\hat\theta)$ &
 $\operatorname{Var}(\sqrt{N}\hat\theta)$ \\
 \midrule
 $\varepsilon \sim t_{10}$ (original)
-  & 20  & 2.966 & 0.4982 & \phantom{0}9.963 \\
-  & 100 & 2.988 & 0.0989 & \phantom{0}9.892 \\
-  & 500 & 3.000 & 0.0200 & 10.016 \\
+  & 20  & 2.965 & 0.5044 & 10.089 \\
+  & 100 & 2.988 & 0.0972 & \phantom{0}9.716 \\
+  & 500 & 3.000 & 0.0206 & 10.300 \\
 \addlinespace
 $\varepsilon = v - 20$, $v \sim \chi^2(20)$ (quiz)
-  & 20  & 3.040 & 2.4771 & 49.541 \\
-  & 100 & 3.001 & 0.4786 & 47.859 \\
-  & 500 & 2.992 & 0.1024 & 51.181 \\
+  & 20  & 3.038 & 2.5436 & 50.871 \\
+  & 100 & 3.001 & 0.4679 & 46.789 \\
+  & 500 & 2.992 & 0.0977 & 48.853 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -348,31 +354,24 @@ scale of the sampling uncertainty changes.
 
 \begin{enumerate}
 \item \emph{The estimator remains centred on $\theta_0 = 3$.} The Monte Carlo
-means are $3.040$, $3.001$ and $2.992$, consistent with $\hat\theta$ being
+means are $3.038$, $3.001$ and $2.992$, consistent with $\hat\theta$ being
 unbiased. This is expected, because recentring the $\chi^2(20)$ draws at
 $v - 20$ preserves $E[\varepsilon] = 0$ and hence leaves $E[y] = 3$ intact.
 
 \item \emph{$\operatorname{Var}(\hat\theta)$ still falls at rate $1/N$.} Moving
-from $N = 20$ to $N = 100$ divides the variance by $2.4771 / 0.4786 = 5.18$, and
-moving from $N = 100$ to $N = 500$ divides it by $0.4786 / 0.1024 = 4.67$. Both
+from $N = 20$ to $N = 100$ divides the variance by $2.5436 / 0.4679 = 5.44$, and
+moving from $N = 100$ to $N = 500$ divides it by $0.4679 / 0.0977 = 4.79$. Both
 are close to the factor of $5$ by which $N$ was increased; the departures are
 Monte Carlo noise from using only $M = 1000$ replications.
 
-\item \emph{$\operatorname{Var}(\sqrt{N}\hat\theta)$ is stable in $N$.} The
-values $49.54$, $47.86$ and $51.18$ show no trend and sit around the theoretical
-$\operatorname{Var}(y) = 49.12$. The $\sqrt{N}$ scaling is exactly the rate that
-offsets the $1/N$ shrinkage, which is why this quantity has a non-degenerate
-limit and why $\sqrt{N}$ is the natural normalisation in asymptotic theory.
+\item \emph{$\operatorname{Var}(\sqrt{N}\hat\theta)$ does not shrink with $N$.}
+The values $50.87$, $46.79$ and $48.85$ show no trend, just as $10.089$,
+$9.716$ and $10.300$ do not in the original model.
 \end{enumerate}
 
-The one substantive difference is the \emph{level}: sampling uncertainty is
-roughly $49.12 / 10.37 \approx 4.7$ times larger under the new model, because
-$\operatorname{Var}(\varepsilon)$ rises from $1.25$ to $40$ while the
-contribution of $x$ stays at $9.12$. A noisier population requires a larger
-sample to attain the same precision --- to match the precision that the original
-model achieves at $N = 100$, the new model needs roughly $N = 470$. So the
-conclusions about the \emph{rates} are unchanged; what changes is how much data
-is needed in practice.
+The only difference is the \emph{level}: sampling uncertainty is about four to
+five times larger throughout, which follows from the rise in
+$\operatorname{Var}(\varepsilon)$ from $1.25$ to $40$.
 
 \paragraph{Histograms of $\sqrt{N}\hat\theta$ at $N = 500$.}
 Figure~\ref{fig:q2-raw} plots the two simulated distributions on a common
@@ -390,37 +389,11 @@ quiz model, $\varepsilon = v - 20$ with $v \sim \chi^2(20)$.}
 \label{fig:q2-raw}
 \end{figure}
 
-To compare the \emph{shapes} rather than the scales, Figure~\ref{fig:q2-std}
-standardises each set of draws and overlays the standard normal density. The two
-histograms are then nearly indistinguishable, and both track the normal curve
-closely.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/q2_hist_standardised.pdf}
-\caption{The same draws as Figure~\ref{fig:q2-raw}, standardised to mean zero
-and unit variance, with the standard normal density overlaid. Once the
-difference in scale is removed, the two sampling distributions have essentially
-the same shape.}
-\label{fig:q2-std}
-\end{figure}
-
-So the answer is: \emph{yes, they look similar} --- and the reason is the central
-limit theorem rather than any similarity between the two error distributions
-themselves. A $\chi^2(20)$ variable is right-skewed, so individual observations
-$y_i$ are skewed in a way they are not under symmetric $t_{10}$ errors. But
-$\hat\theta$ averages $N = 500$ of them, and the CLT implies
-\[
-\sqrt{N}\,(\hat\theta - \theta_0) \;\xrightarrow{d}\;
-N\!\left(0, \operatorname{Var}(y)\right),
-\]
-which requires only a finite variance, not normality or symmetry of the
-underlying draws. The skewness of the individual observations is averaged away:
-the measured skewness of $\sqrt{N}\hat\theta$ at $N = 500$ is $0.10$ in the
-$\chi^2$ case and $0.21$ in the $t_{10}$ case, both effectively zero at
-$M = 1000$. The limiting distributions therefore differ only through the
-variance $\operatorname{Var}(y)$ --- which is exactly the parameter that
-Figure~\ref{fig:q2-raw} displays and that Figure~\ref{fig:q2-std} removes.
+So the answer is: \emph{yes, they look similar} --- both are bell-shaped and
+centred on the same point, and differ only in width. This is the central limit
+theorem at work: $\hat\theta$ averages $N = 500$ observations, which is enough
+to make its distribution close to normal even though the $\chi^2(20)$ error is
+right-skewed while the $t_{10}$ error is symmetric.
 
 %==============================================================================
 \section{Q3: Paper questions}
