@@ -1,1 +1,0 @@
-# STAT-5200---Applied-Econometrics-I
