@@ -1,11 +1,3 @@
-X = sum_{k=1}^{100} D_k =
        [,1] [,2]
 [1,]   5050 5150
 [2,] 338350 2525
-
-Closed-form value =
-       [,1] [,2]
-[1,]   5050 5150
-[2,] 338350 2525
-
-Loop and closed-form results agree.

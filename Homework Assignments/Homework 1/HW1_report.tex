@@ -34,9 +34,9 @@
 %      number in the prose, so the text reads without the code;
 %    * source code and program output use visually distinct styles, and are
 %      never interleaved in the same block;
-%    * only short, load-bearing excerpts appear in the body; the complete
-%      scripts are reproduced verbatim in the appendix;
-%    * the appendix listings are pulled from the .R files at compile time via
+%    * Q1 shows its code in full directly under each question; Q2 shows short
+%      excerpts in the body and its complete script in the appendix;
+%    * the appendix listing is pulled from the .R file at compile time via
 %      \lstinputlisting, so the report cannot drift from the code that was run;
 %    * long lines wrap with a visible continuation marker instead of running
 %      into the margin.
@@ -115,167 +115,97 @@
 \label{sec:q1-matrix}
 
 \paragraph{(a) The two matrices.}
-We work with
 \[
 A=\begin{pmatrix} 5 & 2\\ 2 & 1 \end{pmatrix},
 \qquad
-B=\begin{pmatrix} 5 & 2\\ 2 & 5 \end{pmatrix}.
+B=\begin{pmatrix} 5 & 2\\ 2 & 5 \end{pmatrix}
 \]
-In R these are built with \code{matrix()}. Because \code{matrix()} fills a
-matrix column by column, the argument \code{byrow = TRUE} is used so that the
-entries can be typed in the same order in which they are written above; this is
-a readability choice, not a mathematical one.
+Both are built with \code{matrix()}, using \code{byrow = TRUE} so that the
+entries are typed row by row.
 
-\paragraph{(b) Computing $C = A^{-1}B$.}
-Since $\det(A) = 5\cdot 1 - 2\cdot 2 = 1 \neq 0$, the matrix $A$ is invertible,
-with
-\[
-A^{-1} = \frac{1}{\det(A)}\begin{pmatrix} 1 & -2\\ -2 & 5\end{pmatrix}
-       = \begin{pmatrix} 1 & -2\\ -2 & 5\end{pmatrix},
-\]
-so that
-\[
-C = A^{-1}B
-  = \begin{pmatrix} 1 & -2\\ -2 & 5\end{pmatrix}
-    \begin{pmatrix} 5 & 2\\ 2 & 5\end{pmatrix}
-  = \begin{pmatrix} 1 & -8\\ 0 & 21\end{pmatrix}.
-\]
-Listing~\ref{lst:q1-core} shows the corresponding R code. Two details are worth
-noting. First, \code{solve(A)} returns the inverse of \code{A}, while
-\code{\%*\%} performs matrix multiplication. Second, the one-argument form
-\code{solve(A)} followed by a multiplication is used here only because the
-problem is stated in terms of $A^{-1}$; in applied work the two-argument form
-\code{solve(A, B)} is preferred, since it solves the linear system directly and
-is both faster and numerically better behaved than forming an explicit inverse.
-The script verifies that the two routes agree via \code{all.equal()}.
-
-\begin{lstlisting}[style=Rcode,caption={Constructing $A$ and $B$, and computing
-$C=A^{-1}B$ and its transpose (excerpt from \code{R/q1\_matrix\_algebra.R}).},
-label={lst:q1-core}]
+\begin{lstlisting}[style=Rcode]
 A <- matrix(c(5, 2,
-              2, 1), nrow = 2, ncol = 2, byrow = TRUE)
+              2, 1), nrow = 2, byrow = TRUE)
 
 B <- matrix(c(5, 2,
-              2, 5), nrow = 2, ncol = 2, byrow = TRUE)
-
-A_inv <- solve(A)          # solve(A) returns the inverse of A
-C     <- A_inv %*% B       # %*% is matrix multiplication
-
-stopifnot(all.equal(C, solve(A, B)))   # same result, better-conditioned route
-
-print(t(C))                # (c) transpose of C
+              2, 5), nrow = 2, byrow = TRUE)
 \end{lstlisting}
 
-\paragraph{(c) The transpose of $C$.}
-Transposition in R is \code{t()}. The printed result is
-\[
-C' = \begin{pmatrix} 1 & 0\\ -8 & 21\end{pmatrix},
-\]
-reproduced as console output below.
+\paragraph{(b) Computing $C = A^{-1}B$.}
+\code{solve()} returns the inverse of a matrix and \code{\%*\%} is the matrix
+product, so $C = A^{-1}B$ is computed as \code{solve(A) \%*\% B}.
 
-\begin{lstlisting}[style=Routput,caption={Console output for
-$C$ and $C'$.},label={out:q1-core}]
-C = A^{-1} B =
+\begin{lstlisting}[style=Rcode]
+C <- solve(A) %*% B
+print(C)
+\end{lstlisting}
+
+\begin{lstlisting}[style=Routput]
      [,1] [,2]
 [1,]    1   -8
 [2,]    0   21
+\end{lstlisting}
 
-t(C) =
+\paragraph{(c) The transpose of $C$.}
+\code{t()} transposes a matrix.
+
+\begin{lstlisting}[style=Rcode]
+print(t(C))
+\end{lstlisting}
+
+\begin{lstlisting}[style=Routput]
      [,1] [,2]
 [1,]    1    0
 [2,]   -8   21
 \end{lstlisting}
 
 \paragraph{(d) The difference between \texttt{A \%*\% B} and \texttt{A * B}.}
-The two operators compute genuinely different products.
+\code{\%*\%} is the matrix product: it combines rows of \code{A} with columns of
+\code{B}, and requires \code{ncol(A) == nrow(B)}. \code{*} is the element-wise
+product: it multiplies the entries in matching positions, and requires the two
+matrices to have the same shape.
 
-\code{A \%*\% B} is the \emph{matrix product} of linear algebra. Its $(i,j)$
-entry is the inner product of row $i$ of $A$ with column $j$ of $B$,
-\[
-(A \mathbin{\texttt{\%*\%}} B)_{ij} = \sum_{k} A_{ik} B_{kj},
-\]
-so it requires the inner dimensions to conform (\code{ncol(A) == nrow(B)}) and
-returns an \code{nrow(A)} $\times$ \code{ncol(B)} matrix. It is not commutative.
+\begin{lstlisting}[style=Rcode]
+print(A %*% B)
+print(A * B)
+\end{lstlisting}
 
-\code{A * B} is the \emph{element-wise} (Hadamard) product. Its $(i,j)$ entry is
-\[
-(A \mathbin{\texttt{*}} B)_{ij} = A_{ij} B_{ij},
-\]
-so it requires the two arrays to have the same shape, returns a matrix of that
-same shape, and is commutative. Because \code{*} is an ordinary vectorised
-arithmetic operator, it also applies R's recycling rules: \code{A * 2} scales
-every entry, and \code{A * c(1, 10)} multiplies the rows of \code{A} by
-$1$ and $10$ respectively, because recycling proceeds down columns.
+\begin{lstlisting}[style=Routput]
+     [,1] [,2]
+[1,]   29   20
+[2,]   12    9
+     [,1] [,2]
+[1,]   25    4
+[2,]    4    5
+\end{lstlisting}
 
-For the matrices in this problem,
-\[
-A \mathbin{\texttt{\%*\%}} B = \begin{pmatrix} 29 & 20\\ 12 & 9\end{pmatrix},
-\qquad
-A \mathbin{\texttt{*}} B = \begin{pmatrix} 25 & 4\\ 4 & 5\end{pmatrix}.
-\]
-The $(1,1)$ entries make the contrast concrete: the matrix product gives
-$5\cdot5 + 2\cdot2 = 29$, whereas the element-wise product gives
-$5\cdot5 = 25$. Mistaking one for the other is a common and silent bug, since
-for square matrices of equal dimension both expressions run without error and
-return an object of the same shape.
-
-\subsection{Accumulating a matrix sum with a \texttt{for} loop}
+\subsection{Matrix sum with a \texttt{for} loop}
 \label{sec:q1-loop}
 
-We compute
 \[
 X = \sum_{k=1}^{100} D_k,
 \qquad
-D_k = \begin{pmatrix} k & k+1\\ k^2 & k/2 \end{pmatrix}.
+D_k = \begin{pmatrix} k & k+1\\ k^2 & k/2 \end{pmatrix}
 \]
-The loop initialises an accumulator at the $2\times2$ zero matrix and adds one
-$D_k$ per iteration (Listing~\ref{lst:q1-loop}). Initialising the accumulator
-before the loop matters: writing \code{X <- X + D\_k} against an undefined or
-\code{NA}-filled \code{X} would either error or propagate \code{NA}s.
+\code{X} starts as a $2\times2$ matrix of zeros from \code{matrix(0, nrow = 2,
+ncol = 2)}, and each \code{D\_k} is added to it inside a \code{for} loop.
 
-\begin{lstlisting}[style=Rcode,caption={Accumulating $X=\sum_{k=1}^{100}D_k$
-with a \code{for} loop (excerpt from \code{R/q1\_loop\_sum.R}).},
-label={lst:q1-loop}]
-K <- 100
-X <- matrix(0, nrow = 2, ncol = 2)   # initialise the accumulator
+\begin{lstlisting}[style=Rcode]
+X <- matrix(0, nrow = 2, ncol = 2)
 
-for (k in 1:K) {
+for (k in 1:100) {
   D_k <- matrix(c(k,   k + 1,
-                  k^2, k / 2), nrow = 2, ncol = 2, byrow = TRUE)
+                  k^2, k / 2), nrow = 2, byrow = TRUE)
   X <- X + D_k
 }
 
 print(X)
 \end{lstlisting}
 
-Because the sum is entry-wise, the answer can be written in closed form using
-$\sum_{k=1}^{K}k = K(K+1)/2$ and $\sum_{k=1}^{K}k^2 = K(K+1)(2K+1)/6$. With
-$K=100$,
-\[
-X =
-\begin{pmatrix}
-\sum k & \sum (k+1)\\[2pt]
-\sum k^2 & \sum k/2
-\end{pmatrix}
-=
-\begin{pmatrix}
-5050 & 5150\\
-338{,}350 & 2525
-\end{pmatrix}.
-\]
-The script computes this closed form and checks it against the loop result with
-\code{stopifnot(all.equal(X, X\_closed))}; the check passes, which is reported in
-the output below. Verifying a loop against an independent closed-form expression
-is cheap here and is good practice generally.
-
-\begin{lstlisting}[style=Routput,caption={Console output for
-$X=\sum_{k=1}^{100}D_k$.},label={out:q1-loop}]
-X = sum_{k=1}^{100} D_k =
+\begin{lstlisting}[style=Routput]
        [,1] [,2]
 [1,]   5050 5150
 [2,] 338350 2525
-
-Loop and closed-form results agree.
 \end{lstlisting}
 
 %==============================================================================
@@ -510,17 +440,10 @@ Figure~\ref{fig:q2-raw} displays and that Figure~\ref{fig:q2-std} removes.
 \label{app:code}
 %==============================================================================
 
-The listings in this appendix are read directly from the \code{.R} files at
-compile time, so they are verbatim copies of the code that produced the results
-above.
-
-\subsection{\texorpdfstring{\code{R/q1\_matrix\_algebra.R}}{R/q1\_matrix\_algebra.R}}
-\lstinputlisting[style=Rcode,caption={\code{R/q1\_matrix\_algebra.R} --- Q1.2,
-matrix algebra.},label={lst:app-q1a}]{R/q1_matrix_algebra.R}
-
-\subsection{\texorpdfstring{\code{R/q1\_loop\_sum.R}}{R/q1\_loop\_sum.R}}
-\lstinputlisting[style=Rcode,caption={\code{R/q1\_loop\_sum.R} --- Q1.3, matrix
-sum accumulated with a \code{for} loop.},label={lst:app-q1b}]{R/q1_loop_sum.R}
+The listing in this appendix is read directly from the \code{.R} file at compile
+time, so it is a verbatim copy of the code that produced the results above. The
+Q1 scripts are not repeated here, since they appear in full alongside the
+questions in Section~\ref{sec:q1-matrix} and Section~\ref{sec:q1-loop}.
 
 \subsection{\texorpdfstring{\code{R/q2\_monte\_carlo.R}}{R/q2\_monte\_carlo.R}}
 \lstinputlisting[style=Rcode,caption={\code{R/q2\_monte\_carlo.R} --- Q2, Monte
