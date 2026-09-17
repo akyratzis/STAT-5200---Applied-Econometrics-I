@@ -1,19 +1,21 @@
-# =============================================================================
+# ==================================================================
 # STAT 5200 - Applied Econometrics I
 # Homework 1, Question 2: Monte Carlo study of the sample mean
 #              (quiz at the end of Lab Notes 01)
 #
-# Population model:  y = beta0 + beta1 * x + beta2 * x^2 + eps,   x ~ N(1, 4)
+# Population model:
+#   y = beta0 + beta1 * x + beta2 * x^2 + eps,   x ~ N(1, 4)
 #   beta0 = 1, beta1 = 1, beta2 = 0.2
 #
 # Two error specifications:
-#   "t10"   eps ~ t(10)                      (the original lab model)
-#   "chi2"  eps  = v - 20, v ~ chi^2(20)     (the model asked for in the quiz)
+#   "t10"   eps ~ t(10)                  (the original lab model)
+#   "chi2"  eps = v - 20, v ~ chi^2(20)  (the quiz model)
 #
 # Both have E[eps] = 0, so in both cases
-#   theta_0 = E[y] = beta0 + beta1 * E[x] + beta2 * E[x^2] = 1 + 1 + 0.2 * 5 = 3
+#   theta_0 = E[y] = beta0 + beta1 * E[x] + beta2 * E[x^2]
+#                  = 1 + 1 + 0.2 * 5 = 3
 # The two differ in Var(eps):  Var(t10) = 10/8 = 1.25,  Var(chi^2(20)) = 40.
-# =============================================================================
+# ==================================================================
 
 rm(list = ls())
 
@@ -25,7 +27,7 @@ set.seed(my_random_seed)
 fig_dir <- file.path("..", "figures")
 if (!dir.exists(fig_dir)) dir.create(fig_dir, recursive = TRUE)
 
-# -- Population parameters -----------------------------------------------------
+# -- Population parameters -----------------------------------------
 beta0 <- 1
 beta1 <- 1
 beta2 <- 0.2
@@ -33,9 +35,9 @@ beta2 <- 0.2
 x_mean <- 1
 x_var  <- 4
 
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------
 # Data generating process
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------
 # draw_error(): one realisation of eps under the requested specification.
 draw_error <- function(error = c("t10", "chi2")) {
   error <- match.arg(error)
@@ -46,7 +48,7 @@ draw_error <- function(error = c("t10", "chi2")) {
   }
 }
 
-# generate_data(): an N x 2 matrix of (y, x) pairs sampled from the population.
+# generate_data(): an N x 2 matrix of (y, x) pairs from the population.
 generate_data <- function(N = 20, error = c("t10", "chi2")) {
   error <- match.arg(error)
 
@@ -63,12 +65,13 @@ generate_data <- function(N = 20, error = c("t10", "chi2")) {
   return(mat_data)
 }
 
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------
 # Monte Carlo experiment
-# -----------------------------------------------------------------------------
-# simulation_sample_mean(): generate M data sets of length N and return the
-# M sample means of y as an M x 1 matrix.
-simulation_sample_mean <- function(N = 20, M = 1000, error = c("t10", "chi2")) {
+# ------------------------------------------------------------------
+# simulation_sample_mean(): generate M data sets of length N and
+# return the M sample means of y as an M x 1 matrix.
+simulation_sample_mean <- function(N = 20, M = 1000,
+                                   error = c("t10", "chi2")) {
   error <- match.arg(error)
 
   mat_theta_hat <- matrix(NA, M, 1)   # placeholder for the M sample means
@@ -81,9 +84,9 @@ simulation_sample_mean <- function(N = 20, M = 1000, error = c("t10", "chi2")) {
   return(mat_theta_hat)
 }
 
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------
 # Run the experiment for N = 20, 100, 500 under both error specifications
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------
 M       <- 1000
 N_grid  <- c(20, 100, 500)
 models  <- c("t10", "chi2")
@@ -98,7 +101,7 @@ for (model in models) {
   }
 }
 
-# -- Results table -------------------------------------------------------------
+# -- Results table -------------------------------------------------
 results <- data.frame(
   model         = rep(models, each = length(N_grid)),
   N             = rep(N_grid, times = length(models)),
@@ -117,7 +120,7 @@ for (r in seq_len(nrow(results))) {
 cat("\nMonte Carlo results (M =", M, "replications, theta_0 = 3)\n\n")
 print(results, digits = 4, row.names = FALSE)
 
-# -- Theoretical benchmark for Var(sqrt(N) * theta_hat) = Var(y) ---------------
+# -- Theoretical benchmark for Var(sqrt(N) * theta_hat) = Var(y) ---
 # For x ~ N(1, 4):  Var(x) = 4, Var(x^2) = 48, Cov(x, x^2) = 8, so
 #   Var(beta1 x + beta2 x^2) = 4 + 0.2^2 * 48 + 2 * 0.2 * 8 = 9.12.
 var_x_part <- beta1^2 * x_var + beta2^2 * 48 + 2 * beta1 * beta2 * 8
@@ -126,47 +129,60 @@ var_eps    <- c(t10 = 10 / 8, chi2 = 2 * 20)
 cat("\nTheoretical Var(y) = Var(beta1 x + beta2 x^2) + Var(eps):\n")
 print(round(var_x_part + var_eps, 4))
 
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------
 # Histograms of sqrt(N) * theta_hat at N = 500
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------
 N_plot   <- 500
 th_t10   <- sqrt(N_plot) * draws[["t10"]][[as.character(N_plot)]]
 th_chi2  <- sqrt(N_plot) * draws[["chi2"]][[as.character(N_plot)]]
 
 theta_0  <- beta0 + beta1 * x_mean + beta2 * (x_var + x_mean^2)   # = 3
 
-# (i) Raw scale: a common x-axis makes the difference in spread visible.
+# (i) Raw scale: a common x-axis makes the difference in spread
+# visible.
 xlim_raw <- range(c(th_t10, th_chi2))
+
+title_t10  <- expression("Original model:" ~ epsilon ~ "~" ~ t[10])
+title_chi2 <- expression("Quiz model:" ~ epsilon == v - 20 * "," ~
+                         v ~ "~" ~ chi[20]^2)
+xlab_raw   <- expression(sqrt(N) * hat(theta))
 
 pdf(file.path(fig_dir, "q2_hist_raw.pdf"), width = 9, height = 4.2)
 par(mfrow = c(1, 2), mar = c(4.2, 4.2, 3.0, 1.0))
 
 hist(th_t10, breaks = 30, freq = FALSE, xlim = xlim_raw,
-     main = expression("Original model:" ~ epsilon ~ "~" ~ t[10]),
-     xlab = expression(sqrt(N) * hat(theta)), col = "grey85", border = "white")
+     main = title_t10, xlab = xlab_raw,
+     col = "grey85", border = "white")
 abline(v = sqrt(N_plot) * theta_0, lwd = 2, lty = 2)
 
 hist(th_chi2, breaks = 30, freq = FALSE, xlim = xlim_raw,
-     main = expression("Quiz model:" ~ epsilon == v - 20 * "," ~ v ~ "~" ~ chi[20]^2),
-     xlab = expression(sqrt(N) * hat(theta)), col = "grey85", border = "white")
+     main = title_chi2, xlab = xlab_raw,
+     col = "grey85", border = "white")
 abline(v = sqrt(N_plot) * theta_0, lwd = 2, lty = 2)
 
 dev.off()
 
-# (ii) Standardised scale: subtract sqrt(N) * theta_0 and divide by the Monte
-# Carlo standard deviation, then overlay the standard normal density. This is
-# the comparison that isolates the *shape* of the sampling distribution.
+# (ii) Standardised scale: subtract the mean and divide by the Monte
+# Carlo standard deviation, then overlay the standard normal density.
+# This is the comparison that isolates the *shape* of the sampling
+# distribution.
 std <- function(v) as.vector((v - mean(v)) / sd(v))
 
-pdf(file.path(fig_dir, "q2_hist_standardised.pdf"), width = 9, height = 4.2)
+titles_std <- list(
+  expression(epsilon ~ "~" ~ t[10]),
+  expression(epsilon == v - 20 * "," ~ v ~ "~" ~ chi[20]^2)
+)
+
+pdf(file.path(fig_dir, "q2_hist_standardised.pdf"),
+    width = 9, height = 4.2)
 par(mfrow = c(1, 2), mar = c(4.2, 4.2, 3.0, 1.0))
 
 for (j in seq_along(models)) {
-  z <- std(sqrt(N_plot) * draws[[models[j]]][[as.character(N_plot)]])
+  key <- as.character(N_plot)
+  z   <- std(sqrt(N_plot) * draws[[models[j]]][[key]])
   hist(z, breaks = 30, freq = FALSE, xlim = c(-4, 4),
-       main = if (models[j] == "t10") expression(epsilon ~ "~" ~ t[10])
-              else expression(epsilon == v - 20 * "," ~ v ~ "~" ~ chi[20]^2),
-       xlab = "standardised value", col = "grey85", border = "white")
+       main = titles_std[[j]], xlab = "standardised value",
+       col = "grey85", border = "white")
   curve(dnorm, from = -4, to = 4, add = TRUE, lwd = 2)
 }
 

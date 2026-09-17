@@ -60,15 +60,23 @@
   frame           = single,
   rulecolor       = \color{coderule},
   framesep        = 4pt,
-  xleftmargin     = 20pt,
-  xrightmargin    = 2pt,
+  xleftmargin     = 15pt,
+  xrightmargin    = 0pt,
+  % Fixed character grid: every glyph occupies exactly basewidth, so
+  % indentation and aligned trailing comments line up down the block. With
+  % fullflexible columns the glyphs take their natural widths instead, which
+  % is what makes nominally aligned code drift out of line.
+  columns         = fixed,
+  basewidth       = 0.5em,
+  keepspaces      = true,
+  tabsize         = 2,
+  showstringspaces = false,
+  % Source lines are kept to 76 characters or fewer, which at \footnotesize on
+  % a 0.5em grid needs about 342pt of the ~446pt available, so nothing wraps.
+  % breaklines stays on only as a safety net; the marker should never appear.
   breaklines      = true,
   breakatwhitespace = true,
   postbreak       = \mbox{\textcolor{codekeyword}{$\hookrightarrow$}\space},
-  showstringspaces = false,
-  tabsize         = 2,
-  columns         = fullflexible,
-  keepspaces      = true,
   captionpos      = b,
   abovecaptionskip = 6pt,
 }
@@ -124,11 +132,8 @@ Both are built with \code{matrix()}, using \code{byrow = TRUE} so that the
 entries are typed row by row.
 
 \begin{lstlisting}[style=Rcode]
-A <- matrix(c(5, 2,
-              2, 1), nrow = 2, byrow = TRUE)
-
-B <- matrix(c(5, 2,
-              2, 5), nrow = 2, byrow = TRUE)
+A <- matrix(c(5, 2, 2, 1), nrow = 2, byrow = TRUE)
+B <- matrix(c(5, 2, 2, 5), nrow = 2, byrow = TRUE)
 \end{lstlisting}
 
 \paragraph{(b) Computing $C = A^{-1}B$.}
@@ -194,8 +199,7 @@ ncol = 2)}, and each \code{D\_k} is added to it inside a \code{for} loop.
 X <- matrix(0, nrow = 2, ncol = 2)
 
 for (k in 1:100) {
-  D_k <- matrix(c(k,   k + 1,
-                  k^2, k / 2), nrow = 2, byrow = TRUE)
+  D_k <- matrix(c(k, k + 1, k^2, k / 2), nrow = 2, byrow = TRUE)
   X <- X + D_k
 }
 
@@ -276,7 +280,7 @@ draw_error <- function(error = c("t10", "chi2")) {
 
 generate_data <- function(N = 20, error = c("t10", "chi2")) {
   error <- match.arg(error)
-  mat_data <- matrix(NA, N, 2)   # N by 2 matrix to store (y, x) by row
+  mat_data <- matrix(NA, N, 2)   # stores (y, x) by row
   for (i in 1:N) {
     e <- draw_error(error)
     x <- rnorm(1, mean = x_mean, sd = sqrt(x_var))
@@ -295,9 +299,10 @@ on the grid $N \in \{20, 100, 500\}$ for both error specifications.
 
 \begin{lstlisting}[style=Rcode,caption={The Monte Carlo loop (excerpt from
 \code{R/q2\_monte\_carlo.R}).},label={lst:q2-mc}]
-simulation_sample_mean <- function(N = 20, M = 1000, error = c("t10", "chi2")) {
+simulation_sample_mean <- function(N = 20, M = 1000,
+                                   error = c("t10", "chi2")) {
   error <- match.arg(error)
-  mat_theta_hat <- matrix(NA, M, 1)   # placeholder for the M sample means
+  mat_theta_hat <- matrix(NA, M, 1)   # the M sample means
   for (m in 1:M) {
     dataset            <- generate_data(N, error)
     mat_theta_hat[m, ] <- mean(dataset[, "y"])
