@@ -256,6 +256,11 @@ its spread, so with $k = 20$,
 The error variance of the quiz model is therefore $40 / 1.25 = 32$ times that
 of the original model.
 
+The two errors also differ in shape. A $t$ distribution is symmetric about
+zero, whereas a chi-squared distribution is right-skewed, and subtracting $20$
+shifts it without removing that asymmetry. So the quiz model changes both the
+spread and the shape of the error.
+
 \subsection{Implementation}
 
 The code follows Lab Notes 01. The lab's \code{generate\_data()} is renamed
@@ -410,10 +415,12 @@ quiz model, $\varepsilon = v - 20$ with $v \sim \chi^2(20)$.}
 \end{figure}
 
 So the answer is: \emph{yes, they look similar} --- both are bell-shaped and
-centred on the same point, and differ only in width. This is what the central
-limit theorem leads us to expect: an average of many observations is
-approximately normal whatever the shape of the distribution being averaged. So
-averaging $N = 500$ observations hides the skewness of the $\chi^2$ error.
+centred on the same point, and differ only in width. This is worth remarking on,
+because the two errors are not similar: one is symmetric and the other
+right-skewed. It is what the central limit theorem leads us to expect, though,
+since an average of many observations is approximately normal whatever the shape
+of the distribution being averaged. Averaging $N = 500$ observations is enough
+to leave no visible trace of the skewness of the $\chi^2$ error.
 
 %==============================================================================
 \section{Q3: Paper questions}
