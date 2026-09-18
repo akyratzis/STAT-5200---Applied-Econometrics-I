@@ -505,11 +505,52 @@ validation of the results they obtain from them.
 \paragraph{(7) Do the authors report standard errors?}
 Yes, for every regression. They appear in parentheses beneath each coefficient,
 together with significance stars, and they are clustered rather than
-conventional. For instance, the instrumental-variables estimate of the effect of
-concentration on ballast distance is $-0.3229$ with a standard error of
-$0.0667$, and the estimate of the effect of pool size on utilisation is $0.0184$
-with a standard error of $0.0040$. The authors also report first-stage Wald
-statistics, and use them to flag one of their instruments as weak.
+conventional. Table~\ref{tab:q3-table5} reproduces the paper's Table~5, which
+is the regression that validates its central claim: markets in which vessel
+control is more concentrated ballast shorter distances, emit less, and spend
+less time empty. The authors also report first-stage Wald statistics, and
+elsewhere use them to flag one of their alternative instruments as weak.
+
+\begin{table}[htbp]
+\centering
+\caption{Table~5 of Bimpikis et al., reproduced. Market-level regressions of
+ballast efficiency measures on market concentration, measured by the
+Herfindahl--Hirschman index. The instrument in the IV columns is
+$\log(\mathrm{HHI}_{l,v,t-1})$. Clustered standard errors in parentheses;
+significance codes ${}^{***}\,0.01$, ${}^{**}\,0.05$, ${}^{*}\,0.1$.}
+\label{tab:q3-table5}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+& \multicolumn{2}{c}{Ballast distance (nm)}
+& \multicolumn{2}{c}{Ballast emissions (CO$_2$)}
+& \multicolumn{2}{c}{Ballast time (days)} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+& OLS & IV & OLS & IV & OLS & IV \\
+\midrule
+$\log(\mathrm{HHI})$
+  & $-0.2581^{***}$ & $-0.3229^{***}$
+  & $-0.2428^{***}$ & $-0.3039^{***}$
+  & $-0.2026^{***}$ & $-0.2434^{***}$ \\
+  & $(0.0543)$ & $(0.0667)$
+  & $(0.0461)$ & $(0.0591)$
+  & $(0.0458)$ & $(0.0527)$ \\
+\addlinespace
+\multicolumn{7}{l}{\emph{Fixed effects}} \\
+\quad Load area & Yes & Yes & Yes & Yes & Yes & Yes \\
+\quad Quarter   & Yes & Yes & Yes & Yes & Yes & Yes \\
+\addlinespace
+\multicolumn{7}{l}{\emph{Fit statistics}} \\
+\quad Observations & 2{,}297 & 2{,}143 & 2{,}297 & 2{,}143
+  & 2{,}297 & 2{,}143 \\
+\quad $R^2$ & 0.90674 & 0.99175 & 0.94668 & 0.99397
+  & 0.93063 & 0.99455 \\
+\quad Wald (1st stage $F$) & --- & 100.85 & --- & 100.85
+  & --- & 100.85 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 Their optimisation results, by contrast, carry no standard errors: the shares
 attributed to trade imbalances, uncertainty and fragmentation are reported as
