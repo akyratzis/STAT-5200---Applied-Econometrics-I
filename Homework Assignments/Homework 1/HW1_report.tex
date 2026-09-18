@@ -548,13 +548,6 @@ $\log(\mathrm{HHI})$
 \end{tabular}
 \end{table}
 
-Their optimisation results, by contrast, carry no standard errors: the shares
-attributed to trade imbalances, uncertainty and fragmentation are reported as
-point estimates, because they come from solving integer programs on the realised
-data rather than from a sample. In place of standard errors the authors argue
-robustness differently, by showing that a second and methodologically distinct
-approach points to the same conclusion.
-
 \paragraph{(8) What is a standard error? (not graded)}
 The starting point, following Wooldridge, is that an estimator is a random
 variable. We only ever see one sample, but that sample was drawn by chance, and
@@ -574,19 +567,12 @@ The standard error is what we get by putting an estimate in its place:
 \operatorname{se}(\hat\beta_1) = \frac{\hat\sigma}{\sqrt{SST_x}} .
 \]
 So a standard error is an \emph{estimate of the standard deviation of an
-estimator}. The distinction matters. $\operatorname{sd}(\hat\beta_1)$ is a
+estimator}. $\operatorname{sd}(\hat\beta_1)$ is a
 population quantity we never observe, whereas $\operatorname{se}(\hat\beta_1)$
 is computed from the data in front of us, and is therefore itself a random
 variable. It is precisely because it can be computed that it can be printed
 underneath a coefficient in Table~\ref{tab:q3-table5}, and that $t$ statistics
 and confidence intervals can be built out of it.
-
-Q2 came at the same quantity from the opposite direction. Rather than
-estimating $\operatorname{sd}(\hat\theta)$ from a single sample using a
-formula, we drew $1000$ samples and watched how much $\hat\theta$ actually
-moved: at $N = 500$ its variance was $0.0206$, so the spread is about
-$\sqrt{0.0206} \approx 0.14$. A standard error is the version of that number
-available to somebody who only ever gets one sample.
 
 %==============================================================================
 \appendix
