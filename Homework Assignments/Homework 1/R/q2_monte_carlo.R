@@ -188,6 +188,13 @@ print(normalizePath(fig_dir));
 #   The report reads this file with \input, so the numbers in the
 #   report are always the numbers this script last produced and never
 #   have to be copied across by hand.
+#
+#   The whole tabular environment is written here, not just the rows.
+#   LaTeX's \input{file} expands to \@@input file \relax, and that
+#   trailing \relax would land immediately after the last \\ of the
+#   fragment, breaking the \cr-then-\noalign sequence that \bottomrule
+#   needs and giving "Misplaced \noalign". Emitting the complete
+#   tabular puts the \relax after \end{tabular}, where it is harmless.
 # ------------------------------------------------------------------
 table_rows = function(row_label, mat){
   means = apply(mat, 2, mean);
@@ -200,13 +207,24 @@ table_rows = function(row_label, mat){
             N_grid, means, vars, vars_scaled));
 }
 
+table_header = paste0(
+  "Error specification & $N$ & mean$(\\hat\\theta)$ & ",
+  "$\\operatorname{Var}(\\hat\\theta)$ & ",
+  "$\\operatorname{Var}(\\sqrt{N}\\hat\\theta)$ \\\\");
+
 latex_table = c(
+  "\\begin{tabular}{llrrr}",
+  "\\toprule",
+  table_header,
+  "\\midrule",
   table_rows("$\\varepsilon \\sim t_{10}$ (original)",
              mat_theta_hat_t_error),
   "\\addlinespace",
   table_rows(paste0("$\\varepsilon = v - 20$, ",
                     "$v \\sim \\chi^2(20)$ (quiz)"),
-             mat_theta_hat_x_squared_error));
+             mat_theta_hat_x_squared_error),
+  "\\bottomrule",
+  "\\end{tabular}");
 
 out_dir = file.path("..", "output");
 if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE);
