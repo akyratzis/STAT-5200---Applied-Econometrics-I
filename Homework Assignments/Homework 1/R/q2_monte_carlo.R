@@ -139,15 +139,16 @@ print(apply(mat_theta_hat_x_squared_error, 2, var));
 # ------------------------------------------------------------------
 # Thought experiment 2
 #   Var(sqrt(N)*theta_hat) should be roughly the same for every N.
-#   sweep() multiplies column j by sqrt(N_grid[j]).
 # ------------------------------------------------------------------
 print("Variance of sqrt(N)*theta_hat, e ~ t(10) ...");
-print(apply(sweep(mat_theta_hat_t_error, 2,
-                  sqrt(N_grid), "*"), 2, var));
+print(c("N=20"  = var(sqrt(20) *mat_theta_hat_t_error[,1]),
+        "N=100" = var(sqrt(100)*mat_theta_hat_t_error[,2]),
+        "N=500" = var(sqrt(500)*mat_theta_hat_t_error[,3])));
 
 print("Variance of sqrt(N)*theta_hat, e = v-20 ...");
-print(apply(sweep(mat_theta_hat_x_squared_error, 2,
-                  sqrt(N_grid), "*"), 2, var));
+print(c("N=20"  = var(sqrt(20) *mat_theta_hat_x_squared_error[,1]),
+        "N=100" = var(sqrt(100)*mat_theta_hat_x_squared_error[,2]),
+        "N=500" = var(sqrt(500)*mat_theta_hat_x_squared_error[,3])));
 
 # ------------------------------------------------------------------
 # Histograms of sqrt(N)*theta_hat when N = 500
@@ -181,3 +182,35 @@ dev.off();
 
 print("Figure written to ...");
 print(normalizePath(fig_dir));
+
+# ------------------------------------------------------------------
+# Writing the results table as a LaTeX fragment
+#   The report reads this file with \input, so the numbers in the
+#   report are always the numbers this script last produced and never
+#   have to be copied across by hand.
+# ------------------------------------------------------------------
+table_rows = function(row_label, mat){
+  means = apply(mat, 2, mean);
+  vars  = apply(mat, 2, var);
+  vars_scaled = c(var(sqrt(20) *mat[,1]),
+                  var(sqrt(100)*mat[,2]),
+                  var(sqrt(500)*mat[,3]));
+  c(row_label,
+    sprintf("  & %d & %.3f & %.4f & %.3f \\\\",
+            N_grid, means, vars, vars_scaled));
+}
+
+latex_table = c(
+  table_rows("$\\varepsilon \\sim t_{10}$ (original)",
+             mat_theta_hat_t_error),
+  "\\addlinespace",
+  table_rows(paste0("$\\varepsilon = v - 20$, ",
+                    "$v \\sim \\chi^2(20)$ (quiz)"),
+             mat_theta_hat_x_squared_error));
+
+out_dir = file.path("..", "output");
+if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE);
+writeLines(latex_table, file.path(out_dir, "q2_table.tex"));
+
+print("Table fragment written to ...");
+print(normalizePath(file.path(out_dir, "q2_table.tex")));

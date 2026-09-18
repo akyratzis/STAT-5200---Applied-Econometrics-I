@@ -23,3 +23,5 @@ null device
           1 
 [1] "Figure written to ..."
 [1] "/Users/kyratzis/Library/Mobile Documents/com~apple~CloudDocs/Wharton/1 - Fall 2026/STAT 5200 - Applied Econometrics I/Homework Assignments/Homework 1/figures"
+[1] "Table fragment written to ..."
+[1] "/Users/kyratzis/Library/Mobile Documents/com~apple~CloudDocs/Wharton/1 - Fall 2026/STAT 5200 - Applied Econometrics I/Homework Assignments/Homework 1/output/q2_table.tex"
