@@ -488,11 +488,8 @@ squares} on a panel with two-way fixed effects. The components are:
 concentration, measured by the Herfindahl--Hirschman index, and pool size);
 \item a lagged instrument, instrumenting concentration by its own one-quarter
 lag;
-\item Bartik, or shift-share, instruments, and a rolling variant of them;
 \item Hausman-style instruments, built from peer-group average fleet size;
 \item log-log specifications, so that coefficients read as elasticities;
-\item standard errors clustered by commercial operator, or by load area and
-vessel class;
 \item first-stage $F$ and Wald statistics, as weak-instrument diagnostics.
 \end{itemize}
 
@@ -559,18 +556,37 @@ robustness differently, by showing that a second and methodologically distinct
 approach points to the same conclusion.
 
 \paragraph{(8) What is a standard error? (not graded)}
-A standard error says how much an estimate would move if we happened to draw a
-different sample. It is the standard deviation of the estimate across repeated
-samples: a small standard error means another sample would probably have given
-a similar number, and a large one means it could easily have given a different
-one.
+The starting point, following Wooldridge, is that an estimator is a random
+variable. We only ever see one sample, but that sample was drawn by chance, and
+a different draw would have handed us a different number. How much the estimate
+moves from sample to sample is captured by the standard deviation of the
+estimator, which in the simple regression case is
+\[
+\operatorname{sd}(\hat\beta_1) = \frac{\sigma}{\sqrt{SST_x}},
+\qquad
+SST_x = \sum_{i=1}^{n}(x_i - \bar{x})^2 .
+\]
+The trouble is that we cannot compute this, because $\sigma$, the standard
+deviation of the population error, is unknown.
 
-Q2 measured this directly. At $N = 500$ the variance of the sample mean was
-$0.0206$ under the $t_{10}$ errors, so its standard error is
-$\sqrt{0.0206} \approx 0.14$; under the noisier $\chi^2$ errors the variance
-was $0.0977$, giving a standard error of $\approx 0.31$. Same estimator, same
-sample size, twice the standard error, because the second population is
-noisier.
+The standard error is what we get by putting an estimate in its place:
+\[
+\operatorname{se}(\hat\beta_1) = \frac{\hat\sigma}{\sqrt{SST_x}} .
+\]
+So a standard error is an \emph{estimate of the standard deviation of an
+estimator}. The distinction matters. $\operatorname{sd}(\hat\beta_1)$ is a
+population quantity we never observe, whereas $\operatorname{se}(\hat\beta_1)$
+is computed from the data in front of us, and is therefore itself a random
+variable. It is precisely because it can be computed that it can be printed
+underneath a coefficient in Table~\ref{tab:q3-table5}, and that $t$ statistics
+and confidence intervals can be built out of it.
+
+Q2 came at the same quantity from the opposite direction. Rather than
+estimating $\operatorname{sd}(\hat\theta)$ from a single sample using a
+formula, we drew $1000$ samples and watched how much $\hat\theta$ actually
+moved: at $N = 500$ its variance was $0.0206$, so the spread is about
+$\sqrt{0.0206} \approx 0.14$. A standard error is the version of that number
+available to somebody who only ever gets one sample.
 
 %==============================================================================
 \appendix
