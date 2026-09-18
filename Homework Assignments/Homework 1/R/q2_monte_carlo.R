@@ -160,19 +160,26 @@ sqrtN_theta_hat_t = sqrt(500) * mat_theta_hat_t_error[,"N=500"];
 sqrtN_theta_hat_x2 = sqrt(500) *
   mat_theta_hat_x_squared_error[,"N=500"];
 
-# A common horizontal axis makes the difference in spread visible.
+# A common horizontal axis and a common set of bin edges, so that the
+# two panels really are comparable. Passing breaks = 30 to each call
+# instead lets R pick the bin width separately per panel, and it chose
+# 0.5 for the t(10) draws against 2.0 for the wider chi-squared ones.
+# Counts per bin are then not comparable, and the wider distribution
+# misleadingly looks the more sharply peaked of the two.
 xlim_common = range(c(sqrtN_theta_hat_t, sqrtN_theta_hat_x2));
+common_breaks = seq(floor(xlim_common[1]), ceiling(xlim_common[2]),
+                    length.out = 31);
 
 pdf(file.path(fig_dir, "q2_hist_raw.pdf"), width = 9, height = 4.2);
 par(mfrow = c(1, 2), mar = c(4.2, 4.2, 3.0, 1.0));
 
-hist(sqrtN_theta_hat_t, breaks = 30, xlim = xlim_common,
+hist(sqrtN_theta_hat_t, breaks = common_breaks, xlim = xlim_common,
      main = "Original model: e ~ t(10)",
      xlab = "sqrt(N)*theta_hat, N = 500",
      col = "grey85", border = "white");
 abline(v = sqrt(500)*3, lwd = 2, lty = 2);
 
-hist(sqrtN_theta_hat_x2, breaks = 30, xlim = xlim_common,
+hist(sqrtN_theta_hat_x2, breaks = common_breaks, xlim = xlim_common,
      main = "Quiz model: e = v-20, v ~ chi-squared(20)",
      xlab = "sqrt(N)*theta_hat, N = 500",
      col = "grey85", border = "white");
