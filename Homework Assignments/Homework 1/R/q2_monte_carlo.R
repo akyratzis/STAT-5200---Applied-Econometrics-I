@@ -160,12 +160,7 @@ sqrtN_theta_hat_t = sqrt(500) * mat_theta_hat_t_error[,"N=500"];
 sqrtN_theta_hat_x2 = sqrt(500) *
   mat_theta_hat_x_squared_error[,"N=500"];
 
-# A common horizontal axis and a common set of bin edges, so that the
-# two panels really are comparable. Passing breaks = 30 to each call
-# instead lets R pick the bin width separately per panel, and it chose
-# 0.5 for the t(10) draws against 2.0 for the wider chi-squared ones.
-# Counts per bin are then not comparable, and the wider distribution
-# misleadingly looks the more sharply peaked of the two.
+# Common axis and common bin edges, so the panels are comparable.
 xlim_common = range(c(sqrtN_theta_hat_t, sqrtN_theta_hat_x2));
 common_breaks = seq(floor(xlim_common[1]), ceiling(xlim_common[2]),
                     length.out = 31);
