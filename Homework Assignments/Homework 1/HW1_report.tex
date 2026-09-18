@@ -560,27 +560,18 @@ robustness differently, by showing that a second and methodologically distinct
 approach points to the same conclusion.
 
 \paragraph{(8) What is a standard error? (not graded)}
-An estimate is computed from one sample. Drawing a different sample would give
-a different number, and the standard error is the standard deviation of that
-spread: it measures the typical distance between an estimate and the one a fresh
-sample would have produced. It is a statement about precision and not about
-correctness, since it says nothing about whether the estimator is biased.
+A standard error says how much an estimate would move if we happened to draw a
+different sample. It is the standard deviation of the estimate across repeated
+samples: a small standard error means another sample would probably have given
+a similar number, and a large one means it could easily have given a different
+one.
 
-This is the quantity Q2 measured directly. There,
-$\operatorname{Var}(\hat\theta) = 0.0206$ at $N = 500$ under the $t_{10}$
-errors, so the standard error of the sample mean is
-$\sqrt{0.0206} \approx 0.14$; under the $\chi^2$ errors the variance was
-$0.0977$ and the standard error therefore $\approx 0.31$. The same estimator at
-the same sample size has twice the standard error in the second population,
-because that population is noisier. The Monte Carlo experiment estimated by
-repeated sampling the quantity that a regression table reports in parentheses.
-
-A note on the clustering. The usual formula for a standard error assumes the
-observations are independent. Here they are not: all the voyages run by one
-commercial operator share unobserved factors such as management quality and
-broker relationships. Clustering allows for arbitrary correlation within each
-operator and generally yields larger, more honest standard errors than the
-independent calculation would.
+Q2 measured this directly. At $N = 500$ the variance of the sample mean was
+$0.0206$ under the $t_{10}$ errors, so its standard error is
+$\sqrt{0.0206} \approx 0.14$; under the noisier $\chi^2$ errors the variance
+was $0.0977$, giving a standard error of $\approx 0.31$. Same estimator, same
+sample size, twice the standard error, because the second population is
+noisier.
 
 %==============================================================================
 \appendix
