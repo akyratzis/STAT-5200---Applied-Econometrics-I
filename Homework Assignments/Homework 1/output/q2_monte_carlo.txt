@@ -23,5 +23,13 @@ null device
           1 
 [1] "Figure written to ..."
 [1] "/Users/kyratzis/Library/Mobile Documents/com~apple~CloudDocs/Wharton/1 - Fall 2026/STAT 5200 - Applied Econometrics I/Homework Assignments/Homework 1/figures"
-[1] "Table fragment written to ..."
-[1] "/Users/kyratzis/Library/Mobile Documents/com~apple~CloudDocs/Wharton/1 - Fall 2026/STAT 5200 - Applied Econometrics I/Homework Assignments/Homework 1/output/q2_table.tex"
+[1] "Table 1, e ~ t(10) ..."
+   N  mean    var var_sqrtN
+  20 2.965 0.5044    10.089
+ 100 2.988 0.0972     9.716
+ 500 3.000 0.0206    10.300
+[1] "Table 1, e = v-20 ..."
+   N  mean    var var_sqrtN
+  20 3.038 2.5436    50.871
+ 100 3.001 0.4679    46.789
+ 500 2.992 0.0977    48.853

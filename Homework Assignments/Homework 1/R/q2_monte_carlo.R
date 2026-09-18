@@ -184,51 +184,21 @@ print("Figure written to ...");
 print(normalizePath(fig_dir));
 
 # ------------------------------------------------------------------
-# Writing the results table as a LaTeX fragment
-#   The report reads this file with \input, so the numbers in the
-#   report are always the numbers this script last produced and never
-#   have to be copied across by hand.
-#
-#   The whole tabular environment is written here, not just the rows.
-#   LaTeX's \input{file} expands to \@@input file \relax, and that
-#   trailing \relax would land immediately after the last \\ of the
-#   fragment, breaking the \cr-then-\noalign sequence that \bottomrule
-#   needs and giving "Misplaced \noalign". Emitting the complete
-#   tabular puts the \relax after \end{tabular}, where it is harmless.
+# The three columns of Table 1 in the report, rounded as they appear
+# there, so that the table can be checked against this output.
 # ------------------------------------------------------------------
-table_rows = function(row_label, mat){
-  means = apply(mat, 2, mean);
-  vars  = apply(mat, 2, var);
+report_table = function(mat){
   vars_scaled = c(var(sqrt(20) *mat[,1]),
                   var(sqrt(100)*mat[,2]),
                   var(sqrt(500)*mat[,3]));
-  c(row_label,
-    sprintf("  & %d & %.3f & %.4f & %.3f \\\\",
-            N_grid, means, vars, vars_scaled));
+  data.frame(N = N_grid,
+             mean = round(apply(mat, 2, mean), 3),
+             var = round(apply(mat, 2, var), 4),
+             var_sqrtN = round(vars_scaled, 3));
 }
 
-table_header = paste0(
-  "Error specification & $N$ & mean$(\\hat\\theta)$ & ",
-  "$\\operatorname{Var}(\\hat\\theta)$ & ",
-  "$\\operatorname{Var}(\\sqrt{N}\\hat\\theta)$ \\\\");
+print("Table 1, e ~ t(10) ...");
+print(report_table(mat_theta_hat_t_error), row.names = FALSE);
 
-latex_table = c(
-  "\\begin{tabular}{llrrr}",
-  "\\toprule",
-  table_header,
-  "\\midrule",
-  table_rows("$\\varepsilon \\sim t_{10}$ (original)",
-             mat_theta_hat_t_error),
-  "\\addlinespace",
-  table_rows(paste0("$\\varepsilon = v - 20$, ",
-                    "$v \\sim \\chi^2(20)$ (quiz)"),
-             mat_theta_hat_x_squared_error),
-  "\\bottomrule",
-  "\\end{tabular}");
-
-out_dir = file.path("..", "output");
-if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE);
-writeLines(latex_table, file.path(out_dir, "q2_table.tex"));
-
-print("Table fragment written to ...");
-print(normalizePath(file.path(out_dir, "q2_table.tex")));
+print("Table 1, e = v-20 ...");
+print(report_table(mat_theta_hat_x_squared_error), row.names = FALSE);
