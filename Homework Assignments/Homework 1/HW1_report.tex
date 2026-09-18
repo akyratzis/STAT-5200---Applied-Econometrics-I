@@ -333,8 +333,10 @@ col_labels = c("N=20", "N=100", "N=500");
 colnames(mat_theta_hat_t_error) = col_labels;
 
 print(apply(mat_theta_hat_t_error, 2, var));
-print(apply(sweep(mat_theta_hat_t_error, 2,
-                  sqrt(N_grid), "*"), 2, var));
+
+print(c("N=20"  = var(sqrt(20) *mat_theta_hat_t_error[,1]),
+        "N=100" = var(sqrt(100)*mat_theta_hat_t_error[,2]),
+        "N=500" = var(sqrt(500)*mat_theta_hat_t_error[,3])));
 \end{lstlisting}
 
 \subsection{Results}
