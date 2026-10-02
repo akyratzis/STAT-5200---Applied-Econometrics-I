@@ -164,13 +164,13 @@ Throughout, $w = (y,x)'$ is normally distributed with mean $\mu = (\mu_y,
 \qquad
 |\Sigma| = \sigma_y^2\sigma_x^2(1-\rho^2).
 \]
-It is convenient to write the standardised variables
+Using the suggested transformation found in Notes01, we can write the "standardized" variables
 \[
 z_y = \frac{y-\mu_y}{\sigma_y},
 \qquad
 z_x = \frac{x-\mu_x}{\sigma_x},
 \]
-so that the joint and marginal densities supplied in the question read
+Then the joint and marginal densities supplied in the question become
 \[
 f_{Y,X}(y,x) = \frac{1}{2\pi\sigma_y\sigma_x(1-\rho^2)^{1/2}}
   \exp\!\left(-\frac{1}{2(1-\rho^2)}
@@ -202,8 +202,7 @@ bracket is a perfect square:
 \[
 z_y^2 - 2\rho z_y z_x + \rho^2 z_x^2 = \left(z_y - \rho z_x\right)^2 .
 \]
-This is the step that the completion of the square in Notes 01 performs. It
-remains to express it in the original units. Factoring $1/\sigma_y$ out of
+We now need to express the terms with the original variables. Factoring $1/\sigma_y$ out of
 \[
 z_y - \rho z_x
 = \frac{y-\mu_y}{\sigma_y} - \rho\,\frac{x-\mu_x}{\sigma_x}
@@ -231,23 +230,17 @@ E[y|x] = \mu_y + \rho\frac{\sigma_y}{\sigma_x}(x-\mu_x),
 \Var(y|x) = \sigma_y^2(1-\rho^2).
 \]
 
-Two features are worth recording for later use. First, $E[y|x]$ is a
-\emph{linear} function of $x$, with slope $\rho\sigma_y/\sigma_x$; Notes 01
-calls this the regression function and the slope the regression slope. Second,
-$\Var(y|x)$ does not depend on $x$ at all, so the conditional variance is
-homoskedastic. Both are special properties of the normal distribution, not
-general facts about conditional expectations.
+We note that $E[y|x]$ is a \emph{linear} function of $x$, with slope $\rho\sigma_y/\sigma_x$. Also, $\Var(y|x)$ does not depend on $x$, so the conditional variance is
+homoskedastic.
 
 \paragraph{(2) The linear projection $L(y\mid 1,x)$.}
 Write $\mathbf{x} = (1,x)$, so that $K=1$ and the projection is
-$L(y|1,x) = \beta_0 + \beta_1 x$. Rather than appealing to part (1), we compute
-the projection directly from its definition. The lecture slides define it as
+$L(y|1,x) = \beta_0 + \beta_1 x$. The lecture slides define linear projection as
 the solution of the minimum mean squared error problem,
 \[
 \beta = \arg\min_{b} \; E\!\left[\left(y - \mathbf{x}b\right)^2\right],
 \]
-that is, as the linear combination of the regressors that comes closest to $y$
-in mean square. Writing $Q(b) = E[(y-\mathbf{x}b)^2]$, the first order
+Writing $Q(b) = E[(y-\mathbf{x}b)^2]$, the first order
 condition is
 \[
 \frac{\partial Q(b)}{\partial b}
@@ -255,27 +248,21 @@ condition is
 \qquad\text{so at } b = \beta, \qquad
 E\!\left[\mathbf{x}'(y - \mathbf{x}\beta)\right] = 0 .
 \]
-This is the orthogonality condition: at the optimum the projection error is
-orthogonal to every regressor. Expanding it gives
+Expanding it gives
 $E[\mathbf{x}'y] - E[\mathbf{x}'\mathbf{x}]\beta = 0$, that is, the normal
 equations
 \[
 E[\mathbf{x}'\mathbf{x}]\,\beta = E[\mathbf{x}'y],
 \]
-which is precisely the condition Notes 01 adopts as its definition. The two
-presentations therefore describe the same object: the slides take the
-minimisation problem as primitive and derive the normal equations as its first
-order condition, while Notes 01 starts from the normal equations and records
-the minimisation property separately as LP.6. Q3 solves these equations for
-general $K$; for $K = 1$ the solution is
+which is also the definition found in Notes 01 (more on this on Q3). For $K = 1$ the solution is
 \[
 \beta_1 = \left[\Var(x)\right]^{-1}\Cov(x,y),
 \qquad
 \beta_0 = E[y] - E[x]\beta_1 .
 \]
-The required moments are read off $\Sigma$ and $\mu$ directly:
+In this problem we have:
 $\Var(x) = \sigma_x^2$, $\Cov(x,y) = \rho\sigma_x\sigma_y$, $E[x] = \mu_x$ and
-$E[y] = \mu_y$. Hence
+$E[y] = \mu_y$. Hence, substituting the expressions we get
 \[
 \beta_1 = \frac{\rho\sigma_x\sigma_y}{\sigma_x^2}
 = \rho\frac{\sigma_y}{\sigma_x},
@@ -289,13 +276,9 @@ L(y \mid 1,x) = \mu_y - \rho\frac{\sigma_y}{\sigma_x}\mu_x
 = \mu_y + \rho\frac{\sigma_y}{\sigma_x}(x-\mu_x).
 \]
 
-Comparing with part (1), $L(y|1,x) = E[y|x]$. This is not a coincidence: it is
-property LP.1 of Notes 01, which states that whenever the conditional
+Comparing with part (1), $L(y|1,x) = E[y|x]$. This is in line with property LP.1 in Notes 01, which states that whenever the conditional
 expectation is linear it coincides with the linear projection. Part (1)
-established that $E[y|x]$ is linear here, so LP.1 applies. The projection is in
-general only the best \emph{linear} predictor of $y$, whereas the conditional
-expectation is the best predictor among all functions of $x$; under joint
-normality the restriction to linear functions costs nothing.
+established that $E[y|x]$ is linear here, so LP.1 applies.
 
 \paragraph{(3) The distribution of $u = y - L(y\mid 1,x)$.}
 Substituting the projection from part (2),
@@ -306,8 +289,7 @@ u = y - \mu_y - \rho\frac{\sigma_y}{\sigma_x}(x-\mu_x).
 and $(y,x)'$ is jointly normal, so $u$ is normally distributed.
 
 \emph{Mean.} Taking expectations and using $E[y]=\mu_y$, $E[x]=\mu_x$ gives
-$E[u] = 0$. This also follows without any calculation from Notes 01, equation
-(5): the projection error has mean zero whenever an intercept is included.
+$E[u] = 0$.
 
 \emph{Variance.} Constants do not affect a variance, so
 \begin{align*}
@@ -326,20 +308,6 @@ Collecting the three results,
 \[
 u \;\sim\; N\!\left(0,\; \sigma_y^2(1-\rho^2)\right).
 \]
-
-Two remarks. First, $\Var(u) = \Var(y|x)$ from part (1). That is to be
-expected: since $L(y|1,x) = E[y|x]$, the projection error is also the deviation
-of $y$ from its conditional mean, and the conditional variance is constant, so
-averaging it over $x$ returns the same number. Second, and more than the
-definition of a projection guarantees,
-\[
-\Cov(u,x) = \Cov(y,x) - \rho\frac{\sigma_y}{\sigma_x}\Var(x)
-= \rho\sigma_x\sigma_y - \rho\frac{\sigma_y}{\sigma_x}\sigma_x^2 = 0 .
-\]
-A projection error is always uncorrelated with the regressors, which is all
-that Notes 01 equation (5) asserts. Here, however, $u$ and $x$ are jointly
-normal, and for jointly normal variables zero correlation implies full
-independence. So $u$ is independent of $x$, not merely orthogonal to it.
 
 %==============================================================================
 \section{Q3: Linear projection}
@@ -366,17 +334,12 @@ defines the coefficients by closed-form expressions,
 \tag{W}
 \end{equation*}
 
-The difference is one of presentation rather than substance. Definition (N)
+The two definitions are essentially equivalent. Definition (N)
 characterises the projection \emph{implicitly}, as the solution of the normal
-equations: equivalently, $E[\mathbf{x}'(y - \mathbf{x}\beta)] = 0$, so the
+equations: $E[\mathbf{x}'(y - \mathbf{x}\beta)] = 0$, so the
 projection error is orthogonal to every regressor. Definition (W) gives the
 \emph{explicit} solution of those same equations, after the intercept has been
-separated from the slopes. Showing that they coincide is therefore a matter of
-solving (N). The lecture slides supply a third, equivalent entry point: they
-define the projection as the minimiser of $E[(y-\mathbf{x}b)^2]$, whose first
-order condition is the orthogonality condition just stated. All three
-formulations pick out the same $\beta$.
-
+separated from the slopes. By solving the system of equations defined by (N), we can show that the definitions are equivalent. 
 \paragraph{Formal derivation.}
 Partition $\mathbf{x} = (1,x)$ and conformably $\beta_{\text{full}} =
 (\beta_0, \beta')'$, so that $L(y|\mathbf{x}) = \beta_0 + x\beta$. Writing out
@@ -419,7 +382,7 @@ $E[x']\beta_0 + E[x']E[x]\beta = E[x']E[y]$, and subtract it from
 \[
 \left(E[x'x] - E[x']E[x]\right)\beta = E[x'y] - E[x']E[y].
 \]
-Both sides are now recognisable. By the definition of a variance matrix and of
+By the definition of a variance matrix and of
 a covariance vector,
 \[
 E[x'x] - E[x']E[x] = \Var(x),
@@ -437,19 +400,8 @@ rearranging gives the second half,
 \beta_0 = E[y] - E[x]\beta
 = E[y] - \beta_1E[x_1] - \dots - \beta_KE[x_K].
 \]
-The two definitions therefore describe the same projection, and (W) is simply
-the solved form of (N).
-
-\paragraph{On the two nonsingularity assumptions.}
-Notes 01 assumes $E[\mathbf{x}'\mathbf{x}]$ nonsingular while Wooldridge assumes
-$\Var(x)$ nonsingular, and these are in fact the same requirement. In the block
-matrix above the leading entry is $1 \neq 0$, and the Schur complement of that
-entry is exactly $E[x'x] - E[x']E[x] = \Var(x)$. A block matrix with a
-nonsingular leading block is nonsingular if and only if its Schur complement is,
-so $E[\mathbf{x}'\mathbf{x}]$ is nonsingular precisely when $\Var(x)$ is. The
-derivation above needed that condition at exactly one point, namely to invert
-$\Var(x)$, so nothing is assumed in one definition that is not assumed in the
-other.
+The two definitions therefore describe the same projection, and defintion (W) is simply
+the solved form of definition (N).
 
 %==============================================================================
 \section{Q4: Asymptotics and asymptotic normality}
@@ -463,7 +415,7 @@ what guarantees $\sigma^2 < \infty$, which is precisely the condition the
 central limit theorem requires.
 
 \paragraph{(1) $\Var\!\left(\sqrt{N}(\bar{y}_N - \mu)\right)$.}
-Since the $y_i$ are independent with common variance $\sigma^2$,
+Since the $y_i$ are independent with common variance $\sigma^2$, we first calculate the variance of $\bar{y}_N$:
 \[
 \Var(\bar{y}_N) = \Var\!\left(\frac{1}{N}\sum_{i=1}^{N} y_i\right)
 = \frac{1}{N^2}\sum_{i=1}^{N}\Var(y_i)
@@ -475,10 +427,6 @@ $\sqrt{N}$ scales it by $N$, so
 \Var\!\left(\sqrt{N}(\bar{y}_N - \mu)\right) = N\Var(\bar{y}_N)
 = N\cdot\frac{\sigma^2}{N} = \sigma^2 .
 \]
-This holds \emph{exactly, for every $N$}, and is not an approximation. It also
-shows why $\sqrt{N}$ is the right scaling: it is the factor that exactly offsets
-the $1/N$ shrinkage of $\Var(\bar{y}_N)$ and leaves a quantity whose variance
-neither explodes nor collapses as $N$ grows.
 
 \paragraph{(2) The asymptotic variance of $\sqrt{N}(\bar{y}_N - \mu)$.}
 Apply the Lindeberg--L\'evy central limit theorem of Notes 02 to the i.i.d.\
@@ -490,13 +438,6 @@ $\sqrt{N}(\bar{y}_N - \mu) = N^{-1/2}\sum_{i=1}^{N}(y_i - \mu)$,
 \]
 The asymptotic variance is the variance of this limiting distribution, so in
 the notation of Notes 02 it is $V = \sigma^2$.
-
-It is worth being clear that parts (1) and (2) deliver the same number for
-different reasons. Part (1) is the exact variance of a random variable at each
-finite $N$; part (2) is the variance of the distribution that the random
-variable converges to. For the sample mean the two agree, but in general an
-asymptotic variance is an approximation to a finite-sample variance, and the
-latter need not even exist.
 
 \paragraph{(3) The asymptotic variance of $\bar{y}_N$, compared with
 $\Var(\bar{y}_N)$.}
