@@ -589,14 +589,7 @@ $\sd(\bar{y}_N) = \sigma/\sqrt{N}$,
 = \frac{\mu_3(y)}{\sigma^3\sqrt{N}}
 = \frac{\text{skew}(y)}{\sqrt{N}} .
 \]
-The skewness of a single observation comes from the error term alone. Third
-central moments add across independent summands, and adding a constant leaves
-central moments unchanged, so
-\[
-\mu_3(y_i) = \mu_3(1 + x_i + \varepsilon_i)
-= \mu_3(x_i) + \mu_3(\varepsilon_i).
-\]
-Now $x_i$ is normal and therefore symmetric about its mean, which gives
+We can calculate the theoretical value of the skewness. In our case, $x_i$ is normal and therefore symmetric about its mean, which gives
 $\mu_3(x_i) = 0$; and $\varepsilon_i = v_i - 20$ has the same central moments
 as $v_i$, while a $\chi^2_k$ variable has third central moment $8k$. Hence
 $\mu_3(y_i) = 0 + 8(20) = 160$, and with $\sigma^3 = 44^{3/2} = 291.86$,
