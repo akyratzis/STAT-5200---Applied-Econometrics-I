@@ -429,19 +429,15 @@ $\sqrt{N}$ scales it by $N$, so
 \]
 
 \paragraph{(2) The asymptotic variance of $\sqrt{N}(\bar{y}_N - \mu)$.}
-Apply the Lindeberg--L\'evy central limit theorem of Notes 02 to the i.i.d.\
-sequence $X_i = y_i - \mu$, which has $E[X_i] = 0$ and
-$E[X_i^2] = \sigma^2 < \infty$. Since
-$\sqrt{N}(\bar{y}_N - \mu) = N^{-1/2}\sum_{i=1}^{N}(y_i - \mu)$,
+From the central limit theorem we get
 \[
 \sqrt{N}(\bar{y}_N - \mu) \;\xrightarrow{\;d\;}\; N(0,\sigma^2).
 \]
-The asymptotic variance is the variance of this limiting distribution, so in
-the notation of Notes 02 it is $V = \sigma^2$.
+So the asymptotic variance of this expression is $V = \sigma^2$.
 
 \paragraph{(3) The asymptotic variance of $\bar{y}_N$, compared with
 $\Var(\bar{y}_N)$.}
-Notes 02 adopts the convention that if $\sqrt{N}(\hat{\theta}_N - \theta)
+In Notes 02 we find that if $\sqrt{N}(\hat{\theta}_N - \theta)
 \xrightarrow{d} N(0,V)$, then for large $N$ one treats $\hat\theta_N$ as
 approximately $N(\theta, V/N)$ and calls $V/N$ the asymptotic variance of the
 estimator. With $\hat\theta_N = \bar{y}_N$ and $V = \sigma^2$ from part (2),
@@ -452,12 +448,7 @@ From part (1), $\Var(\bar{y}_N) = \sigma^2/N$ as well, so here
 \[
 \Avar(\bar{y}_N) = \Var(\bar{y}_N).
 \]
-The two coincide exactly. This is a special feature of the sample mean of an
-i.i.d.\ sample, not a general result: $\Var(\bar{y}_N)$ is an exact
-finite-sample quantity, whereas $\Avar(\bar{y}_N)$ is defined through a limiting
-distribution and is in general only an approximation, accurate for large $N$.
-For most estimators the two differ at any finite $N$, and the asymptotic
-variance is used precisely because the exact one is unavailable.
+In this case they are the same.
 
 \paragraph{(4) The asymptotic standard deviation of $\bar{y}_N$.}
 It is the square root of the asymptotic variance,
@@ -465,13 +456,6 @@ It is the square root of the asymptotic variance,
 \sd_{\text{asy}}(\bar{y}_N) = \sqrt{\Avar(\bar{y}_N)}
 = \sqrt{\frac{\sigma^2}{N}} = \frac{\sigma}{\sqrt{N}} .
 \]
-In practice $\sigma^2$ is unknown and is replaced by a consistent estimator
-$\hat\sigma^2$, which following Notes 02 yields the asymptotic standard error
-\[
-\operatorname{se}(\bar{y}_N) = \frac{\hat\sigma}{\sqrt{N}} .
-\]
-Note that it shrinks at rate $N^{-1/2}$: quadrupling the sample size halves the
-standard deviation of the estimator.
 
 %==============================================================================
 \section{Q5: Simulation and asymptotics}
