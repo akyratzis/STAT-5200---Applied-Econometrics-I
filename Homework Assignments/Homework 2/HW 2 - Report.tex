@@ -578,14 +578,9 @@ Theory, $\;\text{skew}(y)/\sqrt{N}$ & 0.1734 & 0.0548 & 0.0173 \\
 \end{table}
 
 \emph{What we see.} The skewness is positive at every $N$ but falls steadily
-towards zero, and it does so at a definite rate: each tenfold increase in $N$
-divides it by roughly $\sqrt{10} \approx 3.16$. All three simulated values lie
-within one Monte Carlo standard error of the theoretical ones.
+towards zero.
 
-\emph{Why.} For an i.i.d.\ sample the third central moment of a sum adds across
-observations, so with $S_N = \sum_{i=1}^N y_i$ we have
-$\mu_3(S_N) = N\mu_3(y)$ and therefore
-$\mu_3(\bar{y}_N) = N\mu_3(y)/N^3 = \mu_3(y)/N^2$. Since
+\emph{Why.} Since
 $\sd(\bar{y}_N) = \sigma/\sqrt{N}$,
 \[
 \text{skew}(\bar{y}_N)
