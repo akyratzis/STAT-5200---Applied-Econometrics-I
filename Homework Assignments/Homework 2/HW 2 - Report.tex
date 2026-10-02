@@ -472,9 +472,7 @@ x_i \sim \text{iid } N(1,4),
 \quad
 v_i \sim \text{iid } \chi^2_{20},
 \]
-with $x$ and $\varepsilon$ independent. Note that this differs from the model
-in Lab Notes 01, which also carried a $\beta_2 x^2$ term; here $y$ is linear in
-$x$.
+with $x$ and $\varepsilon$ independent. 
 
 \paragraph{(1) $\Var(y_i)$.}
 The constant contributes nothing to a variance, and $x_i$ and $\varepsilon_i$
@@ -482,16 +480,13 @@ are independent, so the two variances simply add:
 \[
 \Var(y_i) = \Var(1 + x_i + \varepsilon_i) = \Var(x_i) + \Var(\varepsilon_i).
 \]
-Here $\Var(x_i) = 4$ by assumption. For the error, subtracting the constant
-$20$ shifts the distribution without changing its spread, and a $\chi^2_k$
+Here $\Var(x_i) = 4$ by assumption. A $\chi^2_k$
 variable has variance $2k$, so
 $\Var(\varepsilon_i) = \Var(v_i - 20) = \Var(v_i) = 2(20) = 40$, as the
 question states. Hence
 \[
 \sigma^2 \equiv \Var(y_i) = 4 + 40 = 44 .
 \]
-Simulating a single sample of length $10^6$ from this population returns a
-variance of $44.0000$, which confirms the arithmetic.
 
 \paragraph{(2) The asymptotic variance of $\bar{y}_N$ at $N = 100$.}
 Q4 established that $\Avar(\bar{y}_N) = \sigma^2/N$. Substituting
@@ -504,9 +499,7 @@ $\sigma^2 = 44$ from part (1) and $N = 100$,
 Following the lab notes, the experiment draws $M$ independent data sets of
 length $N = 100$, computes the sample mean of $y$ in each, and takes the
 variance of the $M$ resulting estimates. The data generating process is
-Listing~\ref{lst:q5-dgp}; it keeps the structure of the lab's
-\code{generate\_data()} while dropping the $x^2$ term and taking the $N$ draws
-in one vectorised call rather than one at a time, which matters only for speed.
+Listing~\ref{lst:q5-dgp}.
 
 \begin{lstlisting}[style=Rcode,caption={The data generating process (excerpt
 from \code{R/q5\_simulation\_asymptotics.R}).},label={lst:q5-dgp}]
@@ -530,10 +523,8 @@ With $M = 500{,}000$ replications the simulation gives
 \qquad\text{against}\qquad
 \Avar(\bar{y}_{100}) = 0.44,
 \]
-a ratio of $1.0018$. The two agree, as part (2) predicts. The agreement is in
-fact exact in population rather than merely asymptotic: by the calculation in
-Q4(1), $\Var(\bar{y}_N) = \sigma^2/N$ holds at every $N$ for an i.i.d.\ sample,
-so the only discrepancy here is Monte Carlo error.
+
+We can see that the deviation between the simulated value and the theoretical value is very small and we practically get the same number.
 
 \paragraph{(4) Skewness of $\bar{y}_N$ at $N = 10$, $100$ and $1000$.}
 
@@ -545,20 +536,11 @@ deviation,
 = \frac{E\!\left[(W - E[W])^3\right]}{\left(\Var(W)\right)^{3/2}}
 = \frac{\mu_3(W)}{\sigma_W^3}.
 \]
-Dividing by $\sigma_W^3$ makes it scale free, so it measures asymmetry alone
-and is unaffected by the units of $W$. Any distribution symmetric about its
+Any distribution symmetric about its
 mean has $\mu_3 = 0$ and hence zero skewness; a positive value indicates a
-longer right tail. This is the natural quantity to track here because the
-normal distribution has skewness zero, so watching it fall is watching the
-sampling distribution become normal in the one respect that asymmetry can
-reveal.
+longer right tail. 
 
-The object being measured is the sampling distribution of $\bar{y}_N$, not the
-data. For each $N$ the experiment draws $M$ independent data sets of length
-$N$ and computes the sample mean of each, producing $M$ realisations
-$\bar{y}_N^{(1)},\dots,\bar{y}_N^{(M)}$ of the estimator. Skewness is then
-estimated from those $M$ numbers by replacing each population moment with its
-sample counterpart,
+The equivalent expression using distribution samples is given by the expression for sample skewness
 \[
 \widehat{\text{skew}} = \frac{m_3}{m_2^{3/2}},
 \qquad
@@ -566,9 +548,7 @@ m_2 = \frac{1}{M}\sum_{j=1}^{M}\left(\bar{y}_N^{(j)} - \bar{\bar{y}}\right)^2,
 \qquad
 m_3 = \frac{1}{M}\sum_{j=1}^{M}\left(\bar{y}_N^{(j)} - \bar{\bar{y}}\right)^3,
 \]
-where $\bar{\bar{y}}$ is the average of the $M$ sample means. This is the usual
-moment estimator of skewness; base R has no built-in function for it, so it is
-coded directly as Listing~\ref{lst:q5-skew}.
+where $\bar{\bar{y}}$ is the average of the $M$ sample means. The code is shown as Listing~\ref{lst:q5-skew}.
 
 \begin{lstlisting}[style=Rcode,caption={The sample skewness (excerpt from
 \code{R/q5\_simulation\_asymptotics.R}).},label={lst:q5-skew}]
