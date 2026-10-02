@@ -664,33 +664,22 @@ $\beta_M$
 \end{tabular}
 \end{table}
 
-\emph{Where the delta method is used.} It appears in Section 5.1, in the
-discussion of Table~2. Having estimated $\beta_D$ and $\beta_P$ separately, the
-authors want to express a day of delivery speed in the units of price: how large
-a discount would leave a client exactly as likely to buy as a one-day speedup
-would? That compensating price change is
+\emph{Where the delta method is used, and why.} It appears in Section 5.1
+(p.~1059). Having estimated $\beta_D$ and $\beta_P$, the authors express a day
+of delivery speed in the units of price: the discount that would leave a client
+exactly as likely to buy as a one-day speedup would. That compensating price
+change is
 \[
 \theta = \exp\!\left(-\frac{\beta_D}{\beta_P}\right),
 \]
-the multiplicative change in price that offsets the demand effect of a one-unit
-decrease in $D$. The authors report $\hat\theta = 0.9779$: a one-day speedup is
-worth a discount of $2.21\%$, with a standard error of $0.60\%$. Their
-parenthesis is explicit about where that standard error comes from: \emph{the
-standard error is computed using the delta method}. Substituting the rounded
-coefficients of Table~\ref{tab:q6} into the formula gives $2.27\%$ rather than
-$2.21\%$; the gap is just the rounding in the published table, since a
-$\hat\beta_D$ of $-0.001654$ would reproduce their figure exactly and rounds to
-the $-0.0017$ shown.
+which they report as $2.21\%$ with a standard error of $0.60\%$, noting that
+\emph{the standard error is computed using the delta method}.
 
-\emph{Why the delta method is needed.} Ordinary least squares delivers the
-estimates $\hat\beta = (\hat\beta_D, \hat\beta_P)'$ together with an estimate of
-their asymptotic covariance matrix, but $\theta$ is not one of the coefficients.
-It is a \emph{non-linear function of two of them}, involving both a ratio and an
-exponential, so its standard error cannot be read off the regression output and
-is not obtained by combining the two reported standard errors in any elementary
-way. The delta method solves exactly this problem. Taking a first order Taylor
-expansion of $g(\hat\beta) = \exp(-\hat\beta_D/\hat\beta_P)$ about the true
-$\beta$ gives
+The reason is straightforward: $\theta$ is not one of the estimated
+coefficients but a \emph{non-linear function} of two of them, so its standard
+error cannot be read off the regression output. The delta method supplies it
+from the gradient of the transformation and the covariance matrix already
+estimated for $\hat\beta$,
 \[
 \Avar\!\left(g(\hat\beta)\right)
 = \nabla g(\beta)' \; \Avar(\hat\beta) \; \nabla g(\beta),
@@ -699,37 +688,8 @@ $\beta$ gives
 \begin{pmatrix}
 -1/\beta_P \\[2pt]
 \beta_D/\beta_P^2
-\end{pmatrix},
+\end{pmatrix}.
 \]
-so the standard error follows from the gradient of the transformation and the
-covariance matrix already estimated for $\hat\beta$. Two features of the
-situation make the method the natural choice: the quantity of interest is
-smooth in the parameters, and the covariance matrix of the underlying estimates
-is available, here in clustered form, so that the dependence between
-$\hat\beta_D$ and $\hat\beta_P$ is carried through into the standard error of
-$\hat\theta$ rather than ignored.
-
-As a check, evaluating the expression above at the reported estimates and
-treating $\hat\beta_D$ and $\hat\beta_P$ as approximately uncorrelated returns a
-standard error of $0.0062$ for $\hat\theta$, against the $0.0060$ the authors
-report. The agreement confirms both the reading of the formula and the
-magnitude.
-
-\emph{Where the results appear.} The delta method produces standard errors for
-derived quantities rather than for the regression coefficients themselves, so
-its output is reported in the text rather than in a table of its own:
-Table~\ref{tab:q6} contains the inputs $\hat\beta_D$ and $\hat\beta_P$, and the
-delta method converts them into the $2.21\%$ (SE $0.60\%$) figure quoted above.
-The paper names the method only at that one point, but it reports standard
-errors for several other quantities that are likewise functions of the
-estimated coefficients rather than coefficients themselves, and these must be
-obtained the same way: in the same Section 5.1, a one-day speedup raises demand
-by $1.82\%$ (SE $0.43\%$) and a $10\%$ price cut raises it by $8.58\%$
-(SE $1.25\%$), both of which rescale a fitted coefficient by the average
-purchase probability; and in the semiparametric analysis of Section 6, the
-demand gain from a one-day speedup among the quotes promised in 8 to 14 days is
-$4.68\%$ (SE $0.79\%$), a function of the six spline coefficients on delivery
-time.
 
 %==============================================================================
 \appendix
