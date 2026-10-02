@@ -107,46 +107,17 @@
 %==============================================================================
 
 \paragraph{Are my answers in line with the solutions?}
-Yes, and I did not miss any question. The matrix algebra agrees exactly: the
-same construction of $A$ and $B$, the same $C' = \left(\begin{smallmatrix} 1 & 0
-\\ -8 & 21\end{smallmatrix}\right)$, and the same
-$X = \left(\begin{smallmatrix} 5050 & 5150 \\ 338350 & 2525
-\end{smallmatrix}\right)$ from the loop. The only difference is cosmetic: the
-posted solution fills $D_k$ column by column, whereas I used
-\code{byrow = TRUE}, which the solution itself lists as the alternative. For the
-simulation I reached the same two conclusions --- that $\Var(\hat\theta)$ falls
-with $N$ while $\Var(\sqrt{N}\hat\theta)$ does not, and that both histograms are
-bell shaped because $N = 500$ is large enough for the central limit theorem to
-operate regardless of the shape of the error distribution.
+My solutions were in line with the posted solutions, and I did not miss any
+question.
 
 \paragraph{What could I have done better?}
-Three things, all in the simulation question.
 
-\emph{More replications.} The solution notes that a larger $M$, such as
-$10{,}000$, gives more accurate results. I used $M = 1000$, as the lab notes
-do. My draw of $\Var(\sqrt{N}\hat\theta)$ came out as $50.87$, $46.79$ and
-$48.85$ across the three sample sizes, scattered around the population value of
-$49.12$. The claim being made there is that these numbers show no trend, and a
-spread that wide makes the claim harder to see than it needs to be; at
-$M = 10{,}000$ the scatter would have been roughly a third as wide. I have
-applied this in Q5 of the present assignment, where estimating a third moment
-required $M$ far larger still.
+\emph{More replications.} I could have used more replications, for example
+$M = 10{,}000$ as the solution suggests, to reduce the Monte Carlo noise. In
+this homework I used $M = 500{,}000$ in Q5.
 
-\emph{Comparable bins by construction.} I first drew the two histograms by
-passing \code{breaks = 30} to each \code{hist()} call separately, which leaves R
-free to choose a different bin width for each panel. It chose $0.5$ for one and
-$2.0$ for the other, so the counts were not comparable and the more dispersed
-distribution misleadingly appeared the more sharply peaked. I noticed this only
-on a final check and corrected it. The posted solution avoids the problem
-entirely by building \code{common\_breaks} from the pooled range before plotting
-anything. The lesson is that when two panels exist in order to be compared, the
-bins should be shared by construction rather than verified afterwards.
-
-\emph{Densities rather than counts.} The solution plots with
-\code{freq = FALSE}. Given equal $M$ and common bins this is equivalent to what
-I did, but it is the better default, because a density does not depend on the
-number of replications and so remains comparable if one panel is simulated more
-heavily than another.
+\emph{Choice of paper.} For Q3, I could have chosen a paper published in one of
+the five journals I listed, instead of a conference proceedings paper.
 
 %==============================================================================
 \section{Q2: Conditional expectation}
