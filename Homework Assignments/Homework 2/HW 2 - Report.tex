@@ -538,7 +538,7 @@ deviation,
 \]
 Any distribution symmetric about its
 mean has $\mu_3 = 0$ and hence zero skewness; a positive value indicates a
-longer right tail. 
+longer right tail.
 
 The equivalent expression using distribution samples is given by the expression for sample skewness
 \[
@@ -577,82 +577,191 @@ Theory, $\;\text{skew}(y)/\sqrt{N}$ & 0.1734 & 0.0548 & 0.0173 \\
 \end{tabular}
 \end{table}
 
-\emph{What we see.} The skewness is positive at every $N$ but falls steadily
-towards zero.
+\emph{What we see.} The estimated skewness decreases as the sample size
+increases. The reason is that the skewness of $y_i$ comes from the error term,
+which is chi-squared and therefore right-skewed. So the distribution of the
+sample average is also right-skewed when $N$ is small. Then, by the central
+limit theorem, the distribution of the sample average becomes approximately
+normal as $N$ increases, and since the normal distribution is symmetric, the
+skewness of $\bar{y}_N$ approaches zero as $N$ increases.
 
-\emph{Why.} Since
+\emph{The theoretical values.} Third central moments add across independent
+observations, so $\mu_3(\bar{y}_N) = \mu_3(y)/N^2$, and with
 $\sd(\bar{y}_N) = \sigma/\sqrt{N}$,
 \[
 \text{skew}(\bar{y}_N)
 = \frac{\mu_3(\bar{y}_N)}{\sd(\bar{y}_N)^3}
 = \frac{\mu_3(y)/N^2}{\sigma^3/N^{3/2}}
-= \frac{\mu_3(y)}{\sigma^3\sqrt{N}}
 = \frac{\text{skew}(y)}{\sqrt{N}} .
 \]
-We can calculate the theoretical value of the skewness. In our case, $x_i$ is normal and therefore symmetric about its mean, which gives
-$\mu_3(x_i) = 0$; and $\varepsilon_i = v_i - 20$ has the same central moments
-as $v_i$, while a $\chi^2_k$ variable has third central moment $8k$. Hence
-$\mu_3(y_i) = 0 + 8(20) = 160$, and with $\sigma^3 = 44^{3/2} = 291.86$,
+For $y_i$ itself, $x_i$ is normal and therefore symmetric, giving
+$\mu_3(x_i) = 0$, while $\varepsilon_i = v_i - 20$ has the same central moments
+as $v_i$ and a $\chi^2_k$ variable has third central moment $8k$. Hence
+$\mu_3(y_i) = 0 + 8(20) = 160$ and
 \[
 \text{skew}(y) = \frac{160}{44^{3/2}} = \frac{160}{291.86} = 0.5482,
 \]
 which gives the theory row of Table~\ref{tab:q5-skew} on dividing by
 $\sqrt{N}$.
 
-\emph{Interpretation.} This is the central limit theorem being approached at a
-measurable rate. The individual $y_i$ are right-skewed, inherited from the
-chi-squared error, yet averaging washes that asymmetry out: the limiting
-distribution of $\sqrt{N}(\bar{y}_N - \mu)$ from Q4 is normal, and a normal
-distribution has zero skewness. What Table~\ref{tab:q5-skew} adds to Q4 is the
-speed of the approach, namely $O(N^{-1/2})$.
+%==============================================================================
+\section{Q6: Paper question}
+\label{sec:q6}
+%==============================================================================
 
-Figure~\ref{fig:q5-qq} shows this, with $N = 1$ included because the mean of a
-single observation is that observation, so that panel is the distribution of
-$y_i$ itself and shows where the asymmetry starts. The panels are normal
-quantile-quantile plots rather than histograms, for a reason worth stating: a
-skewness of $0.55$ is simply too mild to see in a histogram, and four
-histograms drawn this way all look alike. Plotted against normal quantiles the
-asymmetry is unmistakable. At $N = 1$ the curve is visibly convex, lying above
-the $45$ degree line at both ends. That is precisely the signature of a right
-skew: in the upper tail the sample quantiles run past the normal ones, because
-the right tail is longer than a normal's, while in the lower tail they fall
-short of them, because the left tail is correspondingly compressed. The bend is
-faint by $N = 10$ and has gone by $N = 100$.
+\paragraph{(1) The paper.}
+My field of interest is Operations Management, and the paper is \emph{The
+Nonlinear Impact of Promised Delivery Time on Online Purchasing}, by Shin
+Oblander and Kinshuk Jerath, in \emph{Manufacturing \& Service Operations
+Management}, one of the five journals listed in Homework 1. It contains the
+term \emph{delta method}, which appears once, in Section 5.1 (p.~1059); the
+term is used in the sense taught in class, as a way of obtaining the standard
+error of a non-linear function of estimated parameters; and the method is
+applied to the authors' own estimates rather than merely cited.
 
-\begin{figure}[htbp]
+\paragraph{(2) Citation.}
+Oblander, S., and Jerath, K. (2026). The nonlinear impact of promised delivery
+time on online purchasing. \emph{Manufacturing \& Service Operations
+Management} 28(4):1051--1067. \url{https://doi.org/10.1287/msom.2024.1335}.
+
+\paragraph{(3) The main research question.}
+Speeding up delivery is expensive, so a firm deciding whether to invest in it
+needs to know what the demand actually responds to. The paper asks how the
+delivery time \emph{promised} to a customer at the moment of ordering affects
+that customer's probability of buying, and whether the relationship is linear.
+The distinction between promised and realised delivery time matters because a
+customer cannot observe the latter when choosing, so it is the promise that
+enters the decision. Working with a business-to-business e-commerce platform
+supplying laboratory materials, the authors use $129{,}832$ quotes covering
+$21{,}246$ products, $2{,}225$ clients and $145$ vendors, in which the offering
+shown to a client is partially randomised and the decision is a simple binary
+accept or reject. They estimate how the purchase probability responds to the
+promised delivery time while controlling for product, client, vendor and markup
+group through fixed effects, and they benchmark that response against price
+sensitivity so that a day of delivery speed can be expressed in money. They
+then relax linearity using splines, and find that demand is essentially
+unresponsive to promises shorter than a week but falls away sharply beyond it,
+which implies that a firm gains more from eliminating its slowest deliveries
+than from accelerating deliveries that are already fast.
+
+\paragraph{(4) The parameter of interest, and why the delta method is used.}
+The parameters estimated directly are those of a linear probability model for
+whether client $i$ buys product $j$ at quote $t$,
+\[
+Y_{ijj'vt} = \alpha_i + \alpha_j + \alpha_{m_{ijt}} + \alpha_v
+ + \beta_P \log P_{ijvt} + \beta_D D_{ijvt}
+ + \beta_M \mathbf{1}(j = j') + \epsilon_{ijj'vt},
+\]
+in which $\beta_D$ is the sensitivity of demand to the promised delivery time
+$D$ and is the paper's parameter of primary interest, while $\beta_P$ is the
+sensitivity to the log price $P$ and serves as the benchmark. The estimates are
+reproduced in Table~\ref{tab:q6}; the preferred specification is column~(5),
+giving $\hat\beta_D = -0.0017$ and $\hat\beta_P = -0.0740$.
+
+\begin{table}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/q5_sampling_distributions.pdf}
-\caption{Normal quantile-quantile plots of $\bar{y}_N$, each standardised to
-mean zero and unit variance, against the $45$ degree line. $N = 1$ is the
-distribution of a single observation $y_i$.}
-\label{fig:q5-qq}
-\end{figure}
+\caption{Table~2 of Oblander and Jerath (p.~1058), reproduced. Linear probability model
+estimates. Standard errors, clustered two-way by product and client, in
+parentheses; significance codes ${}^{***}\,0.001$, ${}^{**}\,0.01$,
+${}^{*}\,0.05$. Columns (1) to (5) add successive groups of fixed effects.
+These coefficients are the \emph{inputs} to the delta method calculation
+described below.}
+\label{tab:q6}
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Specification & (1) & (2) & (3) & (4) & (5) \\
+\midrule
+$\beta_P$
+  & $-0.0204^{***}$ & $-0.0745^{***}$ & $-0.0833^{***}$
+  & $-0.0980^{***}$ & $-0.0740^{***}$ \\
+  & $(0.0013)$ & $(0.0119)$ & $(0.0125)$ & $(0.0120)$ & $(0.0108)$ \\
+$\beta_D$
+  & $-0.0031^{***}$ & $-0.0020^{***}$ & $-0.0018^{***}$
+  & $-0.0016^{***}$ & $-0.0017^{***}$ \\
+  & $(0.0003)$ & $(0.0004)$ & $(0.0004)$ & $(0.0004)$ & $(0.0004)$ \\
+$\beta_M$
+  & $0.0660^{***}$ & $0.0979^{***}$ & $0.1087^{***}$
+  & $0.1096^{***}$ & $0.1096^{***}$ \\
+  & $(0.0047)$ & $(0.0080)$ & $(0.0075)$ & $(0.0076)$ & $(0.0076)$ \\
+\addlinespace
+\quad Product FE & & Yes & Yes & Yes & Yes \\
+\quad Client FE & & & Yes & Yes & Yes \\
+\quad Vendor FE & & & & Yes & Yes \\
+\quad Markup group FE & & & & & Yes \\
+\addlinespace
+\quad $R^2$ & 1.46\% & 25.46\% & 36.19\% & 36.28\% & 36.46\% \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-A quantile-quantile plot shows that the asymmetry disappears but not how fast.
-Figure~\ref{fig:q5-decay} plots the skewness against $N$ on logarithmic axes,
-where the relation $\text{skew}(\bar{y}_N) = \text{skew}(y)/\sqrt{N}$ becomes a
-straight line of slope $-\tfrac{1}{2}$. The simulated points sit on that line
-across three decades of $N$, which is the clearest statement of the result: the
-sampling distribution does not merely become symmetric, it does so at a
-definite rate.
+\emph{Where the delta method is used.} It appears in Section 5.1, in the
+discussion of Table~2. Having estimated $\beta_D$ and $\beta_P$ separately, the
+authors want to express a day of delivery speed in the units of price: how large
+a discount would leave a client exactly as likely to buy as a one-day speedup
+would? That compensating price change is
+\[
+\theta = \exp\!\left(-\frac{\beta_D}{\beta_P}\right),
+\]
+the multiplicative change in price that offsets the demand effect of a one-unit
+decrease in $D$. The authors report $\hat\theta = 0.9779$: a one-day speedup is
+worth a discount of $2.21\%$, with a standard error of $0.60\%$. Their
+parenthesis is explicit about where that standard error comes from: \emph{the
+standard error is computed using the delta method}. Substituting the rounded
+coefficients of Table~\ref{tab:q6} into the formula gives $2.27\%$ rather than
+$2.21\%$; the gap is just the rounding in the published table, since a
+$\hat\beta_D$ of $-0.001654$ would reproduce their figure exactly and rounds to
+the $-0.0017$ shown.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.6\textwidth]{figures/q5_skewness_decay.pdf}
-\caption{Skewness of $\bar{y}_N$ against $N$ on logarithmic axes, over a
-log-spaced grid $N = 1, 3, 10, 30, 100, 300, 1000$ with $200{,}000$
-replications each. The dashed line is $\text{skew}(y)/\sqrt{N}$, of slope
-$-1/2$.}
-\label{fig:q5-decay}
-\end{figure}
+\emph{Why the delta method is needed.} Ordinary least squares delivers the
+estimates $\hat\beta = (\hat\beta_D, \hat\beta_P)'$ together with an estimate of
+their asymptotic covariance matrix, but $\theta$ is not one of the coefficients.
+It is a \emph{non-linear function of two of them}, involving both a ratio and an
+exponential, so its standard error cannot be read off the regression output and
+is not obtained by combining the two reported standard errors in any elementary
+way. The delta method solves exactly this problem. Taking a first order Taylor
+expansion of $g(\hat\beta) = \exp(-\hat\beta_D/\hat\beta_P)$ about the true
+$\beta$ gives
+\[
+\Avar\!\left(g(\hat\beta)\right)
+= \nabla g(\beta)' \; \Avar(\hat\beta) \; \nabla g(\beta),
+\qquad
+\nabla g(\beta) = g(\beta)
+\begin{pmatrix}
+-1/\beta_P \\[2pt]
+\beta_D/\beta_P^2
+\end{pmatrix},
+\]
+so the standard error follows from the gradient of the transformation and the
+covariance matrix already estimated for $\hat\beta$. Two features of the
+situation make the method the natural choice: the quantity of interest is
+smooth in the parameters, and the covariance matrix of the underlying estimates
+is available, here in clustered form, so that the dependence between
+$\hat\beta_D$ and $\hat\beta_P$ is carried through into the standard error of
+$\hat\theta$ rather than ignored.
 
-\emph{A note on the number of replications.} The lab notes use $M = 1000$,
-which is ample for a variance, but part (4) estimates a \emph{third} moment and
-that is far noisier. The standard error of a sample skewness is approximately
-$\sqrt{6/M}$, so $M = 1000$ would give about $0.078$ --- more than four times
-the value being measured at $N = 1000$, and the pattern would be buried in
-noise. Raising $M$ to $500{,}000$ brings that standard error down to $0.0035$,
-which is what makes the comparison in Table~\ref{tab:q5-skew} meaningful.
+As a check, evaluating the expression above at the reported estimates and
+treating $\hat\beta_D$ and $\hat\beta_P$ as approximately uncorrelated returns a
+standard error of $0.0062$ for $\hat\theta$, against the $0.0060$ the authors
+report. The agreement confirms both the reading of the formula and the
+magnitude.
+
+\emph{Where the results appear.} The delta method produces standard errors for
+derived quantities rather than for the regression coefficients themselves, so
+its output is reported in the text rather than in a table of its own:
+Table~\ref{tab:q6} contains the inputs $\hat\beta_D$ and $\hat\beta_P$, and the
+delta method converts them into the $2.21\%$ (SE $0.60\%$) figure quoted above.
+The paper names the method only at that one point, but it reports standard
+errors for several other quantities that are likewise functions of the
+estimated coefficients rather than coefficients themselves, and these must be
+obtained the same way: in the same Section 5.1, a one-day speedup raises demand
+by $1.82\%$ (SE $0.43\%$) and a $10\%$ price cut raises it by $8.58\%$
+(SE $1.25\%$), both of which rescale a fitted coefficient by the average
+purchase probability; and in the semiparametric analysis of Section 6, the
+demand gain from a one-day speedup among the quotes promised in 8 to 14 days is
+$4.68\%$ (SE $0.79\%$), a function of the six spline coefficients on delivery
+time.
 
 %==============================================================================
 \appendix
