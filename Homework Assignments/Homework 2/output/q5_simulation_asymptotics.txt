@@ -17,7 +17,20 @@ Monte_Carlo  Asymptotic       Ratio
 [1] "Skewness of a single y_i, for reference ..."
 [1] 0.5482
 Monte Carlo standard error of each skewness: 0.0035
+[1] "Skewness of a single observation, simulated at N = 1 ..."
+[1] 0.5522
 null device 
           1 
-[1] "Figure written to ..."
+[1] "Skewness across a log-spaced grid of N ..."
+    N skew_MonteCarlo skew_theory
+    1          0.5452      0.5482
+    3          0.3098      0.3165
+   10          0.1673      0.1734
+   30          0.1088      0.1001
+  100          0.0596      0.0548
+  300          0.0297      0.0317
+ 1000          0.0135      0.0173
+null device 
+          1 
+[1] "Figures written to ..."
 [1] "/Users/kyratzis/Library/Mobile Documents/com~apple~CloudDocs/Wharton/1 - Fall 2026/STAT 5200 - Applied Econometrics I/Homework Assignments/Homework 2/figures"

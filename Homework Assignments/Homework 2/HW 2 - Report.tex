@@ -106,7 +106,47 @@
 \section{Q1: Reflection}
 %==============================================================================
 
-\emph{To be completed.}
+\paragraph{Are my answers in line with the solutions?}
+Yes, and I did not miss any question. The matrix algebra agrees exactly: the
+same construction of $A$ and $B$, the same $C' = \left(\begin{smallmatrix} 1 & 0
+\\ -8 & 21\end{smallmatrix}\right)$, and the same
+$X = \left(\begin{smallmatrix} 5050 & 5150 \\ 338350 & 2525
+\end{smallmatrix}\right)$ from the loop. The only difference is cosmetic: the
+posted solution fills $D_k$ column by column, whereas I used
+\code{byrow = TRUE}, which the solution itself lists as the alternative. For the
+simulation I reached the same two conclusions --- that $\Var(\hat\theta)$ falls
+with $N$ while $\Var(\sqrt{N}\hat\theta)$ does not, and that both histograms are
+bell shaped because $N = 500$ is large enough for the central limit theorem to
+operate regardless of the shape of the error distribution.
+
+\paragraph{What could I have done better?}
+Three things, all in the simulation question.
+
+\emph{More replications.} The solution notes that a larger $M$, such as
+$10{,}000$, gives more accurate results. I used $M = 1000$, as the lab notes
+do. My draw of $\Var(\sqrt{N}\hat\theta)$ came out as $50.87$, $46.79$ and
+$48.85$ across the three sample sizes, scattered around the population value of
+$49.12$. The claim being made there is that these numbers show no trend, and a
+spread that wide makes the claim harder to see than it needs to be; at
+$M = 10{,}000$ the scatter would have been roughly a third as wide. I have
+applied this in Q5 of the present assignment, where estimating a third moment
+required $M$ far larger still.
+
+\emph{Comparable bins by construction.} I first drew the two histograms by
+passing \code{breaks = 30} to each \code{hist()} call separately, which leaves R
+free to choose a different bin width for each panel. It chose $0.5$ for one and
+$2.0$ for the other, so the counts were not comparable and the more dispersed
+distribution misleadingly appeared the more sharply peaked. I noticed this only
+on a final check and corrected it. The posted solution avoids the problem
+entirely by building \code{common\_breaks} from the pooled range before plotting
+anything. The lesson is that when two panels exist in order to be compared, the
+bins should be shared by construction rather than verified afterwards.
+
+\emph{Densities rather than counts.} The solution plots with
+\code{freq = FALSE}. Given equal $M$ and common bins this is equivalent to what
+I did, but it is the better default, because a density does not depend on the
+number of replications and so remains comparable if one panel is simulated more
+heavily than another.
 
 %==============================================================================
 \section{Q2: Conditional expectation}
@@ -571,8 +611,50 @@ Q4(1), $\Var(\bar{y}_N) = \sigma^2/N$ holds at every $N$ for an i.i.d.\ sample,
 so the only discrepancy here is Monte Carlo error.
 
 \paragraph{(4) Skewness of $\bar{y}_N$ at $N = 10$, $100$ and $1000$.}
-Table~\ref{tab:q5-skew} reports the simulated skewness alongside the value
-theory predicts.
+
+\emph{How skewness is defined and computed.} For a random variable $W$,
+skewness is the third central moment standardised by the cube of the standard
+deviation,
+\[
+\text{skew}(W)
+= \frac{E\!\left[(W - E[W])^3\right]}{\left(\Var(W)\right)^{3/2}}
+= \frac{\mu_3(W)}{\sigma_W^3}.
+\]
+Dividing by $\sigma_W^3$ makes it scale free, so it measures asymmetry alone
+and is unaffected by the units of $W$. Any distribution symmetric about its
+mean has $\mu_3 = 0$ and hence zero skewness; a positive value indicates a
+longer right tail. This is the natural quantity to track here because the
+normal distribution has skewness zero, so watching it fall is watching the
+sampling distribution become normal in the one respect that asymmetry can
+reveal.
+
+The object being measured is the sampling distribution of $\bar{y}_N$, not the
+data. For each $N$ the experiment draws $M$ independent data sets of length
+$N$ and computes the sample mean of each, producing $M$ realisations
+$\bar{y}_N^{(1)},\dots,\bar{y}_N^{(M)}$ of the estimator. Skewness is then
+estimated from those $M$ numbers by replacing each population moment with its
+sample counterpart,
+\[
+\widehat{\text{skew}} = \frac{m_3}{m_2^{3/2}},
+\qquad
+m_2 = \frac{1}{M}\sum_{j=1}^{M}\left(\bar{y}_N^{(j)} - \bar{\bar{y}}\right)^2,
+\qquad
+m_3 = \frac{1}{M}\sum_{j=1}^{M}\left(\bar{y}_N^{(j)} - \bar{\bar{y}}\right)^3,
+\]
+where $\bar{\bar{y}}$ is the average of the $M$ sample means. This is the usual
+moment estimator of skewness; base R has no built-in function for it, so it is
+coded directly as Listing~\ref{lst:q5-skew}.
+
+\begin{lstlisting}[style=Rcode,caption={The sample skewness (excerpt from
+\code{R/q5\_simulation\_asymptotics.R}).},label={lst:q5-skew}]
+skewness = function(v){
+  m2 = mean((v - mean(v))^2);
+  m3 = mean((v - mean(v))^3);
+  return(m3 / m2^1.5);
+}
+\end{lstlisting}
+
+Table~\ref{tab:q5-skew} reports the result alongside the value theory predicts.
 
 \begin{table}[htbp]
 \centering
@@ -607,33 +689,68 @@ $\sd(\bar{y}_N) = \sigma/\sqrt{N}$,
 = \frac{\mu_3(y)}{\sigma^3\sqrt{N}}
 = \frac{\text{skew}(y)}{\sqrt{N}} .
 \]
-The skewness of a single observation follows from the error term alone: $x_i$
-is normal and hence symmetric, contributing nothing to the third central
-moment, while a $\chi^2_k$ variable has third central moment $8k$. So
-$\mu_3(y) = 8(20) = 160$ and
+The skewness of a single observation comes from the error term alone. Third
+central moments add across independent summands, and adding a constant leaves
+central moments unchanged, so
 \[
-\text{skew}(y) = \frac{160}{44^{3/2}} = 0.5482,
+\mu_3(y_i) = \mu_3(1 + x_i + \varepsilon_i)
+= \mu_3(x_i) + \mu_3(\varepsilon_i).
+\]
+Now $x_i$ is normal and therefore symmetric about its mean, which gives
+$\mu_3(x_i) = 0$; and $\varepsilon_i = v_i - 20$ has the same central moments
+as $v_i$, while a $\chi^2_k$ variable has third central moment $8k$. Hence
+$\mu_3(y_i) = 0 + 8(20) = 160$, and with $\sigma^3 = 44^{3/2} = 291.86$,
+\[
+\text{skew}(y) = \frac{160}{44^{3/2}} = \frac{160}{291.86} = 0.5482,
 \]
 which gives the theory row of Table~\ref{tab:q5-skew} on dividing by
 $\sqrt{N}$.
 
 \emph{Interpretation.} This is the central limit theorem being approached at a
-measurable rate. The individual $y_i$ are visibly right-skewed, inherited from
-the chi-squared error, yet averaging washes that asymmetry out: the limiting
+measurable rate. The individual $y_i$ are right-skewed, inherited from the
+chi-squared error, yet averaging washes that asymmetry out: the limiting
 distribution of $\sqrt{N}(\bar{y}_N - \mu)$ from Q4 is normal, and a normal
 distribution has zero skewness. What Table~\ref{tab:q5-skew} adds to Q4 is the
-speed of the approach, namely $O(N^{-1/2})$. Figure~\ref{fig:q5} shows the same
-thing visually: at $N=10$ a right tail is still discernible, while by $N=1000$
-the standardised sampling distribution is indistinguishable from the normal
-curve drawn over it.
+speed of the approach, namely $O(N^{-1/2})$.
+
+Figure~\ref{fig:q5-qq} shows this, with $N = 1$ included because the mean of a
+single observation is that observation, so that panel is the distribution of
+$y_i$ itself and shows where the asymmetry starts. The panels are normal
+quantile-quantile plots rather than histograms, for a reason worth stating: a
+skewness of $0.55$ is simply too mild to see in a histogram, and four
+histograms drawn this way all look alike. Plotted against normal quantiles the
+asymmetry is unmistakable. At $N = 1$ the curve is visibly convex, lying above
+the $45$ degree line at both ends. That is precisely the signature of a right
+skew: in the upper tail the sample quantiles run past the normal ones, because
+the right tail is longer than a normal's, while in the lower tail they fall
+short of them, because the left tail is correspondingly compressed. The bend is
+faint by $N = 10$ and has gone by $N = 100$.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/q5_sampling_distributions.pdf}
-\caption{Simulated distribution of $\bar{y}_N$ at $N = 10$, $100$ and $1000$,
-each standardised to mean zero and unit variance so that only shape is
-compared, with the standard normal density overlaid.}
-\label{fig:q5}
+\caption{Normal quantile-quantile plots of $\bar{y}_N$, each standardised to
+mean zero and unit variance, against the $45$ degree line. $N = 1$ is the
+distribution of a single observation $y_i$.}
+\label{fig:q5-qq}
+\end{figure}
+
+A quantile-quantile plot shows that the asymmetry disappears but not how fast.
+Figure~\ref{fig:q5-decay} plots the skewness against $N$ on logarithmic axes,
+where the relation $\text{skew}(\bar{y}_N) = \text{skew}(y)/\sqrt{N}$ becomes a
+straight line of slope $-\tfrac{1}{2}$. The simulated points sit on that line
+across three decades of $N$, which is the clearest statement of the result: the
+sampling distribution does not merely become symmetric, it does so at a
+definite rate.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.6\textwidth]{figures/q5_skewness_decay.pdf}
+\caption{Skewness of $\bar{y}_N$ against $N$ on logarithmic axes, over a
+log-spaced grid $N = 1, 3, 10, 30, 100, 300, 1000$ with $200{,}000$
+replications each. The dashed line is $\text{skew}(y)/\sqrt{N}$, of slope
+$-1/2$.}
+\label{fig:q5-decay}
 \end{figure}
 
 \emph{A note on the number of replications.} The lab notes use $M = 1000$,

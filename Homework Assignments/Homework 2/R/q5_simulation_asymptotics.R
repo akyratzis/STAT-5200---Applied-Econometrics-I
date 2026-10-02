@@ -139,7 +139,21 @@ cat(sprintf("Monte Carlo standard error of each skewness: %.4f\n",
             sqrt(6/M)));
 
 # ------------------------------------------------------------------
-# Figure: the sampling distribution of ybar_N at the three N
+# Extra simulations, used only for the figures
+# ------------------------------------------------------------------
+# These run after everything reported above, so they do not disturb
+# the numbers already produced.
+#
+# N = 1 is included because the mean of a single observation is that
+# observation, so this panel is the population distribution of y_i
+# itself, and it shows where the asymmetry starts.
+mat_theta_hat_1 = simulation_sample_mean(N = 1, M = M);
+
+print("Skewness of a single observation, simulated at N = 1 ...");
+print(round(skewness(as.vector(mat_theta_hat_1)), 4));
+
+# ------------------------------------------------------------------
+# Figure 1: the distribution of ybar_N as N grows
 # ------------------------------------------------------------------
 # Each panel is standardised to mean zero and unit variance so that
 # only the shape is compared, with the standard normal density drawn
@@ -149,22 +163,72 @@ if (!dir.exists(fig_dir)) dir.create(fig_dir, recursive = TRUE);
 
 standardise = function(v){ (v - mean(v)) / sd(v) }
 
-pdf(file.path(fig_dir, "q5_sampling_distributions.pdf"),
-    width = 9, height = 3.4);
-par(mfrow = c(1, 3), mar = c(4.2, 4.2, 3.0, 1.0));
+N_panels = c(1, N_grid);
+panels = list(mat_theta_hat_1, mat_theta_hat_10,
+              mat_theta_hat_100, mat_theta_hat_1000);
+skew_panels = c(skewness(as.vector(mat_theta_hat_1)), skew_mc);
 
-panels = list(mat_theta_hat_10, mat_theta_hat_100, mat_theta_hat_1000);
-for (j in 1:3){
+# Normal quantile-quantile plots rather than histograms. A skewness
+# of 0.55 is far too mild to see in a histogram, which is why the
+# panels would otherwise all look alike, but it is plainly visible as
+# curvature away from the 45 degree line in a Q-Q plot.
+pdf(file.path(fig_dir, "q5_sampling_distributions.pdf"),
+    width = 10, height = 3.1);
+par(mfrow = c(1, 4), mar = c(4.2, 4.2, 3.2, 1.0));
+
+p_grid = ppoints(500);
+q_theory = qnorm(p_grid);
+
+for (j in 1:4){
   z = standardise(as.vector(panels[[j]]));
-  hist(z, breaks = 60, freq = FALSE, xlim = c(-4, 4),
-       main = paste0("N = ", N_grid[j],
-                     ",  skewness = ", round(skew_mc[j], 3)),
-       xlab = "standardised sample mean",
-       col = "grey85", border = "white");
-  curve(dnorm, from = -4, to = 4, add = TRUE, lwd = 2);
+  q_emp = quantile(z, probs = p_grid);
+  lab = if (N_panels[j] == 1) "N = 1  (a single y_i)" else
+        paste0("N = ", N_panels[j]);
+  plot(q_theory, q_emp, type = "l", lwd = 2,
+       xlim = c(-3.3, 3.3), ylim = c(-3.3, 4.4),
+       main = paste0(lab, "\nskewness = ",
+                     sprintf("%.3f", skew_panels[j])),
+       xlab = "normal quantile", ylab = "sample quantile");
+  abline(0, 1, lwd = 1, lty = 2, col = "grey40");
 }
 
 dev.off();
 
-print("Figure written to ...");
+# ------------------------------------------------------------------
+# Figure 2: the rate at which the skewness dies
+# ------------------------------------------------------------------
+# A histogram cannot resolve a skewness of 0.17 from one of 0.05, so
+# the decay is shown directly instead. On log-log axes the relation
+# skew(ybar_N) = skew(y)/sqrt(N) is a straight line of slope -1/2.
+N_sweep = c(1, 3, 10, 30, 100, 300, 1000);
+M_sweep = 200000;   # smaller than M: this is for a trend, not a table
+skew_sweep = rep(NA, length(N_sweep));
+
+for (j in 1:length(N_sweep)){
+  draws = simulation_sample_mean(N = N_sweep[j], M = M_sweep);
+  skew_sweep[j] = skewness(as.vector(draws));
+}
+
+print("Skewness across a log-spaced grid of N ...");
+print(data.frame(N = N_sweep,
+                 skew_MonteCarlo = round(skew_sweep, 4),
+                 skew_theory = round(skew_y/sqrt(N_sweep), 4)),
+      row.names = FALSE);
+
+pdf(file.path(fig_dir, "q5_skewness_decay.pdf"),
+    width = 5.5, height = 4.0);
+par(mar = c(4.2, 4.4, 1.0, 1.0));
+
+plot(N_sweep, skew_sweep, log = "xy", type = "p", pch = 19,
+     xlab = "sample size N",
+     ylab = expression("skewness of " * bar(y)[N]),
+     ylim = range(c(skew_sweep, skew_y/sqrt(N_sweep))));
+lines(N_sweep, skew_y/sqrt(N_sweep), lwd = 2, lty = 2);
+legend("bottomleft", bty = "n",
+       legend = c("Monte Carlo", expression(skew(y)/sqrt(N))),
+       pch = c(19, NA), lty = c(NA, 2), lwd = c(NA, 2));
+
+dev.off();
+
+print("Figures written to ...");
 print(normalizePath(fig_dir));
