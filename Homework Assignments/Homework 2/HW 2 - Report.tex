@@ -201,9 +201,33 @@ general facts about conditional expectations.
 \paragraph{(2) The linear projection $L(y\mid 1,x)$.}
 Write $\mathbf{x} = (1,x)$, so that $K=1$ and the projection is
 $L(y|1,x) = \beta_0 + \beta_1 x$. Rather than appealing to part (1), we compute
-the projection directly from its definition in Notes 01, in which the
-coefficients solve $E[\mathbf{x}'\mathbf{x}]\beta = E[\mathbf{x}'y]$ and, after
-the intercept is separated out, satisfy
+the projection directly from its definition. The lecture slides define it as
+the solution of the minimum mean squared error problem,
+\[
+\beta = \arg\min_{b} \; E\!\left[\left(y - \mathbf{x}b\right)^2\right],
+\]
+that is, as the linear combination of the regressors that comes closest to $y$
+in mean square. Writing $Q(b) = E[(y-\mathbf{x}b)^2]$, the first order
+condition is
+\[
+\frac{\partial Q(b)}{\partial b}
+= -2\,E\!\left[\mathbf{x}'(y - \mathbf{x}b)\right] = 0,
+\qquad\text{so at } b = \beta, \qquad
+E\!\left[\mathbf{x}'(y - \mathbf{x}\beta)\right] = 0 .
+\]
+This is the orthogonality condition: at the optimum the projection error is
+orthogonal to every regressor. Expanding it gives
+$E[\mathbf{x}'y] - E[\mathbf{x}'\mathbf{x}]\beta = 0$, that is, the normal
+equations
+\[
+E[\mathbf{x}'\mathbf{x}]\,\beta = E[\mathbf{x}'y],
+\]
+which is precisely the condition Notes 01 adopts as its definition. The two
+presentations therefore describe the same object: the slides take the
+minimisation problem as primitive and derive the normal equations as its first
+order condition, while Notes 01 starts from the normal equations and records
+the minimisation property separately as LP.6. Q3 solves these equations for
+general $K$; for $K = 1$ the solution is
 \[
 \beta_1 = \left[\Var(x)\right]^{-1}\Cov(x,y),
 \qquad
@@ -308,7 +332,10 @@ equations: equivalently, $E[\mathbf{x}'(y - \mathbf{x}\beta)] = 0$, so the
 projection error is orthogonal to every regressor. Definition (W) gives the
 \emph{explicit} solution of those same equations, after the intercept has been
 separated from the slopes. Showing that they coincide is therefore a matter of
-solving (N).
+solving (N). The lecture slides supply a third, equivalent entry point: they
+define the projection as the minimiser of $E[(y-\mathbf{x}b)^2]$, whose first
+order condition is the orthogonality condition just stated. All three
+formulations pick out the same $\beta$.
 
 \paragraph{Formal derivation.}
 Partition $\mathbf{x} = (1,x)$ and conformably $\beta_{\text{full}} =
@@ -464,5 +491,171 @@ $\hat\sigma^2$, which following Notes 02 yields the asymptotic standard error
 \]
 Note that it shrinks at rate $N^{-1/2}$: quadrupling the sample size halves the
 standard deviation of the estimator.
+
+%==============================================================================
+\section{Q5: Simulation and asymptotics}
+\label{sec:q5}
+%==============================================================================
+
+The population model is
+\[
+y_i = 1 + x_i + \varepsilon_i,
+\qquad
+x_i \sim \text{iid } N(1,4),
+\qquad
+\varepsilon_i = v_i - 20,
+\quad
+v_i \sim \text{iid } \chi^2_{20},
+\]
+with $x$ and $\varepsilon$ independent. Note that this differs from the model
+in Lab Notes 01, which also carried a $\beta_2 x^2$ term; here $y$ is linear in
+$x$.
+
+\paragraph{(1) $\Var(y_i)$.}
+The constant contributes nothing to a variance, and $x_i$ and $\varepsilon_i$
+are independent, so the two variances simply add:
+\[
+\Var(y_i) = \Var(1 + x_i + \varepsilon_i) = \Var(x_i) + \Var(\varepsilon_i).
+\]
+Here $\Var(x_i) = 4$ by assumption. For the error, subtracting the constant
+$20$ shifts the distribution without changing its spread, and a $\chi^2_k$
+variable has variance $2k$, so
+$\Var(\varepsilon_i) = \Var(v_i - 20) = \Var(v_i) = 2(20) = 40$, as the
+question states. Hence
+\[
+\sigma^2 \equiv \Var(y_i) = 4 + 40 = 44 .
+\]
+Simulating a single sample of length $10^6$ from this population returns a
+variance of $44.0000$, which confirms the arithmetic.
+
+\paragraph{(2) The asymptotic variance of $\bar{y}_N$ at $N = 100$.}
+Q4 established that $\Avar(\bar{y}_N) = \sigma^2/N$. Substituting
+$\sigma^2 = 44$ from part (1) and $N = 100$,
+\[
+\Avar(\bar{y}_{100}) = \frac{44}{100} = 0.44 .
+\]
+
+\paragraph{(3) $\Var(\bar{y}_N)$ by Monte Carlo.}
+Following the lab notes, the experiment draws $M$ independent data sets of
+length $N = 100$, computes the sample mean of $y$ in each, and takes the
+variance of the $M$ resulting estimates. The data generating process is
+Listing~\ref{lst:q5-dgp}; it keeps the structure of the lab's
+\code{generate\_data()} while dropping the $x^2$ term and taking the $N$ draws
+in one vectorised call rather than one at a time, which matters only for speed.
+
+\begin{lstlisting}[style=Rcode,caption={The data generating process (excerpt
+from \code{R/q5\_simulation\_asymptotics.R}).},label={lst:q5-dgp}]
+generate_data = function(N = 20){
+  # model parameters
+  beta0 = 1;
+  beta1 = 1;
+  # simulating data
+  e = rchisq(N, df = 20) - 20;         # e = v-20, v ~ chi-squared(20)
+  x = rnorm(N, mean = 1, sd = sqrt(4)); # x ~ N(1,4)
+  y = beta0 + beta1*x + e;              # this is our population model
+  mat_data = cbind(y, x);
+  colnames(mat_data) = c("y", "x");     # put column names
+  return(mat_data);
+}
+\end{lstlisting}
+
+With $M = 500{,}000$ replications the simulation gives
+\[
+\Var(\bar{y}_{100}) = 0.4408,
+\qquad\text{against}\qquad
+\Avar(\bar{y}_{100}) = 0.44,
+\]
+a ratio of $1.0018$. The two agree, as part (2) predicts. The agreement is in
+fact exact in population rather than merely asymptotic: by the calculation in
+Q4(1), $\Var(\bar{y}_N) = \sigma^2/N$ holds at every $N$ for an i.i.d.\ sample,
+so the only discrepancy here is Monte Carlo error.
+
+\paragraph{(4) Skewness of $\bar{y}_N$ at $N = 10$, $100$ and $1000$.}
+Table~\ref{tab:q5-skew} reports the simulated skewness alongside the value
+theory predicts.
+
+\begin{table}[htbp]
+\centering
+\caption{Skewness of $\bar{y}_N$, $M = 500{,}000$ replications. The Monte Carlo
+standard error of each estimate is approximately $\sqrt{6/M} = 0.0035$.}
+\label{tab:q5-skew}
+\small
+\begin{tabular}{lrrr}
+\toprule
+& $N = 10$ & $N = 100$ & $N = 1000$ \\
+\midrule
+Monte Carlo & 0.1739 & 0.0561 & 0.0176 \\
+Theory, $\;\text{skew}(y)/\sqrt{N}$ & 0.1734 & 0.0548 & 0.0173 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\emph{What we see.} The skewness is positive at every $N$ but falls steadily
+towards zero, and it does so at a definite rate: each tenfold increase in $N$
+divides it by roughly $\sqrt{10} \approx 3.16$. All three simulated values lie
+within one Monte Carlo standard error of the theoretical ones.
+
+\emph{Why.} For an i.i.d.\ sample the third central moment of a sum adds across
+observations, so with $S_N = \sum_{i=1}^N y_i$ we have
+$\mu_3(S_N) = N\mu_3(y)$ and therefore
+$\mu_3(\bar{y}_N) = N\mu_3(y)/N^3 = \mu_3(y)/N^2$. Since
+$\sd(\bar{y}_N) = \sigma/\sqrt{N}$,
+\[
+\text{skew}(\bar{y}_N)
+= \frac{\mu_3(\bar{y}_N)}{\sd(\bar{y}_N)^3}
+= \frac{\mu_3(y)/N^2}{\sigma^3/N^{3/2}}
+= \frac{\mu_3(y)}{\sigma^3\sqrt{N}}
+= \frac{\text{skew}(y)}{\sqrt{N}} .
+\]
+The skewness of a single observation follows from the error term alone: $x_i$
+is normal and hence symmetric, contributing nothing to the third central
+moment, while a $\chi^2_k$ variable has third central moment $8k$. So
+$\mu_3(y) = 8(20) = 160$ and
+\[
+\text{skew}(y) = \frac{160}{44^{3/2}} = 0.5482,
+\]
+which gives the theory row of Table~\ref{tab:q5-skew} on dividing by
+$\sqrt{N}$.
+
+\emph{Interpretation.} This is the central limit theorem being approached at a
+measurable rate. The individual $y_i$ are visibly right-skewed, inherited from
+the chi-squared error, yet averaging washes that asymmetry out: the limiting
+distribution of $\sqrt{N}(\bar{y}_N - \mu)$ from Q4 is normal, and a normal
+distribution has zero skewness. What Table~\ref{tab:q5-skew} adds to Q4 is the
+speed of the approach, namely $O(N^{-1/2})$. Figure~\ref{fig:q5} shows the same
+thing visually: at $N=10$ a right tail is still discernible, while by $N=1000$
+the standardised sampling distribution is indistinguishable from the normal
+curve drawn over it.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/q5_sampling_distributions.pdf}
+\caption{Simulated distribution of $\bar{y}_N$ at $N = 10$, $100$ and $1000$,
+each standardised to mean zero and unit variance so that only shape is
+compared, with the standard normal density overlaid.}
+\label{fig:q5}
+\end{figure}
+
+\emph{A note on the number of replications.} The lab notes use $M = 1000$,
+which is ample for a variance, but part (4) estimates a \emph{third} moment and
+that is far noisier. The standard error of a sample skewness is approximately
+$\sqrt{6/M}$, so $M = 1000$ would give about $0.078$ --- more than four times
+the value being measured at $N = 1000$, and the pattern would be buried in
+noise. Raising $M$ to $500{,}000$ brings that standard error down to $0.0035$,
+which is what makes the comparison in Table~\ref{tab:q5-skew} meaningful.
+
+%==============================================================================
+\appendix
+\section{Complete R script}
+\label{app:code}
+%==============================================================================
+
+The listing is read directly from the \code{.R} file at compile time, so it is
+a verbatim copy of the code that produced the results above.
+
+\subsection{\texorpdfstring{\code{R/q5\_simulation\_asymptotics.R}}{R/q5\_simulation\_asymptotics.R}}
+\lstinputlisting[style=Rcode,caption={\code{R/q5\_simulation\_asymptotics.R}
+--- Q5, simulation and asymptotics.},label={lst:app-q5}]%
+{R/q5_simulation_asymptotics.R}
 
 \end{document}

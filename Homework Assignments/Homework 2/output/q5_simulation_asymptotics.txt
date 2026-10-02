@@ -1,0 +1,23 @@
+[1] "Part 1. Var(y_i) = Var(x) + Var(e) ..."
+Var_x Var_e Var_y 
+    4    40    44 
+Simulated Var(y) from one data set of length 1e6 ...
+  44.0000
+[1] "Part 2. Avar(ybar_N) = sigma^2/N at N = 100 ..."
+sigma2      N   Avar 
+ 44.00 100.00   0.44 
+[1] "Part 3. Monte Carlo Var(ybar_N) at N = 100 ..."
+Monte_Carlo  Asymptotic       Ratio 
+     0.4408      0.4400      1.0018 
+[1] "Part 4. Skewness of ybar_N ..."
+    N skew_MonteCarlo skew_theory
+   10          0.1739      0.1734
+  100          0.0561      0.0548
+ 1000          0.0176      0.0173
+[1] "Skewness of a single y_i, for reference ..."
+[1] 0.5482
+Monte Carlo standard error of each skewness: 0.0035
+null device 
+          1 
+[1] "Figure written to ..."
+[1] "/Users/kyratzis/Library/Mobile Documents/com~apple~CloudDocs/Wharton/1 - Fall 2026/STAT 5200 - Applied Econometrics I/Homework Assignments/Homework 2/figures"
