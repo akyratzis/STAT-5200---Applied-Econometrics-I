@@ -2,13 +2,6 @@
 observations    variables 
          531           10 
 [1] "Part 1. OLS estimates of the wage equation ..."
-           Estimate       SE   t value P(>|t|)
-intercept  0.494631 0.121376  4.075211 5.3e-05
-educ       0.089439 0.008202 10.904158 0.0e+00
-exper      0.038260 0.005480  6.982179 0.0e+00
-exper2    -0.000599 0.000121 -4.956715 1.0e-06
-Residual standard error: 0.4453 on 527 df
-[1] "The same model through lm(), as a check ..."
 
 Call:
 lm(formula = logwage ~ educ + exper + exper2)
@@ -30,6 +23,9 @@ Residual standard error: 0.4453 on 527 degrees of freedom
 Multiple R-squared:  0.2569,	Adjusted R-squared:  0.2527 
 F-statistic: 60.74 on 3 and 527 DF,  p-value: < 2.2e-16
 
+[1] "Experience at which log(wage) peaks ..."
+exper 
+31.94 
 null device 
           1 
 [1] "Part 2. Shape of the residual distribution ..."
@@ -49,6 +45,9 @@ skewness kurtosis
     45   11.0131 0.9491  9.1527 12.8734
     50   11.6799 1.0237  9.6735 13.6862
     55   12.3507 1.1114 10.1724 14.5290
+[1] "Return from the education coefficient alone ..."
+  educ 
+9.3561 
 null device 
           1 
 [1] "Figures written to ..."

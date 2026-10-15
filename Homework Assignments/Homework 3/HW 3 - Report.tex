@@ -168,27 +168,20 @@ The model is
  + \beta_3 \text{exper}_i^2 + u_i ,
 \]
 so $x_i = (1, \text{educ}_i, \text{exper}_i, \text{exper}_i^2)$ and $K = 4$.
-Following the lab notes, the estimation is done from the matrix formulae
-rather than by calling \code{lm()}, and Listing~\ref{lst:q3-ols} is the
-function that does it. The classical standard errors come from
-$\widehat{\Avar}(\hat\beta) = \hat\sigma^2 (X'X)^{-1}$ with
-$\hat\sigma^2 = (N-K)^{-1}\sum_i \hat{u}_i^2$. Calling \code{lm()} on the same
-model returns the same numbers to the printed precision, which is the check
-that the matrix code is right.
+The estimation is a single call to \code{lm()}, as in the lab notes, shown in
+Listing~\ref{lst:q3-ols}. The coefficients come back from \code{coef()} and
+their estimated covariance matrix from \code{vcov()}, which returns
+$\hat\sigma^2(X'X)^{-1}$ with $\hat\sigma^2 = (N-K)^{-1}\sum_i \hat{u}_i^2$;
+that matrix is what the delta method in part (6) needs.
 
-\begin{lstlisting}[style=Rcode,caption={OLS from the matrix formulae (excerpt
-from \code{R/q3\_cps85\_regression.R}).},label={lst:q3-ols}]
-ols = function(y, X){
-  N = nrow(X);
-  K = ncol(X);
-  b = solve(t(X) %*% X) %*% (t(X) %*% y);        # OLS estimator
-  uhat = y - X %*% b;                            # residuals
-  sig2hat = (1/(N-K)) * sum(uhat^2);             # estimator of Var(u)
-  Vhat = sig2hat * solve((1/N) * t(X) %*% X);    # Avar of sqrt(N)(b-beta)
-  Vhat_ols = Vhat/N;                             # Avar of b
-  se = sqrt(diag(Vhat_ols));
-  ...
-}
+\begin{lstlisting}[style=Rcode,caption={Estimating the model (excerpt from
+\code{R/q3\_cps85\_regression.R}).},label={lst:q3-ols}]
+exper2 = exper^2;   # squared experience, for the concavity in exper
+
+model1 = lm(formula = logwage ~ educ + exper + exper2);
+
+b = coef(model1);
+V = vcov(model1);
 \end{lstlisting}
 
 The estimates are in Table~\ref{tab:q3-ols}.
@@ -203,10 +196,10 @@ error $0.4453$ on $527$ degrees of freedom; $R^2 = 0.2569$.}
 \toprule
 & Estimate & SE & $t$ & $p$ \\
 \midrule
-Intercept & $0.494631$ & $0.121376$ & $4.075$ & $<0.001$ \\
-\code{educ} & $0.089439$ & $0.008202$ & $10.904$ & $<0.001$ \\
-\code{exper} & $0.038260$ & $0.005480$ & $6.982$ & $<0.001$ \\
-\code{exper2} & $-0.000599$ & $0.000121$ & $-4.957$ & $<0.001$ \\
+Intercept & $0.4946312$ & $0.1213756$ & $4.075$ & $5.31\times10^{-5}$ \\
+\code{educ} & $0.0894394$ & $0.0082023$ & $10.904$ & $<2\times10^{-16}$ \\
+\code{exper} & $0.0382600$ & $0.0054797$ & $6.982$ & $8.79\times10^{-12}$ \\
+\code{exper2} & $-0.0005989$ & $0.0001208$ & $-4.957$ & $9.68\times10^{-7}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -217,7 +210,7 @@ $\hat\beta_3 < 0$, so the earnings profile is concave in experience. It peaks
 at
 \[
 \text{exper} = -\frac{\hat\beta_2}{2\hat\beta_3}
-= -\frac{0.038260}{2(-0.000599)} = 31.94 \text{ years},
+= -\frac{0.0382600}{2(-0.0005989)} = 31.94 \text{ years},
 \]
 which sits inside the observed range of experience, $0$ to $55$ years.
 
@@ -394,20 +387,15 @@ Figure~\ref{fig:q3-theta}; Listing~\ref{lst:q3-delta} is the code.
 
 \begin{lstlisting}[style=Rcode,caption={The delta method standard error
 (excerpt from \code{R/q3\_cps85\_regression.R}).},label={lst:q3-delta}]
-c_vec = function(exper_value){
-  return(matrix(c(0, 1, -1, 1 - 2*exper_value), ncol = 1));
+for (j in 1:length(exper_grid)){
+  cv = c(0, 1, -1, 1 - 2*exper_grid[j]);
+  theta_grid[j] = 100 * (exp(sum(cv*b)) - 1);
+  grad = 100 * exp(sum(cv*b)) * cv;
+  se_grid[j] = sqrt(t(grad) %*% V %*% grad);
 }
 
-theta_hat = function(b, exper_value){
-  cv = c_vec(exper_value);
-  return(100 * (exp(t(cv) %*% b) - 1));
-}
-
-se_theta_hat = function(b, Vhat_ols, exper_value){
-  cv = c_vec(exper_value);
-  grad = 100 * as.numeric(exp(t(cv) %*% b)) * cv;
-  return(sqrt(t(grad) %*% Vhat_ols %*% grad));
-}
+lci = theta_grid - 1.96*se_grid;   # 95% confidence interval
+uci = theta_grid + 1.96*se_grid;
 \end{lstlisting}
 
 %==============================================================================
