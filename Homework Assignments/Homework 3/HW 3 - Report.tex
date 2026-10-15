@@ -1,0 +1,270 @@
+%==============================================================================
+%  STAT 5200 - Applied Econometrics I
+%  Homework 3
+%
+%  Compile with:  pdflatex "HW 3 - Report.tex"  (run twice for refs)
+%
+%  Directory layout assumed by this file:
+%     HW 3 - Report.tex
+%     R/        (scripts, for Q3 and Q4)
+%     figures/  (generated figures, for Q3)
+%     output/   (captured console output, for Q3 and Q4)
+%==============================================================================
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[hidelinks]{hyperref}
+
+%------------------------------------------------------------------------------
+%  Code presentation
+%
+%  Code is set as selectable text on a fixed character grid, source and console
+%  output are given visually distinct styles, and source lines are kept to 76
+%  characters so that nothing wraps.
+%------------------------------------------------------------------------------
+\definecolor{codekeyword}{RGB}{0,86,148}
+\definecolor{codestring} {RGB}{163,21,21}
+\definecolor{codecomment}{RGB}{106,115,125}
+\definecolor{codebg}     {RGB}{248,248,250}
+\definecolor{coderule}   {RGB}{220,220,226}
+
+\lstdefinestyle{Rcode}{
+  language        = R,
+  basicstyle      = \ttfamily\footnotesize,
+  keywordstyle    = \color{codekeyword}\bfseries,
+  stringstyle     = \color{codestring},
+  commentstyle    = \color{codecomment}\itshape,
+  numbers         = left,
+  numberstyle     = \ttfamily\scriptsize\color{codecomment},
+  numbersep       = 9pt,
+  backgroundcolor = \color{codebg},
+  frame           = single,
+  rulecolor       = \color{coderule},
+  framesep        = 4pt,
+  xleftmargin     = 15pt,
+  xrightmargin    = 0pt,
+  columns         = fixed,
+  basewidth       = 0.5em,
+  keepspaces      = true,
+  tabsize         = 2,
+  showstringspaces = false,
+  breaklines      = true,
+  breakatwhitespace = true,
+  postbreak       = \mbox{\textcolor{codekeyword}{$\hookrightarrow$}\space},
+  captionpos      = b,
+  abovecaptionskip = 6pt,
+}
+
+\lstdefinestyle{Routput}{
+  language        = {},
+  basicstyle      = \ttfamily\footnotesize,
+  keywordstyle    = \ttfamily,
+  commentstyle    = \ttfamily,
+  stringstyle     = \ttfamily,
+  numbers         = none,
+  backgroundcolor = \color{white},
+  frame           = leftline,
+  rulecolor       = \color{coderule},
+  framesep        = 6pt,
+  xleftmargin     = 20pt,
+  breaklines      = true,
+  captionpos      = b,
+  abovecaptionskip = 6pt,
+}
+
+\lstset{style=Rcode}
+\renewcommand{\lstlistingname}{Listing}
+
+% Short inline code fragments.
+\newcommand{\code}[1]{\texttt{#1}}
+
+% Operators used throughout.
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Avar}{Avar}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator*{\plim}{plim}
+
+% Placeholder marker. Every occurrence should be gone before submission;
+% search the source for "\todo" to find what is still outstanding.
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO:} #1\textbf{]}}}
+
+%------------------------------------------------------------------------------
+\title{\vspace{-2em}Homework 3\\[0.3em]
+       \large STAT 5200 --- Applied Econometrics I --- Fall 2026}
+
+\author{Apostolos Kyratzis - 13130833}
+\date{October 15, 2026}
+
+\begin{document}
+\maketitle
+
+%==============================================================================
+\section{Q1: Reflection}
+\label{sec:q1}
+%==============================================================================
+
+\paragraph{Are my answers in line with the solutions?}
+\todo{read \code{Homework Solutions/Homework 2/HW 2 - Solutions.pdf} and state
+whether the answers agree; list any question missed}
+
+\paragraph{What could I have done better?}
+\todo{points for improvement}
+
+%==============================================================================
+\section{Q2: Asymptotic properties of the OLS estimator}
+\label{sec:q2}
+%==============================================================================
+
+Throughout, the model is
+\[
+y_i = x_i\beta + u_i, \qquad i = 1,\dots,N,
+\]
+with $y_i$ a scalar and $x_i$ a $1 \times k$ row vector, and the estimator is
+\[
+\hat\beta = \left(\sum_{i=1}^{N} x_i'x_i\right)^{-1}
+            \left(\sum_{i=1}^{N} x_i'y_i\right).
+\]
+We assume OLS1 and OLS2 and that $(y_i,x_i)$ is i.i.d.\ over $i$. Each part
+below flags where the assumptions are used.
+
+\paragraph{(1) Consistency of $\hat\beta$.}
+\todo{show $\plim \hat\beta = \beta$; Notes 03, pp.~4--5}
+
+\paragraph{(2) The asymptotic distribution of $\hat\beta$.}
+\todo{derive $\sqrt{N}(\hat\beta - \beta) \xrightarrow{d} N(0, A^{-1}BA^{-1})$;
+Notes 03, p.~6 and Appendix 1}
+
+\paragraph{(3) A consistent estimator of the asymptotic variance.}
+\todo{the sandwich estimator; Notes 03, Appendix 2, eq.~(40)}
+
+\paragraph{(4) The standard error of $\hat\beta$.}
+\todo{square root of the $k$-th diagonal entry of $\hat{V}/N$; Notes 03, pp.~6--7}
+
+%==============================================================================
+\section{Q3: Returns to education in the CPS85 data}
+\label{sec:q3}
+%==============================================================================
+
+The data set is \code{CPS85.txt} from Lab 2. It is part of the course material
+distributed by the instructor and is therefore not tracked in this repository;
+the script reads it from its original location by relative path.
+
+\paragraph{(1) Estimating the wage equation.}
+The model is
+\[
+\log(\text{wage}_i) = \beta_0 + \beta_1 \text{educ}_i + \beta_2 \text{exper}_i
+ + \beta_3 \text{exper}_i^2 + u_i .
+\]
+\todo{estimate by OLS and report the coefficient table}
+
+\paragraph{(2) Normal quantile plot of the residuals.}
+\todo{produce the Q-Q plot, then judge whether $u_i$ looks normal and say
+whether non-normality matters for the later analysis}
+
+\paragraph{(3) The parameter $\theta$.}
+Increasing education by one year while experience falls by one year gives
+\[
+\theta = 100\left[\exp\!\left(\beta_1 - \beta_2 + (1-2\,\text{exper})\beta_3\right) - 1\right].
+\]
+\todo{comment on the construction of $\theta$}
+
+\paragraph{(4) An estimator for $\theta$, and its consistency.}
+\todo{plug-in estimator $\hat\theta$; argue consistency}
+
+\paragraph{(5) $\hat\theta$ across experience levels.}
+\todo{compute $\hat\theta$ for exper $= 0,5,\dots,55$ and discuss}
+
+\paragraph{(6) How standard errors and confidence intervals would be computed.}
+\todo{discussion only, no computation required}
+
+\paragraph{(7) Standard errors and confidence intervals (optional).}
+\todo{optional, not graded; delete this paragraph if not attempted}
+
+%==============================================================================
+\section{Q4: Monte Carlo simulation and the empirical coverage rate}
+\label{sec:q4}
+%==============================================================================
+
+The population model is
+\[
+y = \beta_0 + \beta_1 x + \beta_2 x^2 + u,
+\qquad
+\beta_0 = 1,\;\; \beta_1 = 1,\;\; \beta_2 = 0.2,
+\]
+with $u \sim t_7$ and $x \sim N(1,4)$, and $N = 100$.
+
+\paragraph{(1) Sampling one data set.}
+\todo{draw $Y_N^{(1)}$ and $X_N^{(1)}$}
+
+\paragraph{(2) The OLS estimate.}
+\todo{compute $\hat\beta = [\hat\beta_0, \hat\beta_1, \hat\beta_2]'$}
+
+\paragraph{(3) A 95\% confidence interval for $\beta_1$.}
+\todo{build the interval from the asymptotic distribution of Q2(2), and define
+the indicator $I^{(m)}$}
+
+\paragraph{(4) The empirical coverage rate over $M = 10{,}000$ replications.}
+\todo{report the coverage rate and say whether it matches expectations, by
+reference to the assumptions}
+
+\paragraph{(5) The heteroskedastic model.}
+With the error scaled by $|x|/2$,
+\[
+y = \beta_0 + \beta_1 x + \beta_2 x^2 + \frac{|x|}{2}\,u ,
+\]
+\todo{report the coverage rate, compare it with part (4), and explain by
+reference to the assumptions}
+
+%==============================================================================
+\section{Q5: Paper question}
+\label{sec:q5}
+%==============================================================================
+
+\paragraph{(1) The paper.}
+\todo{a paper from one of the five journals listed in Homework 1, containing
+"OLS" or "ordinary least squares" and reporting OLS results; confirm the
+publication venue before writing the citation}
+
+\paragraph{(2) Citation.}
+\todo{author, title, year, journal, volume, issue, pages, DOI}
+
+\paragraph{(3) The main research question.}
+\todo{one paragraph}
+
+\paragraph{(4) The empirical model in our notation.}
+Writing their specification as $y_i = x_i\beta + u_i$:
+\todo{identify $y_i$, identify $x_i$ in the main specification, give the number
+of variables in $x_i$, and give the total number of observations}
+
+\paragraph{(5) Do the authors state the assumptions behind OLS?}
+\todo{report what the paper does and does not state}
+
+\paragraph{(6) A plausible story under which $E[x_i u_i] = 0$ fails.}
+\todo{one paragraph, no more than five sentences, as critical as possible}
+
+%==============================================================================
+\appendix
+\section{Complete R scripts}
+%==============================================================================
+
+\subsection{\texorpdfstring{\code{R/q3\_cps85\_regression.R}}{R/q3\_cps85\_regression.R}}
+\lstinputlisting[style=Rcode,caption={\code{R/q3\_cps85\_regression.R}
+--- Q3, the CPS85 wage equation.},label={lst:app-q3}]%
+{R/q3_cps85_regression.R}
+
+\subsection{\texorpdfstring{\code{R/q4\_coverage\_rate.R}}{R/q4\_coverage\_rate.R}}
+\lstinputlisting[style=Rcode,caption={\code{R/q4\_coverage\_rate.R}
+--- Q4, Monte Carlo simulation and the empirical coverage rate.},
+label={lst:app-q4}]%
+{R/q4_coverage_rate.R}
+
+\end{document}
