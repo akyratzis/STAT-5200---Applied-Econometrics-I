@@ -154,25 +154,19 @@ Notes 03, p.~6 and Appendix 1}
 \label{sec:q3}
 %==============================================================================
 
-The data set is \code{CPS85.txt} from Lab 2: $531$ observations from the May
-1985 Current Population Survey. It is part of the course material distributed
-by the instructor and is therefore not tracked in this repository; the script
-reads it from its original location by relative path. The dependent variable
-is supplied already on the log scale as \code{logwage}, so no further
-transformation is needed.
+The data is \code{CPS85.txt} from Lab 2: $531$ observations from the May 1985
+Current Population Survey. It is instructor-distributed material and is not
+tracked here, so the script reads it by relative path. The dependent variable
+is already on the log scale as \code{logwage}.
 
 \paragraph{(1) Estimating the wage equation.}
-The model is
 \[
 \log(\text{wage}_i) = \beta_0 + \beta_1 \text{educ}_i + \beta_2 \text{exper}_i
  + \beta_3 \text{exper}_i^2 + u_i ,
 \]
 so $x_i = (1, \text{educ}_i, \text{exper}_i, \text{exper}_i^2)$ and $K = 4$.
-The estimation is a single call to \code{lm()}, as in the lab notes, shown in
-Listing~\ref{lst:q3-ols}. The coefficients come back from \code{coef()} and
-their estimated covariance matrix from \code{vcov()}, which returns
-$\hat\sigma^2(X'X)^{-1}$ with $\hat\sigma^2 = (N-K)^{-1}\sum_i \hat{u}_i^2$;
-that matrix is what the delta method in part (6) needs.
+Estimation is one \code{lm()} call; \code{vcov()} supplies
+$\hat\sigma^2(X'X)^{-1}$, needed for part~(6).
 
 \begin{lstlisting}[style=Rcode,caption={Estimating the model (excerpt from
 \code{R/q3\_cps85\_regression.R}).},label={lst:q3-ols}]
@@ -183,8 +177,6 @@ model1 = lm(formula = logwage ~ educ + exper + exper2);
 b = coef(model1);
 V = vcov(model1);
 \end{lstlisting}
-
-The estimates are in Table~\ref{tab:q3-ols}.
 
 \begin{table}[htbp]
 \centering
@@ -204,101 +196,65 @@ Intercept & $0.4946312$ & $0.1213756$ & $4.075$ & $5.31\times10^{-5}$ \\
 \end{tabular}
 \end{table}
 
-All four coefficients are significant at any conventional level. The signs
-match what the lab notes lead us to expect: $\hat\beta_2 > 0$ and
-$\hat\beta_3 < 0$, so the earnings profile is concave in experience. It peaks
-at
-\[
-\text{exper} = -\frac{\hat\beta_2}{2\hat\beta_3}
-= -\frac{0.0382600}{2(-0.0005989)} = 31.94 \text{ years},
-\]
-which sits inside the observed range of experience, $0$ to $55$ years.
+All four coefficients are significant at any conventional level.
+$\hat\beta_2 > 0$ and $\hat\beta_3 < 0$, so the profile is concave in
+experience, peaking at
+$-\hat\beta_2/(2\hat\beta_3) = 31.94$ years, inside the observed range
+$[0,55]$.
 
 \paragraph{(2) Normal quantile plot of the residuals.}
-Figure~\ref{fig:q3-qq} plots the OLS residuals against normal quantiles. The
-points track the reference line closely over the whole range, with a mild
-departure confined to the extreme tails, where the sample quantiles are pulled
-\emph{towards} the centre: at the first percentile the standardised residual
-is $-2.23$ against the normal's $-2.33$, and at the ninety-ninth it is $2.31$
-against $2.33$. The summary moments say the same thing. The residual skewness
-is $-0.0038$, so the distribution is essentially symmetric, and the kurtosis is
-$2.73$ against the normal's $3$, so the tails are slightly \emph{lighter} than
-normal rather than heavier. No residual lies beyond three standard deviations,
-where a normal sample of this size would be expected to produce about $1.4$.
+In Figure~\ref{fig:q3-qq} the points track the reference line closely, with
+mild departures only in the extreme tails, where the sample quantiles are
+pulled \emph{towards} the centre: at the first percentile the standardised
+residual is $-2.23$ against the normal's $-2.33$. Residual skewness is
+$-0.0038$ and kurtosis $2.73$ against the normal's $3$, so the distribution is
+symmetric and slightly light-tailed, not heavy-tailed. The normality
+assumption is not unreasonable here.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.62\textwidth]{figures/q3_qqplot.pdf}
-\caption{Normal quantile-quantile plot of the OLS residuals, with the
-reference line through the first and third quartiles.}
+\caption{Normal quantile-quantile plot of the OLS residuals.}
 \label{fig:q3-qq}
 \end{figure}
 
-So the residuals are, if anything, slightly better behaved than normal, and as
-the lab notes put it, the normality assumption is not unreasonable here.
-
-\emph{Is non-normality a concern for the later analysis?} Not for what we do
-with this model. The inference in Q2 rests on OLS1 and OLS2 and is asymptotic:
-consistency follows from the law of large numbers and the limiting
-distribution from the central limit theorem, and neither requires $u_i$ to be
-normal. Normality of the error matters only if one wants the $t$ and $F$
-statistics to have exactly their named finite-sample distributions, which is
-the classical fixed-regressor analysis of Appendix 3 to Notes 03. With
-$N = 531$ the asymptotic approximation is what we would rely on in any case.
-The assumption that does bite is homoskedasticity: if it fails, the standard
-errors in Table~\ref{tab:q3-ols} are the wrong ones and the sandwich form
-should be used instead. That is a separate issue from normality, and nothing
-in Figure~\ref{fig:q3-qq} speaks to it.
+\emph{Is non-normality a concern?} No. Inference under OLS1 and OLS2 is
+asymptotic: consistency comes from the law of large numbers and the limiting
+distribution from the central limit theorem, neither of which needs normal
+errors. Normality matters only for exact finite-sample $t$ and $F$
+distributions, and $N = 531$ here. The assumption that does bite is
+homoskedasticity: if it fails, Table~\ref{tab:q3-ols} reports the wrong
+standard errors and the sandwich form is needed. Figure~\ref{fig:q3-qq} says
+nothing about that.
 
 \paragraph{(3) The parameter $\theta$.}
-Experience is defined as age minus years of schooling minus six, so an extra
-year of education necessarily costs a year of experience. The two effects must
-therefore be combined. Raising \code{educ} by one and lowering \code{exper} by
-one changes the expected log wage by
-\[
-\beta_1 - \beta_2 + (1 - 2\,\text{exper})\beta_3 ,
-\]
-where the last term collects the change in the quadratic,
-$(\text{exper}-1)^2 - \text{exper}^2 = 1 - 2\,\text{exper}$. Exponentiating
-gives the proportional change in the expected wage, so
-\[
-\theta = 100\left[\exp\!\left(\beta_1 - \beta_2
- + (1-2\,\text{exper})\beta_3\right) - 1\right],
-\]
-the percentage change in the expected wage. It is convenient to write the
-exponent as a linear combination of the coefficients,
+Since $\text{exper} = \text{age} - \text{educ} - 6$, an extra year of
+education costs a year of experience. The combined effect on the expected log
+wage is $\beta_1 - \beta_2 + (1-2\,\text{exper})\beta_3$, the last term being
+the change in the quadratic,
+$(\text{exper}-1)^2 - \text{exper}^2 = 1-2\,\text{exper}$. Exponentiating,
 \[
 \theta = 100\left[\exp\!\left(c(\text{exper})'\beta\right) - 1\right],
 \qquad
 c(\text{exper}) = \begin{pmatrix} 0 \\ 1 \\ -1 \\ 1-2\,\text{exper}
 \end{pmatrix},
 \]
-which is the form the delta method in part (6) needs.
+written as a contrast $c'\beta$ for use in part~(6).
 
 \paragraph{(4) An estimator for $\theta$, and its consistency.}
-The natural estimator is the plug-in one, obtained by replacing $\beta$ with
-the OLS estimator,
-\[
-\hat\theta = 100\left[\exp\!\left(c(\text{exper})'\hat\beta\right) - 1\right].
-\]
-It is consistent. Q2(1) establishes that $\hat\beta \overset{p}{\to} \beta$
-under OLS1 and OLS2. The map
-$b \mapsto 100[\exp(c'b) - 1]$ is continuous everywhere, being a composition of
-a linear map and the exponential, and $\text{exper}$ enters only through the
-fixed vector $c$. The continuous mapping theorem then gives
-$\hat\theta \overset{p}{\to} \theta$ directly. Note that consistency needs
-nothing beyond what makes $\hat\beta$ consistent; in particular it does not
-require homoskedasticity or normality.
+The plug-in estimator is
+$\hat\theta = 100[\exp(c(\text{exper})'\hat\beta) - 1]$. By Q2(1),
+$\hat\beta \overset{p}{\to} \beta$ under OLS1 and OLS2; the map
+$b \mapsto 100[\exp(c'b)-1]$ is continuous, so the continuous mapping theorem
+gives $\hat\theta \overset{p}{\to} \theta$. Nothing beyond consistency of
+$\hat\beta$ is required.
 
 \paragraph{(5) $\hat\theta$ across experience levels.}
-Table~\ref{tab:q3-theta} evaluates $\hat\theta$ over
-$\text{exper} = 0, 5, \dots, 55$, and Figure~\ref{fig:q3-theta} plots it.
 
 \begin{table}[htbp]
 \centering
 \caption{The estimated return to education $\hat\theta$, in per cent, by years
-of experience. Standard errors and intervals are from the delta method of
-parts (6) and (7).}
+of experience. Standard errors and intervals from parts (6) and (7).}
 \label{tab:q3-theta}
 \small
 \begin{tabular}{rrrr}
@@ -324,66 +280,45 @@ parts (6) and (7).}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.65\textwidth]{figures/q3_theta_by_exper.pdf}
-\caption{The estimated return to education $\hat\theta$ against years of
-experience, with pointwise $95$ per cent confidence intervals from the delta
-method.}
+\caption{$\hat\theta$ against years of experience, with pointwise $95$ per
+cent confidence intervals.}
 \label{fig:q3-theta}
 \end{figure}
 
-\emph{Discussion.} The estimated return rises steadily with experience, from
-$5.19$ per cent at $\text{exper} = 0$ to $12.35$ per cent at
-$\text{exper} = 55$, roughly a factor of two and a half across the range. The
-reason is the concavity of the earnings profile. The trade is always a year of
-schooling bought with a year of experience, and the value of the year of
-experience given up is $\beta_2 + (2\,\text{exper}-1)\beta_3$, which falls as
-experience accumulates because $\hat\beta_3 < 0$. Beyond the turning point at
-$31.94$ years the forgone year is actually worth less than nothing, so the
-swap gains on both sides. For a worker with no experience the return is
-noticeably below the $9.36$ per cent that $100[\exp(\hat\beta_1)-1]$ would
-suggest, which is what one would report by looking at the education
-coefficient alone and forgetting that experience moves too.
-
-The estimates are least precise at the two ends of the range and tightest near
-$\text{exper} = 30$, where the standard error bottoms out at $0.83$. This is
-the usual behaviour of a fitted quantity: $c(\text{exper})$ depends on
-experience, and the variance is smallest in the middle of the data, the sample
-mean of \code{exper} being $17.85$ years. The confidence intervals exclude zero
-everywhere, so the return to education is significantly positive at every
-experience level considered.
+\emph{Discussion.} The return rises from $5.19$ per cent at
+$\text{exper} = 0$ to $12.35$ per cent at $\text{exper} = 55$. The cause is
+the concavity: the forgone year of experience is worth
+$\beta_2 + (2\,\text{exper}-1)\beta_3$, which falls as experience accumulates
+and turns negative past $31.94$ years, so the swap eventually gains on both
+sides. At zero experience the return is well below the $9.36$ per cent given
+by $100[\exp(\hat\beta_1)-1]$, which ignores that experience moves too.
+Precision is best near $\text{exper} = 30$, where the standard error bottoms
+out at $0.83$, the sample mean of \code{exper} being $17.85$ years. All
+intervals exclude zero.
 
 \paragraph{(6) How standard errors and confidence intervals would be computed.}
-By the delta method. The estimator is a smooth non-linear function of
-$\hat\beta$, namely $\hat\theta = g(\hat\beta)$ with
-$g(b) = 100[\exp(c'b)-1]$, so its standard error cannot be read off the
-regression output. Since $g$ is differentiable and
-$\sqrt{N}(\hat\beta - \beta) \overset{d}{\to} N(0,V)$ from Q2(2), a first order
-Taylor expansion gives
+By the delta method, since $\hat\theta = g(\hat\beta)$ with
+$g(b) = 100[\exp(c'b)-1]$ is a smooth non-linear function of $\hat\beta$ and
+$\sqrt{N}(\hat\beta-\beta) \overset{d}{\to} N(0,V)$ from Q2(2):
 \[
 \Avar\!\left(g(\hat\beta)\right)
 = \nabla g(\beta)'\, \Avar(\hat\beta)\, \nabla g(\beta),
 \qquad
-\nabla g(\beta) = 100\exp\!\left(c'\beta\right) c .
+\nabla g(\beta) = 100\exp\!\left(c'\beta\right) c ,
 \]
-Replacing $\beta$ by $\hat\beta$ and $\Avar(\hat\beta)$ by the consistent
-estimator $\hat{V}/N$ of Q2(3) gives the standard error
+so that, using the estimator $\hat{V}/N$ from Q2(3),
 \[
 \text{se}(\hat\theta)
-= 100\exp\!\left(c'\hat\beta\right)
-  \sqrt{c'\,(\hat{V}/N)\,c} ,
+= 100\exp\!\left(c'\hat\beta\right)\sqrt{c'\,(\hat{V}/N)\,c} ,
 \]
-and the interval $\hat\theta \pm 1.96\,\text{se}(\hat\theta)$. Two points are
-worth making. First, $c$ changes with \code{exper}, so the calculation must be
-redone at each value rather than scaled from a single number. Second, because
-$c$ loads on three coefficients at once, the covariances between
-$\hat\beta_1$, $\hat\beta_2$ and $\hat\beta_3$ enter through the off-diagonal
-entries of $\hat{V}/N$; using only the three reported standard errors would
-give the wrong answer. Whether $\hat{V}$ should be the homoskedastic form or
-the sandwich form is the question raised in part (2), and does not change the
-shape of the calculation.
+with interval $\hat\theta \pm 1.96\,\text{se}(\hat\theta)$. Two points: $c$
+changes with \code{exper}, so the calculation is redone at each value; and $c$
+loads on three coefficients, so the off-diagonal entries of $\hat{V}/N$ enter
+and the three reported standard errors alone would not suffice.
 
 \paragraph{(7) Standard errors and confidence intervals (optional).}
-These are the last two columns of Table~\ref{tab:q3-theta} and the band in
-Figure~\ref{fig:q3-theta}; Listing~\ref{lst:q3-delta} is the code.
+Reported in the last two columns of Table~\ref{tab:q3-theta} and as the band
+in Figure~\ref{fig:q3-theta}.
 
 \begin{lstlisting}[style=Rcode,caption={The delta method standard error
 (excerpt from \code{R/q3\_cps85\_regression.R}).},label={lst:q3-delta}]
