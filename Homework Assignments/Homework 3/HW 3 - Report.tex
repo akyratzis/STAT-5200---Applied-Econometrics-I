@@ -231,9 +231,8 @@ It is convenient to write the exponent as a contrast $c(\text{exper})'\beta$,
 \theta = 100\left[\exp\!\left(c(\text{exper})'\beta\right) - 1\right],
 \qquad
 c(\text{exper}) = \begin{pmatrix} 0 \\ 1 \\ -1 \\ 1-2\,\text{exper}
-\end{pmatrix}
+\end{pmatrix}.
 \]
-
 
 \paragraph{(4) An estimator for $\theta$, and its consistency.}
 Replacing $\beta$ by the OLS estimator $\hat\beta$ gives
@@ -445,13 +444,6 @@ $\beta_2$ & $0.2149$ & $0.2$ \\
 \end{table}
 
 \paragraph{(3) A 95\% confidence interval for $\beta_1$.}
-\emph{Throughout Q4 we compute the interval twice, once from the sandwich
-estimator of $\Avar(\hat\beta)$ and once from the classical one, and carry
-both through to the coverage rates in parts (4) and (5).} The reason is that
-Q2 assumes only OLS1 and OLS2, under which the consistent estimator is the
-sandwich of Q2(3); the classical $\hat\sigma^2(X'X)^{-1}$ that \code{lm()}
-reports additionally requires homoskedasticity, which part (5) removes.
-
 From the asymptotic distribution of Q2(2) the interval is
 \[
 \hat\beta_1 \pm 1.96\,\text{se}(\hat\beta_1),
@@ -462,47 +454,36 @@ asymptotic. The indicator
 I^{(m)} = \mathbf{1}\{\beta_1 \in \text{CI}^{(m)}\}
 \]
 records whether the interval from the $m$-th data set contains the true
-$\beta_1$. This is something we can only check because the population is ours:
+$\beta_1$. We can check this only because the population is ours:
 $\beta_1 = 1$ by construction, whereas in an application it would be unknown.
 
-\begin{lstlisting}[style=Rcode,caption={The two variance estimators and the
-indicator (excerpt from \code{R/q4\_coverage\_rate.R}).},label={lst:q4-ci}]
-V_sandwich = solve(t(X) %*% X) %*% (t(X) %*% diag(uhat^2) %*% X) %*%
-  solve(t(X) %*% X);
-V_classical = vcov(fit);
+\begin{lstlisting}[style=Rcode,caption={The interval and the indicator
+(excerpt from \code{R/q4\_coverage\_rate.R}).},label={lst:q4-ci}]
+se_b1 = sqrt(vcov(fit)[2,2]);
+ci = b[2] + c(-1, 1)*1.96*se_b1;
 
-ci_sandwich = b[2] + c(-1, 1)*1.96*se_sandwich;
-ci_classical = b[2] + c(-1, 1)*1.96*se_classical;
-
-I_sandwich = as.numeric(ci_sandwich[1] <= beta1 & beta1 <= ci_sandwich[2]);
+I = as.numeric(ci[1] <= beta1 & beta1 <= ci[2]);
 \end{lstlisting}
 
-\begin{table}[htbp]
-\centering
-\caption{$95$ per cent confidence intervals for $\beta_1$ from the data set of
-part (1), with $\hat\beta_1 = 1.0220$ and the true $\beta_1 = 1$.}
-\label{tab:q4-ci}
-\small
-\begin{tabular}{lrrrr}
-\toprule
-& SE & Lower & Upper & $I^{(1)}$ \\
-\midrule
-Sandwich & $0.0978$ & $0.8303$ & $1.2136$ & $1$ \\
-Classical & $0.0972$ & $0.8315$ & $1.2125$ & $1$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The two standard errors are almost identical here, $0.0978$ against $0.0972$,
-which is what we should expect: the population of part (1) is homoskedastic,
-so the extra assumption the classical estimator makes happens to be true and
-the two estimate the same quantity. Both intervals contain $\beta_1 = 1$, so
-$I^{(1)} = 1$ either way. A single draw says nothing on its own, which is what
-part (4) addresses.
+For the data set of part (1) this gives $\text{se}(\hat\beta_1) = 0.0972$ and
+an interval of $[0.8315,\; 1.2125]$, which contains $\beta_1 = 1$, so
+$I^{(1)} = 1$.
 
 \paragraph{(4) The empirical coverage rate over $M = 10{,}000$ replications.}
-\todo{report the coverage rate and say whether it matches expectations, by
-reference to the assumptions}
+Repeating parts (1) to (3) on $M = 10{,}000$ freshly drawn data sets gives an
+empirical coverage rate of $0.9473$. Since a coverage rate is the mean of $M$
+zero-one draws, its Monte Carlo standard error is
+$\sqrt{0.95 \times 0.05/M} = 0.0022$, so the estimate lies about one standard
+error from the nominal $0.95$.
+
+\emph{Does this meet expectations?} Yes. The interval relies on three
+assumptions and all three hold in this population. OLS1 and OLS2 give the
+asymptotic distribution of Q2(2). Homoskedasticity, OLS3, is what the
+classical $\hat\sigma^2(X'X)^{-1}$ additionally needs, and it holds here
+because $u \sim t_7$ is drawn independently of $x$, so $E[u^2 \mid x]$ is the
+constant $\Var(u)$ and does not vary with $x$. With nothing violated, coverage
+at the nominal level is exactly what the theory predicts. Part (5) removes
+OLS3 and asks what happens.
 
 \paragraph{(5) The heteroskedastic model.}
 With the error scaled by $|x|/2$,

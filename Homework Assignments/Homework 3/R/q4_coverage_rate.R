@@ -37,34 +37,38 @@ print(round(data.frame(estimate = b,
 # ------------------------------------------------------------------
 # Part 3: a 95% confidence interval for beta1, and the indicator
 # ------------------------------------------------------------------
-# Q2 assumes OLS1 and OLS2 only, so the consistent estimator of
-# Avar(b) is the sandwich
-#
-#   (X'X)^(-1) [ sum_i uhat_i^2 x_i'x_i ] (X'X)^(-1).
-#
-# The classical estimator, which additionally needs homoskedasticity,
-# is computed alongside it for comparison.
-X = cbind(1, x, x2);
-uhat = resid(fit);
-
-V_sandwich = solve(t(X) %*% X) %*% (t(X) %*% diag(uhat^2) %*% X) %*%
-  solve(t(X) %*% X);
-V_classical = vcov(fit);
-
-se_sandwich = sqrt(V_sandwich[2,2]);
-se_classical = sqrt(V_classical[2,2]);
-
-ci_sandwich = b[2] + c(-1, 1)*1.96*se_sandwich;
-ci_classical = b[2] + c(-1, 1)*1.96*se_classical;
+se_b1 = sqrt(vcov(fit)[2,2]);
+ci = b[2] + c(-1, 1)*1.96*se_b1;
 
 # The indicator is one when the interval contains the true beta1.
-I_sandwich = as.numeric(ci_sandwich[1] <= beta1 & beta1 <= ci_sandwich[2]);
-I_classical = as.numeric(ci_classical[1] <= beta1 & beta1 <= ci_classical[2]);
+I = as.numeric(ci[1] <= beta1 & beta1 <= ci[2]);
 
-print("Part 3. 95% confidence intervals for beta1 ...");
-print(round(data.frame(
-  se = c(se_sandwich, se_classical),
-  lower = c(ci_sandwich[1], ci_classical[1]),
-  upper = c(ci_sandwich[2], ci_classical[2]),
-  indicator = c(I_sandwich, I_classical),
-  row.names = c("sandwich", "classical")), 4));
+print("Part 3. 95% confidence interval for beta1 ...");
+print(round(c(se = se_b1, lower = ci[1], upper = ci[2], indicator = I), 4));
+
+# ------------------------------------------------------------------
+# Part 4: the empirical coverage rate over M data sets
+# ------------------------------------------------------------------
+# Parts 1, 2 and 3 repeated on M freshly drawn data sets.
+I_all = rep(NA, M);
+
+for (m in 1:M){
+  x = rnorm(N, mean = 1, sd = sqrt(4));
+  u = rt(N, df = 7);
+  y = beta0 + beta1*x + beta2*x^2 + u;
+  x2 = x^2;
+
+  fit = lm(y ~ x + x2);
+  b = coef(fit);
+  ci = b[2] + c(-1, 1)*1.96*sqrt(vcov(fit)[2,2]);
+  I_all[m] = as.numeric(ci[1] <= beta1 & beta1 <= ci[2]);
+}
+
+print("Part 4. Empirical coverage rate over M data sets ...");
+print(c(M = M, N = N));
+print(round(mean(I_all), 4));
+
+# A coverage rate is the mean of M zero-one draws, so its Monte Carlo
+# standard error is sqrt(0.95*0.05/M).
+print("Monte Carlo standard error of a coverage rate ...");
+print(round(sqrt(0.95*0.05/M), 4));

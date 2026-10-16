@@ -13,7 +13,12 @@ mean_y   sd_y mean_x   sd_x
 (Intercept)   0.9401   1.0
 x             1.0220   1.0
 x2            0.2149   0.2
-[1] "Part 3. 95% confidence intervals for beta1 ..."
-              se  lower  upper indicator
-sandwich  0.0978 0.8303 1.2136         1
-classical 0.0972 0.8315 1.2125         1
+[1] "Part 3. 95% confidence interval for beta1 ..."
+       se     lower     upper indicator 
+   0.0972    0.8315    1.2125    1.0000 
+[1] "Part 4. Empirical coverage rate over M data sets ..."
+    M     N 
+10000   100 
+[1] 0.9473
+[1] "Monte Carlo standard error of a coverage rate ..."
+[1] 0.0022
