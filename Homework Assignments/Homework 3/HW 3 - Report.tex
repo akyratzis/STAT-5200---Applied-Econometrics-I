@@ -112,14 +112,15 @@
 \label{sec:q1}
 %==============================================================================
 
-\paragraph{Are my answers in line with the solutions?}
+\subsection{Are my answers in line with the solutions?}
 My solutions were in line with the posted solutions.
 
-\paragraph{What could I have done better?}
+\subsection{What could I have done better?}
 
-\emph{Use the properties of the linear projection.} In Q2.2 I derived the
-projection from the normal equations and solved them. The solution shows a
-shorter route: Q2.1 had already established that $E[y|x]$ is linear in $x$, and
+\emph{Use the properties of the linear projection.} In Q2.2 of Homework 2 I
+derived the projection from the normal equations and solved them. The solution
+shows a shorter route: its Q2.1 had already established that $E[y|x]$ is linear
+in $x$, and
 the linear projection of a linear function of $x$ on $x$ is itself, so
 $L(y|1,x) = E[y|x]$ follows in one line. I cited that property only afterwards,
 as a check, instead of using it to obtain the result.
@@ -142,9 +143,13 @@ with $y_i$ a scalar and $x_i$ a row vector of length $K$, and the estimator is
 We assume OLS1 and OLS2 and that $(y_i,x_i)$ is i.i.d.\ over $i$. Each part
 below flags where the assumptions are used.
 
-\paragraph{(1) Consistency of $\hat\beta$.}
+\subsection{Consistency of $\hat\beta$}
 Write $A = E[x'x]$. Pre-multiplying $y = x\beta + u$ by $x'$ and taking
-expectations gives $E[x'x]\beta = E[x'y]$ (because of OLS1), so that
+expectations gives
+\[
+E[x'y] = E[x'x]\beta + E[x'u],
+\]
+where the second term vanishes by OLS1, leaving $E[x'x]\beta = E[x'y]$ and so
 \[
 \beta = A^{-1}E[x'y],
 \]
@@ -179,7 +184,7 @@ So $\hat\beta$ is consistent. OLS2 is used twice, to identify $\beta$ and to
 invert the limit; OLS1 is what sends the second average to zero; and the
 i.i.d.\ assumption is what allows the law of large numbers to be applied.
 
-\paragraph{(2) The asymptotic distribution of $\hat\beta$.}
+\subsection{The asymptotic distribution of $\hat\beta$}
 Multiplying $(\ast)$ by $\sqrt{N}$,
 \[
 \sqrt{N}(\hat\beta - \beta)
@@ -196,14 +201,14 @@ central limit theorem therefore gives
 \[
 \frac{1}{\sqrt{N}}\sum_{i=1}^{N} x_i'u_i \overset{d}{\to} N(0, B),
 \]
-while the first factor converges in probability to $A^{-1}$ as in part (1). By
+while the first factor converges in probability to $A^{-1}$ as in Q2.1. By
 Slutsky's theorem the product converges in distribution to
 \[
 \sqrt{N}(\hat\beta - \beta) \overset{d}{\to} N\!\left(0,\; A^{-1}BA^{-1}\right),
 \]
 so the asymptotic variance is $V = A^{-1}BA^{-1}$.
 
-\paragraph{(3) A consistent estimator of the asymptotic variance.}
+\subsection{A consistent estimator of the asymptotic variance}
 Estimate $A$ and $B$ by their sample counterparts, using the OLS residuals
 $\hat{u}_i = y_i - x_i\hat\beta$ in place of the unobserved errors:
 \[
@@ -222,7 +227,7 @@ Adding the homoskedasticity assumption OLS3, $E[u^2x'x] = \sigma^2E[x'x]$,
 would reduce $B$ to $\sigma^2A$ and this estimator to
 $\hat\sigma^2(X'X)^{-1}$, which is the form used in Q3 and Q4.
 
-\paragraph{(4) The standard error of $\hat\beta$.}
+\subsection{The standard error of $\hat\beta$}
 The standard error of a coefficient is the square root of the corresponding
 diagonal entry of the estimated asymptotic variance. Writing
 $\hat{V}/N = (\hat{v}_{jk})$,
@@ -231,7 +236,7 @@ $\hat{V}/N = (\hat{v}_{jk})$,
 \]
 and a $100(1-\alpha)$ per cent confidence interval for $\beta_k$ is
 $\hat\beta_k \pm z_{\alpha/2}\sqrt{\hat{v}_{kk}}$, with $z_{\alpha/2}$ the
-normal quantile, since the distribution in part (2) is asymptotic.
+normal quantile, since the distribution in Q2.2 is asymptotic.
 
 \clearpage
 %==============================================================================
@@ -242,14 +247,14 @@ normal quantile, since the distribution in part (2) is asymptotic.
 The data is \code{CPS85.txt} from Lab 2: $531$ observations from the May 1985
 Current Population Survey.
 
-\paragraph{(1) Estimating the wage equation.}
+\subsection{Estimating the wage equation}
 \[
 \log(\text{wage}_i) = \beta_0 + \beta_1 \text{educ}_i + \beta_2 \text{exper}_i
  + \beta_3 \text{exper}_i^2 + u_i ,
 \]
 so $x_i = (1, \text{educ}_i, \text{exper}_i, \text{exper}_i^2)$ and $K = 4$.
 Estimation is one \code{lm()} call; \code{vcov()} supplies
-$\hat\sigma^2(X'X)^{-1}$, needed for part~(6).
+$\hat\sigma^2(X'X)^{-1}$, needed for Q3.6.
 
 \begin{lstlisting}[style=Rcode,caption={Estimating the model (excerpt from
 \code{R/q3\_cps85\_regression.R}).},label={lst:q3-ols}]
@@ -285,7 +290,7 @@ experience, peaking at
 $-\hat\beta_2/(2\hat\beta_3) = 31.94$ years, inside the observed range
 $[0,55]$.
 
-\paragraph{(2) Normal quantile plot of the residuals.}
+\subsection{Normal quantile plot of the residuals}
 In Figure~\ref{fig:q3-qq} the residuals follow the reference line closely over
 the whole range, which is the pattern expected of normally distributed errors.
 Normality is therefore a reasonable assumption here.
@@ -302,7 +307,7 @@ analysis. Inference under OLS1 and OLS2 is asymptotic, resting on the law of
 large numbers and the central limit theorem, neither of which requires normal
 errors.
 
-\paragraph{(3) The parameter $\theta$.}
+\subsection{The parameter $\theta$}
 The expected percentage change in the wage from raising education by one year
 and lowering experience by one year is
 \[
@@ -317,7 +322,7 @@ c(\text{exper}) = \begin{pmatrix} 0 \\ 1 \\ -1 \\ 1-2\,\text{exper}
 \end{pmatrix}.
 \]
 
-\paragraph{(4) An estimator for $\theta$, and its consistency.}
+\subsection{An estimator for $\theta$, and its consistency}
 Replacing $\beta$ by the OLS estimator $\hat\beta$ gives
 \[
 \hat\theta = 100\left[\exp\!\left(\hat\beta_1 - \hat\beta_2
@@ -325,12 +330,12 @@ Replacing $\beta$ by the OLS estimator $\hat\beta$ gives
  = 100\left[\exp\!\left(c(\text{exper})'\hat\beta\right) - 1\right].
 \]
 Under OLS1 and OLS2, $\hat\beta$ is a consistent estimator of $\beta$ by
-Q2(1). The function $b \mapsto 100[\exp(c'b)-1]$ is continuous, so by the
+Q2.1. The function $b \mapsto 100[\exp(c'b)-1]$ is continuous, so by the
 continuous mapping theorem $\hat\theta$ is a consistent estimator of $\theta$.
 
-\paragraph{(5) $\hat\theta$ across experience levels.}
+\subsection{$\hat\theta$ across experience levels}
 Evaluating $\hat\theta$ over $\text{exper} = 0, 5, \dots, 55$ is a direct
-substitution into the formula of part~(4), shown in
+substitution into the formula of Q3.4, shown in
 Listing~\ref{lst:q3-theta}.
 
 \begin{lstlisting}[style=Rcode,caption={Evaluating $\hat\theta$ (excerpt from
@@ -396,7 +401,7 @@ declining part of the profile, where a further year of experience would lower
 the predicted wage, so giving one up is a benefit rather than a cost, the swap
 gains on both sides, and the return reaches $12.35$ per cent.
 
-\paragraph{(6) How standard errors and confidence intervals would be computed.}
+\subsection{How standard errors and confidence intervals would be computed}
 By the delta method. $\hat\theta$ is not one of the estimated coefficients but
 a non-linear function $g(\hat\beta)$ of three of them, so its standard error
 cannot be read off the regression output. The delta method obtains it from the
@@ -409,16 +414,16 @@ after which the interval is $\hat\theta \pm 1.96\,\text{se}(\hat\theta)$, the
 normal quantile being the appropriate one because the result is asymptotic.
 
 Three conditions have to hold. First, $\hat\beta$ must be asymptotically
-normal, which OLS1 and OLS2 deliver through Q2(2). Second, $g$ must be
+normal, which OLS1 and OLS2 deliver through Q2.2. Second, $g$ must be
 continuously differentiable at $\beta$ with a non-zero gradient there; here
 $g$ is the exponential of a linear combination, so this is immediate. Third,
-the covariance matrix must be estimated consistently, which is Q2(3). That
+the covariance matrix must be estimated consistently, which is Q2.3. That
 last condition is where homoskedasticity enters: the matrix used below is the
 usual $\hat\sigma^2(X'X)^{-1}$, and if the errors are heteroskedastic the
 sandwich form is required instead.
 
-\paragraph{(7) Standard errors and confidence intervals (optional).}
-Listing~\ref{lst:q3-delta} applies the formula of part~(6); the results are in
+\subsection{Standard errors and confidence intervals (optional)}
+Listing~\ref{lst:q3-delta} applies the formula of Q3.6; the results are in
 Table~\ref{tab:q3-ci}.
 
 \begin{lstlisting}[style=Rcode,caption={The delta method standard error
@@ -478,7 +483,7 @@ y = \beta_0 + \beta_1 x + \beta_2 x^2 + u,
 \]
 with $u \sim t_7$ and $x \sim N(1,4)$, and $N = 100$.
 
-\paragraph{(1) Sampling one data set.}
+\subsection{Sampling one data set}
 One data set of length $N = 100$ is drawn by sampling $x_i \sim N(1,4)$ and
 $u_i \sim t_7$ independently and forming
 $y_i = 1 + x_i + 0.2x_i^2 + u_i$, as in Listing~\ref{lst:q4-draw}. The seed is
@@ -496,7 +501,7 @@ $E[y] = 1 + E[x] + 0.2E[x^2] = 1 + 1 + 0.2(5) = 3$, using
 $E[x^2] = \Var(x) + E[x]^2 = 4 + 1 = 5$. The sample mean of this particular
 data set is $3.1898$.
 
-\paragraph{(2) The OLS estimate.}
+\subsection{The OLS estimate}
 Regressing $y$ on a constant, $x$ and $x^2$ in this data set gives
 Table~\ref{tab:q4-ols}. The regressors are the ones the population model
 actually contains, so the specification is correct and $\hat\beta$ should sit
@@ -526,8 +531,8 @@ $\beta_2$ & $0.2149$ & $0.2$ \\
 \end{tabular}
 \end{table}
 
-\paragraph{(3) A 95\% confidence interval for $\beta_1$.}
-From the asymptotic distribution of Q2(2) the interval is
+\subsection{A 95\% confidence interval for $\beta_1$}
+From the asymptotic distribution of Q2.2 the interval is
 \[
 \hat\beta_1 \pm 1.96\,\text{se}(\hat\beta_1),
 \]
@@ -548,24 +553,24 @@ ci = b[2] + c(-1, 1)*1.96*se_b1;
 I = as.numeric(ci[1] <= beta1 & beta1 <= ci[2]);
 \end{lstlisting}
 
-For the data set of part (1) this gives $\text{se}(\hat\beta_1) = 0.0972$ and
+For the data set of Q4.1 this gives $\text{se}(\hat\beta_1) = 0.0972$ and
 an interval of $[0.8315,\; 1.2125]$, which contains $\beta_1 = 1$, so
 $I^{(1)} = 1$.
 
-\paragraph{(4) The empirical coverage rate over $M = 10{,}000$ replications.}
-Repeating parts (1) to (3) on $M = 10{,}000$ freshly drawn data sets gives an
+\subsection{The empirical coverage rate over $M = 10{,}000$ replications}
+Repeating Q4.1 to Q4.3 on $M = 10{,}000$ freshly drawn data sets gives an
 empirical coverage rate of $0.9473$.
 
 \emph{Does this meet expectations?} Yes. The interval relies on three
 assumptions and all three hold in this population. OLS1 and OLS2 give the
-asymptotic distribution of Q2(2). Homoskedasticity, OLS3, is what the
+asymptotic distribution of Q2.2. Homoskedasticity, OLS3, is what the
 classical $\hat\sigma^2(X'X)^{-1}$ additionally needs, and it holds here
 because $u \sim t_7$ is drawn independently of $x$, so $E[u^2 \mid x]$ is the
 constant $\Var(u)$ and does not vary with $x$. With nothing violated, coverage
 at the nominal level is what the theory predicts, with $\beta_1$ falling within the specified interval around 95\% of the time.
 
-\paragraph{(5) The heteroskedastic model.}
-Parts (1) to (4) are repeated with the error scaled by $|x|/2$,
+\subsection{The heteroskedastic model}
+Q4.1 to Q4.4 are repeated with the error scaled by $|x|/2$,
 \[
 y = \beta_0 + \beta_1 x + \beta_2 x^2 + \frac{|x|}{2}\,u ,
 \]
@@ -574,7 +579,7 @@ everything else unchanged.
 \emph{(a) The empirical coverage rate.} Over $M = 10{,}000$ replications it is
 $0.8412$.
 
-\emph{(b) Comparison with part (4).} The rate falls from $0.9473$ to
+\emph{(b) Comparison with Q4.4.} The rate falls from $0.9473$ to
 $0.8412$, well below the nominal $95$ per cent.
 
 \emph{(c) Does this meet expectations?} Yes. Writing the new error as
@@ -585,7 +590,7 @@ fails, because
 E[\tilde{u}^2 \mid x] = \frac{x^2}{4}\,\Var(u)
 \]
 varies with $x$. So $\hat\beta$ is still consistent and asymptotically normal
-by Q2(2), but $\hat\sigma^2(X'X)^{-1}$ is consistent for $\Avar(\hat\beta)$
+by Q2.2, but $\hat\sigma^2(X'X)^{-1}$ is consistent for $\Avar(\hat\beta)$
 only under OLS3. The standard error is therefore wrong, the interval built
 from it is the wrong width, and coverage falls below $95$ per cent.
 
@@ -595,7 +600,7 @@ from it is the wrong width, and coverage falls below $95$ per cent.
 \label{sec:q5}
 %==============================================================================
 
-\paragraph{(1) The paper.}
+\subsection{The paper}
 My field of interest is Operations Management, and the paper is \emph{The
 Nonlinear Impact of Promised Delivery Time on Online Purchasing}, by Shin
 Oblander and Kinshuk Jerath, in \emph{Manufacturing \& Service Operations
@@ -605,12 +610,12 @@ too: it contains the term \emph{ordinary least squares}, since Section 5.1
 states that ``we estimate all models using ordinary least squares''. Its main empirical results, Table~2 and
 the tables that follow it, are OLS estimates of a linear probability model.
 
-\paragraph{(2) Citation.}
+\subsection{Citation}
 Oblander, S., and Jerath, K. (2026). The nonlinear impact of promised delivery
 time on online purchasing. \emph{Manufacturing \& Service Operations
 Management} 28(4):1051--1067. \url{https://doi.org/10.1287/msom.2024.1335}.
 
-\paragraph{(3) The main research question.}
+\subsection{The main research question}
 This is the summary given in Homework 2. Speeding up delivery is expensive, so
 a firm deciding whether to invest in it needs to know what the demand actually
 responds to. The paper asks how the delivery time \emph{promised} to a
@@ -631,7 +636,7 @@ promises shorter than a week but falls away sharply beyond it, which implies
 that a firm gains more from eliminating its slowest deliveries than from
 accelerating deliveries that are already fast.
 
-\paragraph{(4) The empirical model in our notation.}
+\subsection{The empirical model in our notation}
 The main specification is column~(5) of the paper's Table~2, a linear
 probability model for whether client $i$ buys product $j$ at quote $t$,
 \[
@@ -660,7 +665,7 @@ each time the markup rules changed, without saying how many times that was.
 \item The total number of observations is $N = 129{,}832$ quotes.
 \end{itemize}
 
-\paragraph{(5) Do the authors state the assumptions behind OLS?}
+\subsection{Do the authors state the assumptions behind OLS?}
 Only informally. The paper never lists OLS1, $E[x'u] = 0$, or OLS2,
 $\operatorname{rank} E[x'x] = K$, but it argues for both.
 
@@ -678,7 +683,7 @@ Section 4 argues that usable variation in price and delivery time remains
 after the fixed effects are removed.
 \end{itemize}
 
-\paragraph{(6) A plausible story under which $E[x_i u_i] = 0$ fails.}
+\subsection{A plausible story under which $E[x_i u_i] = 0$ fails}
 The product fixed effects remove only differences between products that are
 constant over time, so any time-varying shock to a given product's market stays
 in the error $u_i$. Suppose demand for a reagent surges temporarily, for
