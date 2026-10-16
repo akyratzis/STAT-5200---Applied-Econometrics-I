@@ -129,7 +129,7 @@ Throughout, the model is
 \[
 y_i = x_i\beta + u_i, \qquad i = 1,\dots,N,
 \]
-with $y_i$ a scalar and $x_i$ a $1 \times k$ row vector, and the estimator is
+with $y_i$ a scalar and $x_i$ a row vector of length $K$, and the estimator is
 \[
 \hat\beta = \left(\sum_{i=1}^{N} x_i'x_i\right)^{-1}
             \left(\sum_{i=1}^{N} x_i'y_i\right).
@@ -143,9 +143,9 @@ expectations gives $E[x'x]\beta = E[x'y]$, so that
 \[
 \beta = A^{-1}E[x'y],
 \]
-where OLS2, $\operatorname{rank}E[x'x] = K$, is what makes $A$ invertible and
-so identifies $\beta$. Replacing the two expectations by sample averages gives
-the estimator of the question,
+where OLS2, $\operatorname{rank}E[x'x] = K$, ensures that $A$ is invertible, so
+that $\beta$ is identified. Replacing the two expectations by their sample
+averages gives the estimator of the question,
 \[
 \hat\beta = \left(\frac{1}{N}\sum_{i=1}^{N} x_i'x_i\right)^{-1}
             \left(\frac{1}{N}\sum_{i=1}^{N} x_i'y_i\right),
@@ -171,8 +171,8 @@ applying this to $(\ast)$,
 \hat\beta \overset{p}{\to} \beta + A^{-1}\cdot 0 = \beta .
 \]
 So $\hat\beta$ is consistent. OLS2 is used twice, to identify $\beta$ and to
-invert the limit; OLS1 is what kills the second term; the i.i.d.\ assumption
-is what licenses the law of large numbers.
+invert the limit; OLS1 is what sends the second average to zero; and the
+i.i.d.\ assumption is what allows the law of large numbers to be applied.
 
 \paragraph{(2) The asymptotic distribution of $\hat\beta$.}
 Multiplying $(\ast)$ by $\sqrt{N}$,
@@ -186,7 +186,8 @@ matrix
 \[
 B = \Cov(x_i'u_i) = E[u_i^2 x_i'x_i],
 \]
-assumed finite. The Lindeberg--L\'evy central limit theorem therefore gives
+finite by the assumption of finite second moments. The Lindeberg--L\'evy
+central limit theorem therefore gives
 \[
 \frac{1}{\sqrt{N}}\sum_{i=1}^{N} x_i'u_i \overset{d}{\to} N(0, B),
 \]
@@ -593,9 +594,10 @@ from it is the wrong width, and coverage falls below $95$ per cent.
 My field of interest is Operations Management, and the paper is \emph{The
 Nonlinear Impact of Promised Delivery Time on Online Purchasing}, by Shin
 Oblander and Kinshuk Jerath, in \emph{Manufacturing \& Service Operations
-Management}, one of the five journals listed in Homework 1. It contains the
-term \emph{ordinary least squares}: Section 5.1 states that ``we estimate all
-models using ordinary least squares''. Its main empirical results, Table~2 and
+Management}, one of the five journals listed in Homework 1. It is the same
+paper I used for the delta method question in Homework 2, which qualifies here
+too: it contains the term \emph{ordinary least squares}, since Section 5.1
+states that ``we estimate all models using ordinary least squares''. Its main empirical results, Table~2 and
 the tables that follow it, are OLS estimates of a linear probability model.
 
 \paragraph{(2) Citation.}
@@ -604,13 +606,25 @@ time on online purchasing. \emph{Manufacturing \& Service Operations
 Management} 28(4):1051--1067. \url{https://doi.org/10.1287/msom.2024.1335}.
 
 \paragraph{(3) The main research question.}
-Speeding up delivery is expensive, so a firm deciding whether to invest in it
-needs to know what the demand actually responds to. The paper asks how the
-delivery time \emph{promised} to a customer at the moment of ordering affects
-that customer's probability of buying, and whether the relationship is linear.
-The distinction between promised and realised delivery time matters because a
-customer cannot observe the latter when choosing, so it is the promise that
-enters the decision.
+This is the summary given in Homework 2. Speeding up delivery is expensive, so
+a firm deciding whether to invest in it needs to know what the demand actually
+responds to. The paper asks how the delivery time \emph{promised} to a
+customer at the moment of ordering affects that customer's probability of
+buying, and whether the relationship is linear. The distinction between
+promised and realised delivery time matters because a customer cannot observe
+the latter when choosing, so it is the promise that enters the decision.
+Working with a business-to-business e-commerce platform supplying laboratory
+materials, the authors use $129{,}832$ quotes covering $21{,}246$ products,
+$2{,}225$ clients and $145$ vendors, in which the offering shown to a client is
+partially randomised and the decision is a simple binary accept or reject.
+They estimate how the purchase probability responds to the promised delivery
+time while controlling for product, client, vendor and markup group through
+fixed effects, and they benchmark that response against price sensitivity so
+that a day of delivery speed can be expressed in money. They then relax
+linearity using splines, and find that demand is essentially unresponsive to
+promises shorter than a week but falls away sharply beyond it, which implies
+that a firm gains more from eliminating its slowest deliveries than from
+accelerating deliveries that are already fast.
 
 \paragraph{(4) The empirical model in our notation.}
 The main specification is column~(5) of the paper's Table~2, a linear
