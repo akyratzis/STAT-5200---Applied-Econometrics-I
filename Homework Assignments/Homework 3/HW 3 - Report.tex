@@ -119,6 +119,7 @@ whether the answers agree; list any question missed}
 \paragraph{What could I have done better?}
 \todo{points for improvement}
 
+\clearpage
 %==============================================================================
 \section{Q2: Asymptotic properties of the OLS estimator}
 \label{sec:q2}
@@ -149,6 +150,7 @@ Notes 03, p.~6 and Appendix 1}
 \paragraph{(4) The standard error of $\hat\beta$.}
 \todo{square root of the $k$-th diagonal entry of $\hat{V}/N$; Notes 03, pp.~6--7}
 
+\clearpage
 %==============================================================================
 \section{Q3: Returns to education in the CPS85 data}
 \label{sec:q3}
@@ -314,21 +316,25 @@ the predicted wage, so giving one up is a benefit rather than a cost, the swap
 gains on both sides, and the return reaches $12.35$ per cent.
 
 \paragraph{(6) How standard errors and confidence intervals would be computed.}
-By the delta method, since $\hat\theta = g(\hat\beta)$ with
-$g(b) = 100[\exp(c'b)-1]$ is a smooth non-linear function of $\hat\beta$ and
-$\sqrt{N}(\hat\beta-\beta) \overset{d}{\to} N(0,V)$ from Q2(2):
+By the delta method. $\hat\theta$ is not one of the estimated coefficients but
+a non-linear function $g(\hat\beta)$ of three of them, so its standard error
+cannot be read off the regression output. The delta method obtains it from the
+gradient of $g$ and the estimated covariance matrix of $\hat\beta$,
 \[
 \Avar\!\left(g(\hat\beta)\right)
 = \nabla g(\beta)'\, \Avar(\hat\beta)\, \nabla g(\beta),
-\qquad
-\nabla g(\beta) = 100\exp\!\left(c'\beta\right) c ,
 \]
-so that, using the estimator $\hat{V}/N$ from Q2(3),
-\[
-\text{se}(\hat\theta)
-= 100\exp\!\left(c'\hat\beta\right)\sqrt{c'\,(\hat{V}/N)\,c} ,
-\]
-with interval $\hat\theta \pm 1.96\,\text{se}(\hat\theta)$.
+after which the interval is $\hat\theta \pm 1.96\,\text{se}(\hat\theta)$, the
+normal quantile being the appropriate one because the result is asymptotic.
+
+Three conditions have to hold. First, $\hat\beta$ must be asymptotically
+normal, which OLS1 and OLS2 deliver through Q2(2). Second, $g$ must be
+continuously differentiable at $\beta$ with a non-zero gradient there; here
+$g$ is the exponential of a linear combination, so this is immediate. Third,
+the covariance matrix must be estimated consistently, which is Q2(3). That
+last condition is where homoskedasticity enters: the matrix used below is the
+usual $\hat\sigma^2(X'X)^{-1}$, and if the errors are heteroskedastic the
+sandwich form is required instead.
 
 \paragraph{(7) Standard errors and confidence intervals (optional).}
 Listing~\ref{lst:q3-delta} applies the formula of part~(6); the results are in
@@ -377,6 +383,7 @@ $\hat\theta$, by the delta method.}
 The standard error is smallest near $\text{exper} = 30$, at $0.83$, and rises
 towards both ends of the range. All twelve intervals exclude zero.
 
+\clearpage
 %==============================================================================
 \section{Q4: Monte Carlo simulation and the empirical coverage rate}
 \label{sec:q4}
@@ -412,6 +419,7 @@ y = \beta_0 + \beta_1 x + \beta_2 x^2 + \frac{|x|}{2}\,u ,
 \todo{report the coverage rate, compare it with part (4), and explain by
 reference to the assumptions}
 
+\clearpage
 %==============================================================================
 \section{Q5: Paper question}
 \label{sec:q5}
@@ -439,6 +447,7 @@ of variables in $x_i$, and give the total number of observations}
 \paragraph{(6) A plausible story under which $E[x_i u_i] = 0$ fails.}
 \todo{one paragraph, no more than five sentences, as critical as possible}
 
+\clearpage
 %==============================================================================
 \appendix
 \section{Complete R scripts}
