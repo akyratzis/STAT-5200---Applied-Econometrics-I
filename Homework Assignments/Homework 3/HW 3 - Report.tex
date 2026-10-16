@@ -397,10 +397,53 @@ y = \beta_0 + \beta_1 x + \beta_2 x^2 + u,
 with $u \sim t_7$ and $x \sim N(1,4)$, and $N = 100$.
 
 \paragraph{(1) Sampling one data set.}
-\todo{draw $Y_N^{(1)}$ and $X_N^{(1)}$}
+One data set of length $N = 100$ is drawn by sampling $x_i \sim N(1,4)$ and
+$u_i \sim t_7$ independently and forming
+$y_i = 1 + x_i + 0.2x_i^2 + u_i$, as in Listing~\ref{lst:q4-draw}. The seed is
+fixed so that the whole question is reproducible.
+
+\begin{lstlisting}[style=Rcode,caption={Drawing one data set (excerpt from
+\code{R/q4\_coverage\_rate.R}).},label={lst:q4-draw}]
+x = rnorm(N, mean = 1, sd = sqrt(4));
+u = rt(N, df = 7);
+y = beta0 + beta1*x + beta2*x^2 + u;
+\end{lstlisting}
+
+As a check on the draw, the population mean of $y$ is
+$E[y] = 1 + E[x] + 0.2E[x^2] = 1 + 1 + 0.2(5) = 3$, using
+$E[x^2] = \Var(x) + E[x]^2 = 4 + 1 = 5$. The sample mean of this particular
+data set is $3.1898$.
 
 \paragraph{(2) The OLS estimate.}
-\todo{compute $\hat\beta = [\hat\beta_0, \hat\beta_1, \hat\beta_2]'$}
+Regressing $y$ on a constant, $x$ and $x^2$ in this data set gives
+Table~\ref{tab:q4-ols}. The regressors are the ones the population model
+actually contains, so the specification is correct and $\hat\beta$ should sit
+near $\beta$; it does, with each estimate within about one twentieth of its
+true value.
+
+\begin{lstlisting}[style=Rcode,caption={The OLS estimate (excerpt from
+\code{R/q4\_coverage\_rate.R}).},label={lst:q4-ols}]
+x2 = x^2;
+fit = lm(y ~ x + x2);
+b = coef(fit);
+\end{lstlisting}
+
+\begin{table}[htbp]
+\centering
+\caption{OLS estimates from one data set of $N = 100$ drawn from the
+population.}
+\label{tab:q4-ols}
+\small
+\begin{tabular}{lrr}
+\toprule
+& Estimate & True value \\
+\midrule
+$\beta_0$ & $0.9401$ & $1.0$ \\
+$\beta_1$ & $1.0220$ & $1.0$ \\
+$\beta_2$ & $0.2149$ & $0.2$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \paragraph{(3) A 95\% confidence interval for $\beta_1$.}
 \todo{build the interval from the asymptotic distribution of Q2(2), and define

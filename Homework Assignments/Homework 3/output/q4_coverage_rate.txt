@@ -1,0 +1,15 @@
+[1] "Part 1. First five observations of the data set ..."
+           y       x
+[1,]  0.0979 -0.2529
+[2,]  1.8002  1.3673
+[3,] -0.0493 -0.6713
+[4,]  9.3158  4.1906
+[5,]  3.4888  1.6590
+[1] "Summary of the data set ..."
+mean_y   sd_y mean_x   sd_x 
+3.1898 3.1623 1.2178 1.7964 
+[1] "Part 2. OLS estimates against the true values ..."
+            estimate truth
+(Intercept)   0.9401   1.0
+x             1.0220   1.0
+x2            0.2149   0.2
