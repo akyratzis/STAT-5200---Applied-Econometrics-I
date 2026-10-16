@@ -138,17 +138,94 @@ We assume OLS1 and OLS2 and that $(y_i,x_i)$ is i.i.d.\ over $i$. Each part
 below flags where the assumptions are used.
 
 \paragraph{(1) Consistency of $\hat\beta$.}
-\todo{show $\plim \hat\beta = \beta$; Notes 03, pp.~4--5}
+Write $A = E[x'x]$. Pre-multiplying $y = x\beta + u$ by $x'$ and taking
+expectations gives $E[x'x]\beta = E[x'y]$, so that
+\[
+\beta = A^{-1}E[x'y],
+\]
+where OLS2, $\operatorname{rank}E[x'x] = K$, is what makes $A$ invertible and
+so identifies $\beta$. Replacing the two expectations by sample averages gives
+the estimator of the question,
+\[
+\hat\beta = \left(\frac{1}{N}\sum_{i=1}^{N} x_i'x_i\right)^{-1}
+            \left(\frac{1}{N}\sum_{i=1}^{N} x_i'y_i\right),
+\]
+and substituting $y_i = x_i\beta + u_i$,
+\begin{equation*}
+\hat\beta = \beta + \left(\frac{1}{N}\sum_{i=1}^{N} x_i'x_i\right)^{-1}
+            \left(\frac{1}{N}\sum_{i=1}^{N} x_i'u_i\right).
+\tag{$\ast$}
+\end{equation*}
+Because $(y_i,x_i)$ is i.i.d., the law of large numbers applies to each
+average:
+\[
+\frac{1}{N}\sum_{i=1}^{N} x_i'x_i \overset{p}{\to} A,
+\qquad
+\frac{1}{N}\sum_{i=1}^{N} x_i'u_i \overset{p}{\to} E[x'u] = 0,
+\]
+the second limit being zero by OLS1. Since $A$ is invertible by OLS2, the
+continuous mapping theorem gives
+$\left(N^{-1}\sum_i x_i'x_i\right)^{-1} \overset{p}{\to} A^{-1}$, and
+applying this to $(\ast)$,
+\[
+\hat\beta \overset{p}{\to} \beta + A^{-1}\cdot 0 = \beta .
+\]
+So $\hat\beta$ is consistent. OLS2 is used twice, to identify $\beta$ and to
+invert the limit; OLS1 is what kills the second term; the i.i.d.\ assumption
+is what licenses the law of large numbers.
 
 \paragraph{(2) The asymptotic distribution of $\hat\beta$.}
-\todo{derive $\sqrt{N}(\hat\beta - \beta) \xrightarrow{d} N(0, A^{-1}BA^{-1})$;
-Notes 03, p.~6 and Appendix 1}
+Multiplying $(\ast)$ by $\sqrt{N}$,
+\[
+\sqrt{N}(\hat\beta - \beta)
+= \left(\frac{1}{N}\sum_{i=1}^{N} x_i'x_i\right)^{-1}
+  \frac{1}{\sqrt{N}}\sum_{i=1}^{N} x_i'u_i .
+\]
+The summands $x_i'u_i$ are i.i.d., have mean zero by OLS1, and have covariance
+matrix
+\[
+B = \Cov(x_i'u_i) = E[u_i^2 x_i'x_i],
+\]
+assumed finite. The Lindeberg--L\'evy central limit theorem therefore gives
+\[
+\frac{1}{\sqrt{N}}\sum_{i=1}^{N} x_i'u_i \overset{d}{\to} N(0, B),
+\]
+while the first factor converges in probability to $A^{-1}$ as in part (1). By
+Slutsky's theorem the product converges in distribution to
+\[
+\sqrt{N}(\hat\beta - \beta) \overset{d}{\to} N\!\left(0,\; A^{-1}BA^{-1}\right),
+\]
+so the asymptotic variance is $V = A^{-1}BA^{-1}$.
 
 \paragraph{(3) A consistent estimator of the asymptotic variance.}
-\todo{the sandwich estimator; Notes 03, Appendix 2, eq.~(40)}
+Estimate $A$ and $B$ by their sample counterparts, using the OLS residuals
+$\hat{u}_i = y_i - x_i\hat\beta$ in place of the unobserved errors:
+\[
+\hat{A} = \frac{1}{N}\sum_{i=1}^{N} x_i'x_i = \frac{X'X}{N},
+\qquad
+\hat{B} = \frac{1}{N}\sum_{i=1}^{N} \hat{u}_i^2 x_i'x_i .
+\]
+Both are consistent for their population counterparts, so
+$\hat{V} = \hat{A}^{-1}\hat{B}\hat{A}^{-1}$ is consistent for $V$. In matrix
+form the estimator of $\Avar(\hat\beta) = V/N$ is
+\[
+\frac{\hat{V}}{N}
+= (X'X)^{-1}\left(\sum_{i=1}^{N} \hat{u}_i^2 x_i'x_i\right)(X'X)^{-1}.
+\]
+Adding the homoskedasticity assumption OLS3, $E[u^2x'x] = \sigma^2E[x'x]$,
+would reduce $B$ to $\sigma^2A$ and this estimator to
+$\hat\sigma^2(X'X)^{-1}$, which is the form used in Q3 and Q4.
 
 \paragraph{(4) The standard error of $\hat\beta$.}
-\todo{square root of the $k$-th diagonal entry of $\hat{V}/N$; Notes 03, pp.~6--7}
+The standard error of a coefficient is the square root of the corresponding
+diagonal entry of the estimated asymptotic variance. Writing
+$\hat{V}/N = (\hat{v}_{jk})$,
+\[
+\text{se}(\hat\beta_k) = \sqrt{\hat{v}_{kk}} ,
+\]
+and a $100(1-\alpha)$ per cent confidence interval for $\beta_k$ is
+$\hat\beta_k \pm z_{\alpha/2}\sqrt{\hat{v}_{kk}}$, with $z_{\alpha/2}$ the
+normal quantile, since the distribution in part (2) is asymptotic.
 
 \clearpage
 %==============================================================================
@@ -513,26 +590,88 @@ from it is the wrong width, and coverage falls below $95$ per cent.
 %==============================================================================
 
 \paragraph{(1) The paper.}
-\todo{a paper from one of the five journals listed in Homework 1, containing
-"OLS" or "ordinary least squares" and reporting OLS results; confirm the
-publication venue before writing the citation}
+My field of interest is Operations Management, and the paper is \emph{The
+Nonlinear Impact of Promised Delivery Time on Online Purchasing}, by Shin
+Oblander and Kinshuk Jerath, in \emph{Manufacturing \& Service Operations
+Management}, one of the five journals listed in Homework 1. It contains the
+term \emph{ordinary least squares}: Section 5.1 states that ``we estimate all
+models using ordinary least squares''. Its main empirical results, Table~2 and
+the tables that follow it, are OLS estimates of a linear probability model.
 
 \paragraph{(2) Citation.}
-\todo{author, title, year, journal, volume, issue, pages, DOI}
+Oblander, S., and Jerath, K. (2026). The nonlinear impact of promised delivery
+time on online purchasing. \emph{Manufacturing \& Service Operations
+Management} 28(4):1051--1067. \url{https://doi.org/10.1287/msom.2024.1335}.
 
 \paragraph{(3) The main research question.}
-\todo{one paragraph}
+Speeding up delivery is expensive, so a firm deciding whether to invest in it
+needs to know what the demand actually responds to. The paper asks how the
+delivery time \emph{promised} to a customer at the moment of ordering affects
+that customer's probability of buying, and whether the relationship is linear.
+The distinction between promised and realised delivery time matters because a
+customer cannot observe the latter when choosing, so it is the promise that
+enters the decision.
 
 \paragraph{(4) The empirical model in our notation.}
-Writing their specification as $y_i = x_i\beta + u_i$:
-\todo{identify $y_i$, identify $x_i$ in the main specification, give the number
-of variables in $x_i$, and give the total number of observations}
+The main specification is column~(5) of the paper's Table~2, a linear
+probability model for whether client $i$ buys product $j$ at quote $t$,
+\[
+Y_{ijj'vt} = \alpha_i + \alpha_j + \alpha_{m_{ijt}} + \alpha_v
+ + \beta_P \log P_{ijvt} + \beta_D D_{ijvt}
+ + \beta_M \mathbf{1}(j = j') + \epsilon_{ijj'vt},
+\]
+estimated by OLS. Writing it as $y_i = x_i\beta + u_i$, with one observation
+per quote:
+\begin{itemize}
+\item $y_i$ is a binary indicator equal to one if the client purchased the
+quoted item. Because $y_i$ is binary, $E[y_i \mid x_i]$ is the purchase
+probability, so each coefficient is a change in that probability.
+\item $x_i$ contains three regressors of interest: the log of the quoted unit
+price, $\log P$; the promised delivery time in days, $D$; and an indicator,
+$\mathbf{1}(j = j')$, that the quoted product is exactly the one the client
+requested. It also contains four sets of fixed effects, each a set of dummy
+variables: one per client ($2{,}225$), per product ($21{,}246$), per vendor
+($145$) and per markup group.
+\item The number of variables in $x_i$ is therefore three regressors of
+interest plus roughly $23{,}600$ fixed-effect dummies. The exact count cannot
+be given, because the paper does not report the number of markup groups.
+\item The total number of observations is $N = 129{,}832$ quotes.
+\end{itemize}
 
 \paragraph{(5) Do the authors state the assumptions behind OLS?}
-\todo{report what the paper does and does not state}
+Only informally. The paper never lists OLS1, $E[x'u] = 0$, or OLS2,
+$\operatorname{rank} E[x'x] = K$, but it argues for both, and it addresses
+inference.
+\begin{itemize}
+\item \emph{Exogeneity (OLS1).} Section 4, ``Identification'', is in effect an
+argument for OLS1. The fixed effects absorb time-invariant differences between
+products, clients, vendors and markup groups. The remaining variation in
+delivery time is attributed to vendor stockouts, and the stated key assumption
+is that these come from idiosyncratic shocks unrelated to the client's outside
+options. For price, the authors rely on the markup-group fixed effects and on a
+period in which the company randomised its price markups.
+\item \emph{Rank (OLS2).} Not stated, but the authors drop clients and products
+observed only once, which the fixed effects would absorb completely, and they
+show that price and delivery time still vary after the fixed effects are
+removed.
+\item \emph{Inference.} Standard errors are clustered two ways, by client and by
+product. This relaxes the i.i.d.\ assumption, allowing quotes from the same
+client, or for the same product, to be correlated.
+\end{itemize}
 
 \paragraph{(6) A plausible story under which $E[x_i u_i] = 0$ fails.}
-\todo{one paragraph, no more than five sentences, as critical as possible}
+The product fixed effects remove only differences between products that are
+constant over time, so any time-varying shock to a given product's market stays
+in the error $u_i$. Suppose demand for a reagent surges temporarily, for
+example because a new laboratory protocol that uses it becomes popular:
+vendors run out of stock, which lengthens the promised delivery time $D_i$.
+The same surge raises clients' willingness to buy, and because competing
+suppliers are out of stock too, clients accept slow quotes they would otherwise
+have rejected. Long promised delivery times then coincide with high purchase
+propensity, so $D_i$ is positively correlated with $u_i$ and
+$E[x_i u_i] \neq 0$. Since the true $\beta_D$ is negative, this biases
+$\hat\beta_D$ towards zero, and the paper's estimate of $-0.0017$ likely
+understates how much clients are deterred by slow delivery.
 
 \clearpage
 %==============================================================================
