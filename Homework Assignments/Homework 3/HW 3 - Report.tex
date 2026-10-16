@@ -632,9 +632,12 @@ $\mathbf{1}(j = j')$, that the quoted product is exactly the one the client
 requested. It also contains four sets of fixed effects, each a set of dummy
 variables: one per client ($2{,}225$), per product ($21{,}246$), per vendor
 ($145$) and per markup group.
-\item The number of variables in $x_i$ is therefore three regressors of
-interest plus roughly $23{,}600$ fixed-effect dummies. The exact count cannot
-be given, because the paper does not report the number of markup groups.
+\item The number of variables in $x_i$ is therefore the three regressors of
+interest plus the fixed-effect dummies, of which the client, product and
+vendor effects alone account for $2{,}225 + 21{,}246 + 145 = 23{,}616$. An
+exact total cannot be given: the paper describes twelve distinct markup
+modifiers but says a separate set of markup-group fixed effects is included
+each time the markup rules changed, without saying how many times that was.
 \item The total number of observations is $N = 129{,}832$ quotes.
 \end{itemize}
 
@@ -651,9 +654,9 @@ is that these come from idiosyncratic shocks unrelated to the client's outside
 options. For price, the authors rely on the markup-group fixed effects and on a
 period in which the company randomised its price markups.
 \item \emph{Rank (OLS2).} Not stated, but the authors drop clients and products
-observed only once, which the fixed effects would absorb completely, and they
-show that price and delivery time still vary after the fixed effects are
-removed.
+observed only once, which the fixed effects would absorb completely, and
+Section 4 argues that usable variation in price and delivery time remains
+after the fixed effects are removed.
 \item \emph{Inference.} Standard errors are clustered two ways, by client and by
 product. This relaxes the i.i.d.\ assumption, allowing quotes from the same
 client, or for the same product, to be correlated.
