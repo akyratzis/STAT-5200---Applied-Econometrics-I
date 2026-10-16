@@ -258,7 +258,7 @@ exper2 = exper^2;
 model1 = lm(formula = logwage ~ educ + exper + exper2);
 
 b = coef(model1);
-V = vcov(model1);   # estimated covariance matrix of b, for the delta method
+V = vcov(model1);   # estimated covariance matrix of b
 \end{lstlisting}
 
 \begin{table}[htbp]

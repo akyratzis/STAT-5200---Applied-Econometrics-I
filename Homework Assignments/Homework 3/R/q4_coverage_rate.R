@@ -44,7 +44,8 @@ ci = b[2] + c(-1, 1)*1.96*se_b1;
 I = as.numeric(ci[1] <= beta1 & beta1 <= ci[2]);
 
 print("Part 3. 95% confidence interval for beta1 ...");
-print(round(c(se = se_b1, lower = ci[1], upper = ci[2], indicator = I), 4));
+print(round(c(se = se_b1, lower = ci[1], upper = ci[2],
+              indicator = I), 4));
 
 # ------------------------------------------------------------------
 # Part 4: the empirical coverage rate over M data sets

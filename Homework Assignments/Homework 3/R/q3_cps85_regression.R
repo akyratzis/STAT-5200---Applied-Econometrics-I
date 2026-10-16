@@ -15,7 +15,7 @@ print("Part 1. OLS estimates of the wage equation ...");
 print(summary(model1));
 
 b = coef(model1);
-V = vcov(model1);   # estimated covariance matrix of b, for the delta method
+V = vcov(model1);   # estimated covariance matrix of b
 
 print("Experience at which log(wage) peaks ...");
 print(round(-b[3]/(2*b[4]), 2));
