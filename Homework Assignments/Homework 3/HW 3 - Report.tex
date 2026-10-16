@@ -445,8 +445,60 @@ $\beta_2$ & $0.2149$ & $0.2$ \\
 \end{table}
 
 \paragraph{(3) A 95\% confidence interval for $\beta_1$.}
-\todo{build the interval from the asymptotic distribution of Q2(2), and define
-the indicator $I^{(m)}$}
+\emph{Throughout Q4 we compute the interval twice, once from the sandwich
+estimator of $\Avar(\hat\beta)$ and once from the classical one, and carry
+both through to the coverage rates in parts (4) and (5).} The reason is that
+Q2 assumes only OLS1 and OLS2, under which the consistent estimator is the
+sandwich of Q2(3); the classical $\hat\sigma^2(X'X)^{-1}$ that \code{lm()}
+reports additionally requires homoskedasticity, which part (5) removes.
+
+From the asymptotic distribution of Q2(2) the interval is
+\[
+\hat\beta_1 \pm 1.96\,\text{se}(\hat\beta_1),
+\]
+the normal quantile being the right one because the distribution is
+asymptotic. The indicator
+\[
+I^{(m)} = \mathbf{1}\{\beta_1 \in \text{CI}^{(m)}\}
+\]
+records whether the interval from the $m$-th data set contains the true
+$\beta_1$. This is something we can only check because the population is ours:
+$\beta_1 = 1$ by construction, whereas in an application it would be unknown.
+
+\begin{lstlisting}[style=Rcode,caption={The two variance estimators and the
+indicator (excerpt from \code{R/q4\_coverage\_rate.R}).},label={lst:q4-ci}]
+V_sandwich = solve(t(X) %*% X) %*% (t(X) %*% diag(uhat^2) %*% X) %*%
+  solve(t(X) %*% X);
+V_classical = vcov(fit);
+
+ci_sandwich = b[2] + c(-1, 1)*1.96*se_sandwich;
+ci_classical = b[2] + c(-1, 1)*1.96*se_classical;
+
+I_sandwich = as.numeric(ci_sandwich[1] <= beta1 & beta1 <= ci_sandwich[2]);
+\end{lstlisting}
+
+\begin{table}[htbp]
+\centering
+\caption{$95$ per cent confidence intervals for $\beta_1$ from the data set of
+part (1), with $\hat\beta_1 = 1.0220$ and the true $\beta_1 = 1$.}
+\label{tab:q4-ci}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+& SE & Lower & Upper & $I^{(1)}$ \\
+\midrule
+Sandwich & $0.0978$ & $0.8303$ & $1.2136$ & $1$ \\
+Classical & $0.0972$ & $0.8315$ & $1.2125$ & $1$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The two standard errors are almost identical here, $0.0978$ against $0.0972$,
+which is what we should expect: the population of part (1) is homoskedastic,
+so the extra assumption the classical estimator makes happens to be true and
+the two estimate the same quantity. Both intervals contain $\beta_1 = 1$, so
+$I^{(1)} = 1$ either way. A single draw says nothing on its own, which is what
+part (4) addresses.
 
 \paragraph{(4) The empirical coverage rate over $M = 10{,}000$ replications.}
 \todo{report the coverage rate and say whether it matches expectations, by
