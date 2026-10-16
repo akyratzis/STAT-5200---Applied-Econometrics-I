@@ -144,7 +144,7 @@ below flags where the assumptions are used.
 
 \paragraph{(1) Consistency of $\hat\beta$.}
 Write $A = E[x'x]$. Pre-multiplying $y = x\beta + u$ by $x'$ and taking
-expectations gives $E[x'x]\beta = E[x'y]$, so that
+expectations gives $E[x'x]\beta = E[x'y]$ (because of OLS1), so that
 \[
 \beta = A^{-1}E[x'y],
 \]
@@ -662,8 +662,8 @@ each time the markup rules changed, without saying how many times that was.
 
 \paragraph{(5) Do the authors state the assumptions behind OLS?}
 Only informally. The paper never lists OLS1, $E[x'u] = 0$, or OLS2,
-$\operatorname{rank} E[x'x] = K$, but it argues for both, and it addresses
-inference.
+$\operatorname{rank} E[x'x] = K$, but it argues for both.
+
 \begin{itemize}
 \item \emph{Exogeneity (OLS1).} Section 4, ``Identification'', is in effect an
 argument for OLS1. The fixed effects absorb time-invariant differences between
