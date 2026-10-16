@@ -313,10 +313,6 @@ declining part of the profile, where a further year of experience would lower
 the predicted wage, so giving one up is a benefit rather than a cost, the swap
 gains on both sides, and the return reaches $12.35$ per cent.
 
-This also explains why the figure at low experience falls short of the $9.36$
-per cent implied by $100[\exp(\hat\beta_1)-1]$: that number holds experience
-fixed, which the question does not allow.
-
 \paragraph{(6) How standard errors and confidence intervals would be computed.}
 By the delta method, since $\hat\theta = g(\hat\beta)$ with
 $g(b) = 100[\exp(c'b)-1]$ is a smooth non-linear function of $\hat\beta$ and
@@ -332,10 +328,7 @@ so that, using the estimator $\hat{V}/N$ from Q2(3),
 \text{se}(\hat\theta)
 = 100\exp\!\left(c'\hat\beta\right)\sqrt{c'\,(\hat{V}/N)\,c} ,
 \]
-with interval $\hat\theta \pm 1.96\,\text{se}(\hat\theta)$. Two points: $c$
-changes with \code{exper}, so the calculation is redone at each value; and $c$
-loads on three coefficients, so the off-diagonal entries of $\hat{V}/N$ enter
-and the three reported standard errors alone would not suffice.
+with interval $\hat\theta \pm 1.96\,\text{se}(\hat\theta)$.
 
 \paragraph{(7) Standard errors and confidence intervals (optional).}
 Listing~\ref{lst:q3-delta} applies the formula of part~(6); the results are in
