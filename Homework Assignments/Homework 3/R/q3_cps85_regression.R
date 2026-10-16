@@ -53,21 +53,24 @@ print("Part 5. theta_hat across experience ...");
 print(data.frame(exper = exper_grid, theta_hat = round(theta_grid, 4)),
       row.names = FALSE);
 
+# theta nets the education gain against the experience year given up.
+# The first is b[2] throughout; the second is b[3] + (2*exper-1)*b[4].
+print("Education gain, in log points ...");
+print(round(b[2], 4));
+
+print("Value of the forgone experience year, in log points ...");
+print(data.frame(exper = exper_grid,
+                 forgone = round(b[3] + (2*exper_grid - 1)*b[4], 4)),
+      row.names = FALSE);
+
+# It crosses zero where b[3] + (2*exper-1)*b[4] = 0.
+print("Experience at which the forgone year is worth nothing ...");
+print(round((1 - b[3]/b[4])/2, 2));
+
 # For comparison: the return one would report from the education
 # coefficient alone, forgetting that experience moves too.
 print("Return from the education coefficient alone ...");
 print(round(100*(exp(b[2]) - 1), 4));
-
-# ------------------------------------------------------------------
-# Figure: theta_hat against experience
-# ------------------------------------------------------------------
-pdf(file.path(fig_dir, "q3_theta_by_exper.pdf"),
-    width = 5.8, height = 4.4);
-par(mar = c(4.2, 4.4, 1.0, 1.0));
-plot(exper_grid, theta_grid, type = "b", pch = 19,
-     xlab = "years of experience",
-     ylab = expression("estimated return to education, " * hat(theta) * " (%)"));
-dev.off();
 
 # ------------------------------------------------------------------
 # Part 7 (optional): standard errors and confidence intervals
@@ -93,23 +96,6 @@ print(data.frame(exper = exper_grid,
                  se = round(se_grid, 4),
                  lower = round(lci, 4),
                  upper = round(uci, 4)), row.names = FALSE);
-
-# ------------------------------------------------------------------
-# Figure: theta_hat with the confidence band
-# ------------------------------------------------------------------
-pdf(file.path(fig_dir, "q3_theta_ci.pdf"), width = 5.8, height = 4.4);
-par(mar = c(4.2, 4.4, 1.0, 1.0));
-plot(exper_grid, theta_grid, type = "b", pch = 19,
-     ylim = range(c(lci, uci)),
-     xlab = "years of experience",
-     ylab = expression("estimated return to education, " * hat(theta) * " (%)"));
-lines(exper_grid, lci, lty = 2, col = "grey40");
-lines(exper_grid, uci, lty = 2, col = "grey40");
-legend("topright", bty = "n",
-       legend = c(expression(hat(theta)), "95% confidence interval"),
-       pch = c(19, NA), lty = c(1, 2),
-       col = c("black", "grey40"));
-dev.off();
 
 print("Figures written to ...");
 print(normalizePath(fig_dir));

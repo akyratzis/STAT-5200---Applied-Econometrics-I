@@ -155,9 +155,7 @@ Notes 03, p.~6 and Appendix 1}
 %==============================================================================
 
 The data is \code{CPS85.txt} from Lab 2: $531$ observations from the May 1985
-Current Population Survey. It is instructor-distributed material and is not
-tracked here, so the script reads it by relative path. The dependent variable
-is already on the log scale as \code{logwage}.
+Current Population Survey.
 
 \paragraph{(1) Estimating the wage equation.}
 \[
@@ -288,20 +286,36 @@ of experience.}
 \end{tabular}
 \end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.65\textwidth]{figures/q3_theta_by_exper.pdf}
-\caption{$\hat\theta$ against years of experience.}
-\label{fig:q3-theta}
-\end{figure}
+\emph{Discussion.} The starting point is that the wage profile is concave in
+experience. Since $\hat\beta_2 > 0$ and $\hat\beta_3 < 0$, an extra year of
+experience adds a lot at the start of a career, adds progressively less as
+experience accumulates, adds nothing at the peak of the profile at $31.94$
+years, and beyond that actually lowers the predicted wage. The value of a year
+of experience therefore rises, flattens and then turns negative.
 
-\emph{Discussion.} The return rises from $5.19$ per cent at
-$\text{exper} = 0$ to $12.35$ per cent at $\text{exper} = 55$. The cause is
-the concavity: the forgone year of experience is worth
-$\beta_2 + (2\,\text{exper}-1)\beta_3$, which falls as experience accumulates
-and turns negative past $31.94$ years, so the swap eventually gains on both
-sides. At zero experience the return is well below the $9.36$ per cent given
-by $100[\exp(\hat\beta_1)-1]$, which ignores that experience moves too.
+This matters because $\theta$ sets two effects against each other: the gain
+from the extra year of schooling, which is the same at every level of
+experience, and the loss from the year of experience that must be given up,
+which follows the profile just described. That forgone year is worth
+$\hat\beta_2 + (2\,\text{exper}-1)\hat\beta_3$, which crosses zero at
+$32.44$ years, slightly later than the peak of the profile because it measures
+a discrete one-year step rather than the slope at a point.
+
+The result is a return that rises steadily with experience, from $5.19$ per
+cent at $\text{exper} = 0$ to $12.35$ per cent at $\text{exper} = 55$. A
+worker with no experience is on the steep early part of the profile, so the
+year given up is expensive and absorbs close to half the gain from the extra
+year of schooling, leaving $5.19$ per cent. A worker with around thirty years
+of experience is near the top of the profile, which is almost flat, so the
+year surrendered is worth very little and nearly the whole education effect
+comes through, at $9.04$ per cent. Past $32.44$ years the worker is on the
+declining part of the profile, where a further year of experience would lower
+the predicted wage, so giving one up is a benefit rather than a cost, the swap
+gains on both sides, and the return reaches $12.35$ per cent.
+
+This also explains why the figure at low experience falls short of the $9.36$
+per cent implied by $100[\exp(\hat\beta_1)-1]$: that number holds experience
+fixed, which the question does not allow.
 
 \paragraph{(6) How standard errors and confidence intervals would be computed.}
 By the delta method, since $\hat\theta = g(\hat\beta)$ with
@@ -325,7 +339,7 @@ and the three reported standard errors alone would not suffice.
 
 \paragraph{(7) Standard errors and confidence intervals (optional).}
 Listing~\ref{lst:q3-delta} applies the formula of part~(6); the results are in
-Table~\ref{tab:q3-ci} and Figure~\ref{fig:q3-ci}.
+Table~\ref{tab:q3-ci}.
 
 \begin{lstlisting}[style=Rcode,caption={The delta method standard error
 (excerpt from \code{R/q3\_cps85\_regression.R}).},label={lst:q3-delta}]
@@ -367,17 +381,8 @@ $\hat\theta$, by the delta method.}
 \end{tabular}
 \end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.65\textwidth]{figures/q3_theta_ci.pdf}
-\caption{$\hat\theta$ against years of experience, with pointwise $95$ per
-cent confidence intervals.}
-\label{fig:q3-ci}
-\end{figure}
-
-Precision is best near $\text{exper} = 30$, where the standard error bottoms
-out at $0.83$, the sample mean of \code{exper} being $17.85$ years. All
-intervals exclude zero.
+The standard error is smallest near $\text{exper} = 30$, at $0.83$, and rises
+towards both ends of the range. All twelve intervals exclude zero.
 
 %==============================================================================
 \section{Q4: Monte Carlo simulation and the empirical coverage rate}

@@ -39,11 +39,29 @@ null device
     45   11.0131
     50   11.6799
     55   12.3507
+[1] "Education gain, in log points ..."
+  educ 
+0.0894 
+[1] "Value of the forgone experience year, in log points ..."
+ exper forgone
+     0  0.0389
+     5  0.0329
+    10  0.0269
+    15  0.0209
+    20  0.0149
+    25  0.0089
+    30  0.0029
+    35 -0.0031
+    40 -0.0090
+    45 -0.0150
+    50 -0.0210
+    55 -0.0270
+[1] "Experience at which the forgone year is worth nothing ..."
+exper 
+32.44 
 [1] "Return from the education coefficient alone ..."
   educ 
 9.3561 
-null device 
-          1 
 [1] "Part 7. Standard errors and 95% confidence intervals ..."
  exper theta_hat     se   lower   upper
      0    5.1882 1.0841  3.0633  7.3130
@@ -58,7 +76,5 @@ null device
     45   11.0131 0.9491  9.1527 12.8734
     50   11.6799 1.0237  9.6735 13.6862
     55   12.3507 1.1114 10.1724 14.5290
-null device 
-          1 
 [1] "Figures written to ..."
 [1] "/Users/kyratzis/Library/Mobile Documents/com~apple~CloudDocs/Wharton/1 - Fall 2026/STAT 5200 - Applied Econometrics I/Homework Assignments/Homework 3/figures"
