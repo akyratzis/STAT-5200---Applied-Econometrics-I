@@ -20,5 +20,5 @@ x2            0.2149   0.2
     M     N 
 10000   100 
 [1] 0.9473
-[1] "Monte Carlo standard error of a coverage rate ..."
-[1] 0.0022
+[1] "Part 5. Empirical coverage rate, heteroskedastic model ..."
+[1] 0.8412

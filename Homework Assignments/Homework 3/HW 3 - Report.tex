@@ -482,12 +482,29 @@ constant $\Var(u)$ and does not vary with $x$. With nothing violated, coverage
 at the nominal level is exactly what the theory predicts, with $\beta_1$ falling within the specified interval around 95\% of the time.
 
 \paragraph{(5) The heteroskedastic model.}
-With the error scaled by $|x|/2$,
+Parts (1) to (4) are repeated with the error scaled by $|x|/2$,
 \[
 y = \beta_0 + \beta_1 x + \beta_2 x^2 + \frac{|x|}{2}\,u ,
 \]
-\todo{report the coverage rate, compare it with part (4), and explain by
-reference to the assumptions}
+everything else unchanged.
+
+\emph{(a) The empirical coverage rate.} Over $M = 10{,}000$ replications it is
+$0.8412$.
+
+\emph{(b) Comparison with part (4).} The rate falls from $0.9473$ to
+$0.8412$, well below the nominal $95$ per cent.
+
+\emph{(c) Does this meet expectations?} Yes. Writing the new error as
+$\tilde{u} = (|x|/2)u$, OLS1 still holds, since $u$ is drawn independently of
+$x$ with mean zero, so $E[x'\tilde{u}] = 0$, and OLS2 is untouched. OLS3
+fails, because
+\[
+E[\tilde{u}^2 \mid x] = \frac{x^2}{4}\,\Var(u)
+\]
+varies with $x$. So $\hat\beta$ is still consistent and asymptotically normal
+by Q2(2), but $\hat\sigma^2(X'X)^{-1}$ is consistent for $\Avar(\hat\beta)$
+only under OLS3. The standard error is therefore wrong, the interval built
+from it is the wrong width, and coverage falls below $95$ per cent.
 
 \clearpage
 %==============================================================================

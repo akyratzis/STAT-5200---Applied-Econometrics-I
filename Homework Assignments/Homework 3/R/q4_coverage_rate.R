@@ -68,7 +68,23 @@ print("Part 4. Empirical coverage rate over M data sets ...");
 print(c(M = M, N = N));
 print(round(mean(I_all), 4));
 
-# A coverage rate is the mean of M zero-one draws, so its Monte Carlo
-# standard error is sqrt(0.95*0.05/M).
-print("Monte Carlo standard error of a coverage rate ...");
-print(round(sqrt(0.95*0.05/M), 4));
+# ------------------------------------------------------------------
+# Part 5: the same exercise with a heteroskedastic error
+# ------------------------------------------------------------------
+#   y = beta0 + beta1*x + beta2*x^2 + (|x|/2)*u
+I_all_het = rep(NA, M);
+
+for (m in 1:M){
+  x = rnorm(N, mean = 1, sd = sqrt(4));
+  u = rt(N, df = 7);
+  y = beta0 + beta1*x + beta2*x^2 + (abs(x)/2)*u;
+  x2 = x^2;
+
+  fit = lm(y ~ x + x2);
+  b = coef(fit);
+  ci = b[2] + c(-1, 1)*1.96*sqrt(vcov(fit)[2,2]);
+  I_all_het[m] = as.numeric(ci[1] <= beta1 & beta1 <= ci[2]);
+}
+
+print("Part 5. Empirical coverage rate, heteroskedastic model ...");
+print(round(mean(I_all_het), 4));
