@@ -170,12 +170,12 @@ $\hat\sigma^2(X'X)^{-1}$, needed for part~(6).
 
 \begin{lstlisting}[style=Rcode,caption={Estimating the model (excerpt from
 \code{R/q3\_cps85\_regression.R}).},label={lst:q3-ols}]
-exper2 = exper^2;   # squared experience, for the concavity in exper
+exper2 = exper^2;
 
 model1 = lm(formula = logwage ~ educ + exper + exper2);
 
 b = coef(model1);
-V = vcov(model1);
+V = vcov(model1);   # estimated covariance matrix of b, for the delta method
 \end{lstlisting}
 
 \begin{table}[htbp]
@@ -203,13 +203,9 @@ $-\hat\beta_2/(2\hat\beta_3) = 31.94$ years, inside the observed range
 $[0,55]$.
 
 \paragraph{(2) Normal quantile plot of the residuals.}
-In Figure~\ref{fig:q3-qq} the points track the reference line closely, with
-mild departures only in the extreme tails, where the sample quantiles are
-pulled \emph{towards} the centre: at the first percentile the standardised
-residual is $-2.23$ against the normal's $-2.33$. Residual skewness is
-$-0.0038$ and kurtosis $2.73$ against the normal's $3$, so the distribution is
-symmetric and slightly light-tailed, not heavy-tailed. The normality
-assumption is not unreasonable here.
+In Figure~\ref{fig:q3-qq} the residuals follow the reference line closely over
+the whole range, which is the pattern expected of normally distributed errors.
+Normality is therefore a reasonable assumption here.
 
 \begin{figure}[htbp]
 \centering
@@ -218,44 +214,139 @@ assumption is not unreasonable here.
 \label{fig:q3-qq}
 \end{figure}
 
-\emph{Is non-normality a concern?} No. Inference under OLS1 and OLS2 is
-asymptotic: consistency comes from the law of large numbers and the limiting
-distribution from the central limit theorem, neither of which needs normal
-errors. Normality matters only for exact finite-sample $t$ and $F$
-distributions, and $N = 531$ here. The assumption that does bite is
-homoskedasticity: if it fails, Table~\ref{tab:q3-ols} reports the wrong
-standard errors and the sandwich form is needed. Figure~\ref{fig:q3-qq} says
-nothing about that.
+Had the errors not been normal, it would not have been a concern for the later
+analysis. Inference under OLS1 and OLS2 is asymptotic, resting on the law of
+large numbers and the central limit theorem, neither of which requires normal
+errors; normality matters only for the exact finite-sample $t$ and $F$
+distributions, and $N = 531$ here.
 
 \paragraph{(3) The parameter $\theta$.}
-Since $\text{exper} = \text{age} - \text{educ} - 6$, an extra year of
-education costs a year of experience. The combined effect on the expected log
-wage is $\beta_1 - \beta_2 + (1-2\,\text{exper})\beta_3$, the last term being
-the change in the quadratic,
-$(\text{exper}-1)^2 - \text{exper}^2 = 1-2\,\text{exper}$. Exponentiating,
+The expected percentage change in the wage from raising education by one year
+and lowering experience by one year is
+\[
+\theta = 100\left[\exp\!\left(\beta_1 - \beta_2
+ + (1-2\,\text{exper})\beta_3\right) - 1\right].
+\]
+It is convenient to write the exponent as a contrast $c(\text{exper})'\beta$,
 \[
 \theta = 100\left[\exp\!\left(c(\text{exper})'\beta\right) - 1\right],
 \qquad
 c(\text{exper}) = \begin{pmatrix} 0 \\ 1 \\ -1 \\ 1-2\,\text{exper}
 \end{pmatrix},
 \]
-written as a contrast $c'\beta$ for use in part~(6).
+which is the form used in part~(6).
 
 \paragraph{(4) An estimator for $\theta$, and its consistency.}
-The plug-in estimator is
-$\hat\theta = 100[\exp(c(\text{exper})'\hat\beta) - 1]$. By Q2(1),
-$\hat\beta \overset{p}{\to} \beta$ under OLS1 and OLS2; the map
-$b \mapsto 100[\exp(c'b)-1]$ is continuous, so the continuous mapping theorem
-gives $\hat\theta \overset{p}{\to} \theta$. Nothing beyond consistency of
-$\hat\beta$ is required.
+Replacing $\beta$ by the OLS estimator $\hat\beta$ gives
+\[
+\hat\theta = 100\left[\exp\!\left(\hat\beta_1 - \hat\beta_2
+ + (1-2\,\text{exper})\hat\beta_3\right) - 1\right]
+ = 100\left[\exp\!\left(c(\text{exper})'\hat\beta\right) - 1\right].
+\]
+Under OLS1 and OLS2, $\hat\beta$ is a consistent estimator of $\beta$ by
+Q2(1). The function $b \mapsto 100[\exp(c'b)-1]$ is continuous, so by the
+continuous mapping theorem $\hat\theta$ is a consistent estimator of $\theta$.
 
 \paragraph{(5) $\hat\theta$ across experience levels.}
+Evaluating $\hat\theta$ over $\text{exper} = 0, 5, \dots, 55$ is a direct
+substitution into the formula of part~(4), shown in
+Listing~\ref{lst:q3-theta}.
+
+\begin{lstlisting}[style=Rcode,caption={Evaluating $\hat\theta$ (excerpt from
+\code{R/q3\_cps85\_regression.R}).},label={lst:q3-theta}]
+exper_grid = seq(0, 55, by = 5);
+theta_grid = rep(NA, length(exper_grid));
+
+for (j in 1:length(exper_grid)){
+  theta_grid[j] = 100 * (exp(b[2] - b[3]
+                             + (1 - 2*exper_grid[j])*b[4]) - 1);
+}
+\end{lstlisting}
 
 \begin{table}[htbp]
 \centering
 \caption{The estimated return to education $\hat\theta$, in per cent, by years
-of experience. Standard errors and intervals from parts (6) and (7).}
+of experience.}
 \label{tab:q3-theta}
+\small
+\begin{tabular}{rr}
+\toprule
+\code{exper} & $\hat\theta$ (\%) \\
+\midrule
+ 0 & $5.1882$ \\
+ 5 & $5.8200$ \\
+10 & $6.4556$ \\
+15 & $7.0950$ \\
+20 & $7.7383$ \\
+25 & $8.3854$ \\
+30 & $9.0364$ \\
+35 & $9.6914$ \\
+40 & $10.3502$ \\
+45 & $11.0131$ \\
+50 & $11.6799$ \\
+55 & $12.3507$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.65\textwidth]{figures/q3_theta_by_exper.pdf}
+\caption{$\hat\theta$ against years of experience.}
+\label{fig:q3-theta}
+\end{figure}
+
+\emph{Discussion.} The return rises from $5.19$ per cent at
+$\text{exper} = 0$ to $12.35$ per cent at $\text{exper} = 55$. The cause is
+the concavity: the forgone year of experience is worth
+$\beta_2 + (2\,\text{exper}-1)\beta_3$, which falls as experience accumulates
+and turns negative past $31.94$ years, so the swap eventually gains on both
+sides. At zero experience the return is well below the $9.36$ per cent given
+by $100[\exp(\hat\beta_1)-1]$, which ignores that experience moves too.
+
+\paragraph{(6) How standard errors and confidence intervals would be computed.}
+By the delta method, since $\hat\theta = g(\hat\beta)$ with
+$g(b) = 100[\exp(c'b)-1]$ is a smooth non-linear function of $\hat\beta$ and
+$\sqrt{N}(\hat\beta-\beta) \overset{d}{\to} N(0,V)$ from Q2(2):
+\[
+\Avar\!\left(g(\hat\beta)\right)
+= \nabla g(\beta)'\, \Avar(\hat\beta)\, \nabla g(\beta),
+\qquad
+\nabla g(\beta) = 100\exp\!\left(c'\beta\right) c ,
+\]
+so that, using the estimator $\hat{V}/N$ from Q2(3),
+\[
+\text{se}(\hat\theta)
+= 100\exp\!\left(c'\hat\beta\right)\sqrt{c'\,(\hat{V}/N)\,c} ,
+\]
+with interval $\hat\theta \pm 1.96\,\text{se}(\hat\theta)$. Two points: $c$
+changes with \code{exper}, so the calculation is redone at each value; and $c$
+loads on three coefficients, so the off-diagonal entries of $\hat{V}/N$ enter
+and the three reported standard errors alone would not suffice.
+
+\paragraph{(7) Standard errors and confidence intervals (optional).}
+Listing~\ref{lst:q3-delta} applies the formula of part~(6); the results are in
+Table~\ref{tab:q3-ci} and Figure~\ref{fig:q3-ci}.
+
+\begin{lstlisting}[style=Rcode,caption={The delta method standard error
+(excerpt from \code{R/q3\_cps85\_regression.R}).},label={lst:q3-delta}]
+se_grid = rep(NA, length(exper_grid));
+
+for (j in 1:length(exper_grid)){
+  cv = c(0, 1, -1, 1 - 2*exper_grid[j]);
+  grad = 100 * exp(sum(cv*b)) * cv;
+  se_grid[j] = sqrt(t(grad) %*% V %*% grad);
+}
+
+lci = theta_grid - 1.96*se_grid;   # 95% confidence interval
+uci = theta_grid + 1.96*se_grid;
+\end{lstlisting}
+
+\begin{table}[htbp]
+\centering
+\caption{Standard errors and $95$ per cent confidence intervals for
+$\hat\theta$, by the delta method.}
+\label{tab:q3-ci}
 \small
 \begin{tabular}{rrrr}
 \toprule
@@ -279,59 +370,15 @@ of experience. Standard errors and intervals from parts (6) and (7).}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.65\textwidth]{figures/q3_theta_by_exper.pdf}
+\includegraphics[width=0.65\textwidth]{figures/q3_theta_ci.pdf}
 \caption{$\hat\theta$ against years of experience, with pointwise $95$ per
 cent confidence intervals.}
-\label{fig:q3-theta}
+\label{fig:q3-ci}
 \end{figure}
 
-\emph{Discussion.} The return rises from $5.19$ per cent at
-$\text{exper} = 0$ to $12.35$ per cent at $\text{exper} = 55$. The cause is
-the concavity: the forgone year of experience is worth
-$\beta_2 + (2\,\text{exper}-1)\beta_3$, which falls as experience accumulates
-and turns negative past $31.94$ years, so the swap eventually gains on both
-sides. At zero experience the return is well below the $9.36$ per cent given
-by $100[\exp(\hat\beta_1)-1]$, which ignores that experience moves too.
 Precision is best near $\text{exper} = 30$, where the standard error bottoms
 out at $0.83$, the sample mean of \code{exper} being $17.85$ years. All
 intervals exclude zero.
-
-\paragraph{(6) How standard errors and confidence intervals would be computed.}
-By the delta method, since $\hat\theta = g(\hat\beta)$ with
-$g(b) = 100[\exp(c'b)-1]$ is a smooth non-linear function of $\hat\beta$ and
-$\sqrt{N}(\hat\beta-\beta) \overset{d}{\to} N(0,V)$ from Q2(2):
-\[
-\Avar\!\left(g(\hat\beta)\right)
-= \nabla g(\beta)'\, \Avar(\hat\beta)\, \nabla g(\beta),
-\qquad
-\nabla g(\beta) = 100\exp\!\left(c'\beta\right) c ,
-\]
-so that, using the estimator $\hat{V}/N$ from Q2(3),
-\[
-\text{se}(\hat\theta)
-= 100\exp\!\left(c'\hat\beta\right)\sqrt{c'\,(\hat{V}/N)\,c} ,
-\]
-with interval $\hat\theta \pm 1.96\,\text{se}(\hat\theta)$. Two points: $c$
-changes with \code{exper}, so the calculation is redone at each value; and $c$
-loads on three coefficients, so the off-diagonal entries of $\hat{V}/N$ enter
-and the three reported standard errors alone would not suffice.
-
-\paragraph{(7) Standard errors and confidence intervals (optional).}
-Reported in the last two columns of Table~\ref{tab:q3-theta} and as the band
-in Figure~\ref{fig:q3-theta}.
-
-\begin{lstlisting}[style=Rcode,caption={The delta method standard error
-(excerpt from \code{R/q3\_cps85\_regression.R}).},label={lst:q3-delta}]
-for (j in 1:length(exper_grid)){
-  cv = c(0, 1, -1, 1 - 2*exper_grid[j]);
-  theta_grid[j] = 100 * (exp(sum(cv*b)) - 1);
-  grad = 100 * exp(sum(cv*b)) * cv;
-  se_grid[j] = sqrt(t(grad) %*% V %*% grad);
-}
-
-lci = theta_grid - 1.96*se_grid;   # 95% confidence interval
-uci = theta_grid + 1.96*se_grid;
-\end{lstlisting}
 
 %==============================================================================
 \section{Q4: Monte Carlo simulation and the empirical coverage rate}

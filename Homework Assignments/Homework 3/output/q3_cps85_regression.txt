@@ -1,6 +1,3 @@
-[1] "Data ..."
-observations    variables 
-         531           10 
 [1] "Part 1. OLS estimates of the wage equation ..."
 
 Call:
@@ -28,10 +25,26 @@ exper
 31.94 
 null device 
           1 
-[1] "Part 2. Shape of the residual distribution ..."
-skewness kurtosis 
- -0.0038   2.7276 
-[1] "Parts 5 and 7. theta_hat across experience ..."
+[1] "Part 5. theta_hat across experience ..."
+ exper theta_hat
+     0    5.1882
+     5    5.8200
+    10    6.4556
+    15    7.0950
+    20    7.7383
+    25    8.3854
+    30    9.0364
+    35    9.6914
+    40   10.3502
+    45   11.0131
+    50   11.6799
+    55   12.3507
+[1] "Return from the education coefficient alone ..."
+  educ 
+9.3561 
+null device 
+          1 
+[1] "Part 7. Standard errors and 95% confidence intervals ..."
  exper theta_hat     se   lower   upper
      0    5.1882 1.0841  3.0633  7.3130
      5    5.8200 1.0087  3.8429  7.7970
@@ -45,9 +58,6 @@ skewness kurtosis
     45   11.0131 0.9491  9.1527 12.8734
     50   11.6799 1.0237  9.6735 13.6862
     55   12.3507 1.1114 10.1724 14.5290
-[1] "Return from the education coefficient alone ..."
-  educ 
-9.3561 
 null device 
           1 
 [1] "Figures written to ..."
