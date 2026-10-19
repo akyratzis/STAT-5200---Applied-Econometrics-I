@@ -1,0 +1,252 @@
+%==============================================================================
+%  STAT 5200 - Applied Econometrics I
+%  Homework 4
+%
+%  Compile with:  pdflatex "HW 3 - Report.tex"  (run twice for refs)
+%
+%  Directory layout assumed by this file:
+%     HW 4 - Report.tex
+%     R/        (scripts, if Q1 needs descriptive statistics)
+%     figures/  (generated figures)
+%     output/   (captured console output)
+%==============================================================================
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[hidelinks]{hyperref}
+
+%------------------------------------------------------------------------------
+%  Code presentation
+%
+%  Code is set as selectable text on a fixed character grid, source and console
+%  output are given visually distinct styles, and source lines are kept to 76
+%  characters so that nothing wraps.
+%------------------------------------------------------------------------------
+\definecolor{codekeyword}{RGB}{0,86,148}
+\definecolor{codestring} {RGB}{163,21,21}
+\definecolor{codecomment}{RGB}{106,115,125}
+\definecolor{codebg}     {RGB}{248,248,250}
+\definecolor{coderule}   {RGB}{220,220,226}
+
+\lstdefinestyle{Rcode}{
+  language        = R,
+  basicstyle      = \ttfamily\footnotesize,
+  keywordstyle    = \color{codekeyword}\bfseries,
+  stringstyle     = \color{codestring},
+  commentstyle    = \color{codecomment}\itshape,
+  numbers         = left,
+  numberstyle     = \ttfamily\scriptsize\color{codecomment},
+  numbersep       = 9pt,
+  backgroundcolor = \color{codebg},
+  frame           = single,
+  rulecolor       = \color{coderule},
+  framesep        = 4pt,
+  xleftmargin     = 15pt,
+  xrightmargin    = 0pt,
+  columns         = fixed,
+  basewidth       = 0.5em,
+  keepspaces      = true,
+  tabsize         = 2,
+  showstringspaces = false,
+  breaklines      = true,
+  breakatwhitespace = true,
+  postbreak       = \mbox{\textcolor{codekeyword}{$\hookrightarrow$}\space},
+  captionpos      = b,
+  abovecaptionskip = 6pt,
+}
+
+\lstdefinestyle{Routput}{
+  language        = {},
+  basicstyle      = \ttfamily\footnotesize,
+  keywordstyle    = \ttfamily,
+  commentstyle    = \ttfamily,
+  stringstyle     = \ttfamily,
+  numbers         = none,
+  backgroundcolor = \color{white},
+  frame           = leftline,
+  rulecolor       = \color{coderule},
+  framesep        = 6pt,
+  xleftmargin     = 20pt,
+  breaklines      = true,
+  captionpos      = b,
+  abovecaptionskip = 6pt,
+}
+
+\lstset{style=Rcode}
+\renewcommand{\lstlistingname}{Listing}
+
+% Short inline code fragments.
+\newcommand{\code}[1]{\texttt{#1}}
+
+% Operators used throughout.
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Avar}{Avar}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator*{\plim}{plim}
+
+% Placeholder marker. Every occurrence should be gone before submission;
+% search the source for "\todo" to find what is still outstanding.
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO:} #1\textbf{]}}}
+
+%------------------------------------------------------------------------------
+\title{\vspace{-2em}Homework 4\\[0.3em]
+       \large STAT 5200 --- Applied Econometrics I --- Fall 2026}
+
+\author{Apostolos Kyratzis - 13130833}
+\date{October 19, 2026}
+
+\begin{document}
+\maketitle
+
+%==============================================================================
+\section{Q1: Replication and project proposal}
+\label{sec:q1}
+%==============================================================================
+
+\todo{no more than one page in total}
+
+\subsection{The problem to be considered}
+\todo{what question the project will ask}
+
+\subsection{The data set}
+\todo{which data, where it comes from, and confirmation that it is already
+on hand; the question asks for descriptive statistics of the variables of
+interest to have been computed}
+
+\subsection{The paper to be replicated}
+\todo{which paper, and why it helps with the literature and the data}
+
+\clearpage
+%==============================================================================
+\section{Q2: Paper question --- difference-in-differences}
+\label{sec:q2}
+%==============================================================================
+
+\subsection{The paper}
+\todo{published in a journal from the field, contains
+``difference-in-differences'', reports DiD results; confirm the venue before
+writing the citation}
+
+\subsection{Citation}
+\todo{author, title, year, journal, volume, issue, pages, DOI}
+
+\subsection{The main research question}
+\todo{one paragraph}
+
+\subsection{The empirical model}
+\todo{identify the outcome, the treatment variable, the controls and fixed
+effects in the main specification, and the total number of observations}
+
+\subsection{The source of treatment}
+\todo{the event, policy change or intervention}
+
+\subsection{Treatment and control groups}
+\todo{who is in each, and why the control group is a reasonable comparison}
+
+\subsection{The coefficient of interest}
+\todo{what it measures and how the authors interpret it}
+
+\subsection{The parallel trends assumption}
+\todo{what must hold for the estimate to be causal, in this paper's context}
+
+\subsection{Evidence for parallel trends}
+\todo{pre-treatment trends, event-study specification, or whatever they show}
+
+\subsection{A story under which parallel trends fails}
+\todo{a plausible case where the two groups would have diverged anyway}
+
+\clearpage
+%==============================================================================
+\section{Q3: Paper question --- synthetic control}
+\label{sec:q3}
+%==============================================================================
+
+\subsection{The paper}
+\todo{published in a journal from the field, uses the synthetic control
+method, reports results from it}
+
+\subsection{Citation}
+\todo{author, title, year, journal, volume, issue, pages, DOI}
+
+\subsection{The main research question}
+\todo{one paragraph}
+
+\subsection{The treated unit and the treatment}
+\todo{which unit, and what event or policy constitutes treatment}
+
+\subsection{The donor pool}
+\todo{which units it contains}
+
+\subsection{How the synthetic control is constructed}
+\todo{the variables and pre-treatment outcomes used to choose the weights}
+
+\subsection{The estimated treatment effect}
+\todo{how it follows from comparing the treated unit with its synthetic
+control after treatment}
+
+\subsection{Pre-treatment fit}
+\todo{how closely the synthetic control tracks the treated unit beforehand,
+and what the authors show}
+
+\subsection{Placebo and permutation tests}
+\todo{what they do and what they establish}
+
+\subsection{A criticism of the design}
+\todo{why the donor pool may not give a good counterfactual, or what else
+happened around the treatment date}
+
+\clearpage
+%==============================================================================
+\section{Q4: Paper question --- regression discontinuity}
+\label{sec:q4}
+%==============================================================================
+
+\subsection{The paper}
+\todo{published in a journal from the field, contains ``regression
+discontinuity'', reports RDD results}
+
+\subsection{Citation}
+\todo{author, title, year, journal, volume, issue, pages, DOI}
+
+\subsection{The main research question}
+\todo{one paragraph}
+
+\subsection{The empirical model}
+\todo{identify the outcome, the running variable, the cutoff, any controls,
+and the total number of observations}
+
+\subsection{How the cutoff determines treatment}
+\todo{why crossing it changes treatment status or its probability}
+
+\subsection{Sharp or fuzzy}
+\todo{which, and why; if fuzzy, how the cutoff shifts the probability of
+treatment}
+
+\subsection{The coefficient of interest}
+\todo{what it measures and how the authors interpret it}
+
+\subsection{Bandwidth and robustness}
+\todo{the bandwidth used, and whether results survive other bandwidths and
+functional forms}
+
+\subsection{The identifying assumption}
+\todo{why units just either side of the cutoff are comparable}
+
+\subsection{Evidence for validity}
+\todo{manipulation tests, the density around the cutoff, continuity of
+predetermined characteristics, graphical analysis}
+
+\subsection{A criticism of the design}
+\todo{manipulation of the running variable, another policy at the same
+cutoff, or another violation of continuity}
+
+\end{document}
