@@ -132,37 +132,90 @@ interest to have been computed}
 %==============================================================================
 
 \subsection{The paper}
-\todo{published in a journal from the field, contains
-``difference-in-differences'', reports DiD results; confirm the venue before
-writing the citation}
+My field is Operations Management, and the paper is \emph{Value of High-Quality
+Logistics: Evidence from a Clash Between SF Express and Alibaba}, by Ruomeng
+Cui, Meng Li and Qiang Li, in \emph{Management Science}, one of the five
+journals listed in Homework 1. It identifies the value of logistics quality
+from a natural experiment and estimates it by difference-in-differences.
 
 \subsection{Citation}
-\todo{author, title, year, journal, volume, issue, pages, DOI}
+Cui, R., Li, M., and Li, Q. (2020). Value of high-quality logistics: Evidence
+from a clash between SF Express and Alibaba. \emph{Management Science}
+66(9):3879--3902. \url{https://doi.org/10.1287/mnsc.2019.3411}.
 
 \subsection{The main research question}
-\todo{one paragraph}
+Retail platforms sell the same product through couriers of differing quality,
+and faster, more reliable delivery is costly to provide. The paper asks what
+that quality is worth in demand terms: how much does a seller lose when a
+high-quality delivery option is withdrawn, and which products bear the loss?
+The question is hard to answer with observational data because couriers are
+chosen, not assigned, so sellers of popular products may systematically select
+better logistics. The authors exploit a commercial dispute that removed the
+premium option abruptly and for reasons unrelated to any individual product.
 
 \subsection{The empirical model}
-\todo{identify the outcome, the treatment variable, the controls and fixed
-effects in the main specification, and the total number of observations}
+In June 2017 Alibaba removed SF Express, a premium courier, as a shipping
+option on its platform for roughly $42$ hours following a dispute between the
+two firms. The outcome is market performance at the level of the stock-keeping
+unit (SKU), measured by sales, and the paper also reports effects on product
+variety and on logistics ratings. The treatment indicator marks SKUs that had
+been served by SF Express, interacted with the window during which the option
+was unavailable. The estimation sample covers $129{,}832$ representative SKUs
+on the platform.
+
+\todo{confirm from the published article: the exact estimating equation, which
+fixed effects are included, the clustering of the standard errors, and the
+total number of SKU-by-period observations rather than the number of SKUs}
 
 \subsection{The source of treatment}
-\todo{the event, policy change or intervention}
+A commercial dispute between Alibaba and SF Express in June 2017, in which
+Alibaba withdrew SF Express as a delivery option from its retail platform for
+about $42$ hours. The withdrawal was abrupt, short, and driven by a
+platform-level conflict rather than by conditions in any individual product
+market, which is what makes it usable as a natural experiment.
 
 \subsection{Treatment and control groups}
-\todo{who is in each, and why the control group is a reasonable comparison}
+The treated group is the set of SKUs that relied on SF Express before the
+clash, since these lost their delivery option. The control group is comparable
+SKUs served by other couriers, which were unaffected. The control group is a
+reasonable comparison because the dispute originated between the two firms and
+was not a response to demand conditions for particular products, so which SKUs
+were exposed is plausibly unrelated to their contemporaneous sales prospects.
+
+\todo{confirm how the authors define the treated group precisely, and whether
+they match or otherwise restrict the control group}
 
 \subsection{The coefficient of interest}
-\todo{what it measures and how the authors interpret it}
+The coefficient on the interaction of the treatment indicator with the outage
+window, which measures the change in sales for exposed SKUs relative to the
+change for unexposed SKUs over the same hours. The authors interpret it as the
+demand value of high-quality logistics. They also report heterogeneity: the
+loss is larger for star products than for long-tail products, so that the
+long-tail share of sales rises while the option is unavailable.
+
+\todo{report the point estimate and standard error from the published article;
+a working-paper version gives a sales reduction of about 14.56 per cent and a
+rise of about 3 per cent in the long-tail contribution, but these figures need
+checking against the published text}
 
 \subsection{The parallel trends assumption}
-\todo{what must hold for the estimate to be causal, in this paper's context}
+For the estimate to be causal, sales of SF Express SKUs and sales of SKUs on
+other couriers must have followed a common path in the absence of the dispute.
+The levels may differ, since premium logistics is plausibly selected by
+different products; what must not differ is the \emph{change}. The assumption
+would fail if, over the same hours, something else moved demand for the two
+groups differently.
 
 \subsection{Evidence for parallel trends}
-\todo{pre-treatment trends, event-study specification, or whatever they show}
+\todo{read the identification and robustness sections and report what they
+show: pre-trend plots, an event-study specification by hour or day, placebo
+windows before the clash, or balance of the two groups on observables}
 
 \subsection{A story under which parallel trends fails}
-\todo{a plausible case where the two groups would have diverged anyway}
+\todo{write after reading; one candidate is that SF Express SKUs are
+disproportionately time-sensitive or higher-priced goods whose demand responds
+differently to the same within-week or promotional cycle, so the two groups
+would have diverged over the window even without the withdrawal}
 
 \clearpage
 %==============================================================================
@@ -171,38 +224,82 @@ effects in the main specification, and the total number of observations}
 %==============================================================================
 
 \subsection{The paper}
-\todo{published in a journal from the field, uses the synthetic control
-method, reports results from it}
+The paper is \emph{The Cost of Intelligence: Impacts of AI Data Centers on US
+Electricity Prices}, by Vishrut Rana, Christian Kaps and Serguei Netessine. It
+estimates the effect of data-centre construction on local electricity prices
+using a synthetic control design.
+
+I acknowledge that it is not published in one of the five journals listed in
+Homework 1. It is a working paper, available through SSRN and the Harvard
+Business School working paper series. I chose it because the synthetic control
+method is rare in operations journals, because the authors are operations
+researchers, and because the question is close to the topic I am proposing for
+the course project.
 
 \subsection{Citation}
-\todo{author, title, year, journal, volume, issue, pages, DOI}
+Rana, V., Kaps, C., and Netessine, S. (2026). The cost of intelligence:
+Impacts of AI data centers on US electricity prices. Working paper, September
+30, 2026. Available at SSRN,
+\url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7580459}.
 
 \subsection{The main research question}
-\todo{one paragraph}
+The build-out of AI data centres has added large, concentrated electricity
+demand in particular regions, and this has prompted public concern about
+affordability and, in some places, moratoria on new development. The paper asks
+whether that concern is justified: how much of the recent rise in US
+electricity prices can be attributed to data-centre capacity, whether the
+burden falls on industrial or residential customers, and whether the effect
+depends on who builds the facility. The identification problem is that data
+centres are sited where power is already cheap and plentiful, so a raw
+comparison of regions with and without them confounds the effect with the
+conditions that attracted them.
 
 \subsection{The treated unit and the treatment}
-\todo{which unit, and what event or policy constitutes treatment}
+The treated units are US regions that received data-centre capacity additions
+between 2020 and 2025; treatment is the addition of that capacity. Because
+capacity arrives in increments rather than at a single date, the authors use a
+single-anchor design with cumulative, repeated treatment rather than a single
+pre- and post-period.
+
+\todo{confirm the unit of analysis: utility service territory, balancing
+authority, state, or some other region, and how the single anchor date is
+chosen}
 
 \subsection{The donor pool}
-\todo{which units it contains}
+\todo{read the paper and report which regions form the donor pool and what
+excludes a region from it}
 
 \subsection{How the synthetic control is constructed}
-\todo{the variables and pre-treatment outcomes used to choose the weights}
+\todo{report the pre-treatment matching variables and outcome lags used to
+choose the donor weights, and how the weights are estimated given the
+cumulative, repeated treatment structure}
 
 \subsection{The estimated treatment effect}
-\todo{how it follows from comparing the treated unit with its synthetic
-control after treatment}
+The effect is the post-treatment gap between the treated region's electricity
+price and that of its synthetic counterpart. Data centres added between 2020
+and 2025 raised industrial electricity prices in their regions by about
+\$$5.4$/MWh, which the authors report as roughly $15$ per cent of the observed
+increase over the period. The residential spillover is much smaller, about
+\$$1.7$/MWh, or around $4$ per cent of the increase since 2020. The effect is
+concentrated among co-location developers; builds by large technology firms
+show no discernible price increase. The authors read this as evidence that
+concern about data centres harming electricity affordability is overstated.
 
 \subsection{Pre-treatment fit}
-\todo{how closely the synthetic control tracks the treated unit beforehand,
-and what the authors show}
+\todo{report how closely the synthetic control tracks the treated regions
+before treatment, and which figures or fit statistics the authors give}
 
 \subsection{Placebo and permutation tests}
-\todo{what they do and what they establish}
+\todo{report whether they run in-space placebos on donor regions, in-time
+placebos at false treatment dates, or permutation inference, and what the
+tests establish}
 
 \subsection{A criticism of the design}
-\todo{why the donor pool may not give a good counterfactual, or what else
-happened around the treatment date}
+\todo{write after reading; candidates include the siting problem, since
+regions that attract data centres may be on different price trajectories for
+reasons the pre-treatment fit cannot capture, and the overlap of the treatment
+window with the 2021--2022 natural gas price shock, which hit regions
+differently according to their generation mix}
 
 \clearpage
 %==============================================================================
@@ -211,42 +308,85 @@ happened around the treatment date}
 %==============================================================================
 
 \subsection{The paper}
-\todo{published in a journal from the field, contains ``regression
-discontinuity'', reports RDD results}
+The paper is \emph{The Effect of Discretion on Procurement Performance}, by
+Decio Coviello, Andrea Guglielmo and Giancarlo Spagnolo, in \emph{Management
+Science}, one of the five journals listed in Homework 1. It uses a regression
+discontinuity design built on a legal threshold in Italian public procurement.
 
 \subsection{Citation}
-\todo{author, title, year, journal, volume, issue, pages, DOI}
+Coviello, D., Guglielmo, A., and Spagnolo, G. (2018). The effect of discretion
+on procurement performance. \emph{Management Science} 64(2):715--738.
+\url{https://doi.org/10.1287/mnsc.2016.2628}.
 
 \subsection{The main research question}
-\todo{one paragraph}
+Public buyers can be given discretion over whom to invite to bid, or be
+required to run an open auction. Discretion may let a buyer use knowledge of
+supplier quality that a mechanical rule cannot encode, improving delivery; it
+may equally let the buyer favour connected firms, raising costs and entrenching
+incumbents. The paper asks which effect dominates in practice, using Italian
+public works contracts where the procedure is determined by a legal value
+threshold rather than by the buyer's choice.
 
 \subsection{The empirical model}
-\todo{identify the outcome, the running variable, the cutoff, any controls,
-and the total number of observations}
+Italian law sets a value threshold for public works. Contracts above it must be
+awarded by open auction, which leaves the buyer little say over who bids and
+wins; contracts below it may be awarded by restricted auction, in which the
+buyer selects whom to invite. The running variable is therefore the value of
+the contract, the cutoff is the legal threshold, and treatment is the
+discretionary procedure. Outcomes include the repeat-winning of the same firm
+and measures of delivery performance such as cost and time overruns.
+
+\todo{confirm from the paper: the exact threshold in euros, the full list of
+outcome variables, any covariates included, the polynomial order used for the
+running variable, and the total number of contracts in the estimation sample}
 
 \subsection{How the cutoff determines treatment}
-\todo{why crossing it changes treatment status or its probability}
+Crossing the threshold changes the legally permitted award procedure. Below it,
+the buyer may run a restricted auction and choose the invitees; above it, an
+open auction is mandatory and that choice disappears. Discretion is therefore a
+deterministic function of contract value at the cutoff, so a contract's
+position relative to the threshold determines the regime it faces.
 
 \subsection{Sharp or fuzzy}
-\todo{which, and why; if fuzzy, how the cutoff shifts the probability of
-treatment}
+\todo{confirm from the paper; the legal rule assigns the procedure
+deterministically, which points to a sharp design, but the authors may treat
+compliance as imperfect, in which case the discontinuity is used as an
+instrument for the procedure actually used}
 
 \subsection{The coefficient of interest}
-\todo{what it measures and how the authors interpret it}
+The jump in outcomes at the threshold, which identifies the effect of giving
+the buyer discretion. The authors find that discretion raises the probability
+that the same firm wins repeatedly, and that it does not worsen procurement
+outcomes, and may improve them. They read the combination as evidence that
+repeated dealing reflects relational contracting with suppliers whose
+performance the buyer has learned, rather than simple favouritism.
+
+\todo{report the point estimates and standard errors}
 
 \subsection{Bandwidth and robustness}
-\todo{the bandwidth used, and whether results survive other bandwidths and
-functional forms}
+\todo{report the bandwidth used in the main specification, how it is chosen,
+and whether results survive alternative bandwidths and polynomial orders}
 
 \subsection{The identifying assumption}
-\todo{why units just either side of the cutoff are comparable}
+Contracts just below and just above the threshold must be comparable in
+everything except the award procedure, so that all other determinants of
+procurement outcomes are continuous at the cutoff. The reasoning is that a
+project worth marginally more than the threshold is, in substance, the same
+kind of project as one worth marginally less; only the legal regime differs
+discontinuously. Formally, the conditional expectation of potential outcomes
+must be continuous in contract value at the threshold.
 
 \subsection{Evidence for validity}
-\todo{manipulation tests, the density around the cutoff, continuity of
-predetermined characteristics, graphical analysis}
+\todo{report what the authors provide: a density test on the running variable
+such as McCrary, continuity of predetermined contract and buyer
+characteristics at the cutoff, and graphical analysis of the discontinuity}
 
 \subsection{A criticism of the design}
-\todo{manipulation of the running variable, another policy at the same
-cutoff, or another violation of continuity}
+\todo{write after reading; the natural line of attack is manipulation of the
+running variable, since the buyer who benefits from discretion is often the
+same party that sets the contract value, and the wider procurement literature
+documents bunching of contract values just below such thresholds; if buyers
+sort across the cutoff then contracts either side differ in unobserved ways and
+the continuity assumption fails}
 
 \end{document}
