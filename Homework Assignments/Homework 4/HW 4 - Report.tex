@@ -166,10 +166,11 @@ hour-of-day fixed effects, and $Z_i$, which holds average product price and
 product-category fixed effects ($397$ categories) where the outcome is at
 product level.
 
-The estimation sample is $129{,}448$ SKUs and $1{,}278{,}433$ transactions over
-the natural-experiment window. Regression observations differ by level of
-aggregation: $1{,}054$ at group level, $407{,}898$ at merchant level,
-$11{,}380{,}809$ at product level, and $191{,}209$ for logistics rating.
+The estimation sample is $129{,}448$ SKUs and $14{,}438{,}123$ transactions
+around the clash, of which $1{,}278{,}433$ fall inside the $42$-hour window.
+Regression observations differ by level of aggregation: $1{,}054$ at group
+level, $407{,}898$ at merchant level, $11{,}380{,}809$ at product level, and
+$191{,}209$ for logistics rating.
 
 \subsection{The source of treatment}
 A commercial dispute between Alibaba and SF Express. Alibaba removed SF Express
@@ -177,6 +178,18 @@ as a shipping option from its retail platform from 6:00 p.m.\ on June 1 to
 12:00 p.m.\ on June 3, 2017 --- $42$ hours. The withdrawal was unexpected and
 originated in a conflict between the two firms rather than in demand conditions
 for any product.
+Figure~\ref{fig:q2-timeline} reproduces the paper's timeline.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/q2_timeline.png}
+\caption{Timeline of the clash. Cainiao demanded that carriers share customer
+data and SF Express refused; SF Express cut off Cainiao's access on the morning
+of June 1; Alibaba removed SF Express as a shipping option at 6:00 p.m.\ that
+day; the State Post Bureau mandated a settlement and collaboration resumed at
+12:00 p.m.\ on June 3. Reproduced from Figure 1 of Cui, Li and Li (2020).}
+\label{fig:q2-timeline}
+\end{figure}
 
 \subsection{Treatment and control groups}
 Only non-Cainiao merchants could choose SF Express; Cainiao merchants could use
@@ -220,20 +233,34 @@ Yes, two pieces. First, a formal pre-trend test: the authors estimate
 \]
 where $\lambda$ captures any difference in the pre-treatment sales trend across
 the two groups. The estimated $\lambda$ is statistically insignificant,
-reported in Appendix D. Second, Figure~\ref{fig:q2-trends} reproduces the
-paper's Figure 2, which plots both groups over the whole window with fitted
-second-order polynomial trends; the two move together before the vertical
-lines marking the clash. They also run a placebo test over a separate
-promotion period with no treatment, and the DID estimates there are
-insignificant.
+reported in Appendix D. Second, the paper plots the two groups directly.
+Figure~\ref{fig:q2-sales} shows the sales panel: hollow circles are the
+treatment group, triangles the control group, and the dashed and solid lines
+are fitted second-order polynomial trends. The two series move together from
+May 20 until the first vertical line at June 1, 6:00 p.m., which is where the
+parallel-trends assumption has to hold; the treated series then falls while
+the control series does not. Figure~\ref{fig:q2-trends} shows all four
+outcomes on the same axes.
+
+They also run a placebo test over a separate promotion period with no
+treatment, and the DID estimates there are insignificant.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/q2_sales_trends.png}
+\caption{Hourly merchant sales for the treatment group (circles, dashed trend)
+and the control group (triangles, solid trend). The vertical lines mark the
+start and end of the $42$-hour clash. Detail from Figure 2 of Cui, Li and Li
+(2020).}
+\label{fig:q2-sales}
+\end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/q2_trends.png}
-\caption{Sales, product variety, sales dispersion and logistics rating for the
-treatment and control groups. Dashed and solid lines are fitted second-order
-polynomial trends; the vertical lines mark the start and end of the $42$-hour
-clash. Reproduced from Figure 2 of Cui, Li and Li (2020).}
+\caption{All four outcomes for the treatment and control groups: sales,
+product variety, sales dispersion and logistics rating. Reproduced from
+Figure 2 of Cui, Li and Li (2020).}
 \label{fig:q2-trends}
 \end{figure}
 
