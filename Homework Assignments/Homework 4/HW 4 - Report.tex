@@ -132,11 +132,10 @@ interest to have been computed}
 %==============================================================================
 
 \subsection{The paper}
-My field is Operations Management, and the paper is \emph{Value of High-Quality
-Logistics: Evidence from a Clash Between SF Express and Alibaba}, by Ruomeng
-Cui, Meng Li and Qiang Li, in \emph{Management Science}, one of the five
-journals listed in Homework 1. It identifies the value of logistics quality
-from a natural experiment and estimates it by difference-in-differences.
+\emph{Value of High-Quality Logistics: Evidence from a Clash Between SF Express
+and Alibaba}, by Ruomeng Cui, Meng Li and Qiang Li, in \emph{Management
+Science}, one of the five journals listed in Homework 1. The abstract states
+that the authors use ``a difference-in-differences design''.
 
 \subsection{Citation}
 Cui, R., Li, M., and Li, Q. (2020). Value of high-quality logistics: Evidence
@@ -144,78 +143,118 @@ from a clash between SF Express and Alibaba. \emph{Management Science}
 66(9):3879--3902. \url{https://doi.org/10.1287/mnsc.2019.3411}.
 
 \subsection{The main research question}
-Retail platforms sell the same product through couriers of differing quality,
-and faster, more reliable delivery is costly to provide. The paper asks what
-that quality is worth in demand terms: how much does a seller lose when a
-high-quality delivery option is withdrawn, and which products bear the loss?
-The question is hard to answer with observational data because couriers are
-chosen, not assigned, so sellers of popular products may systematically select
-better logistics. The authors exploit a commercial dispute that removed the
-premium option abruptly and for reasons unrelated to any individual product.
+What is a high-quality delivery option worth to an online retail platform? The
+authors ask how sales, product variety, sales dispersion and logistics ratings
+respond when the premium courier is withdrawn, and which products bear the
+loss. Observational data cannot answer this, because merchants choose their
+courier: sellers of popular or expensive goods may select better logistics, so
+quality is correlated with unobserved product appeal.
 
 \subsection{The empirical model}
-In June 2017 Alibaba removed SF Express, a premium courier, as a shipping
-option on its platform for roughly $42$ hours following a dispute between the
-two firms. The outcome is market performance at the level of the stock-keeping
-unit (SKU), measured by sales, and the paper also reports effects on product
-variety and on logistics ratings. The treatment indicator marks SKUs that had
-been served by SF Express, interacted with the window during which the option
-was unavailable. The estimation sample covers $129{,}832$ representative SKUs
-on the platform.
+The specification is
+\[
+\text{Sales}_{it} = c + \text{Treated}_i + \text{TreatedPeriod}_t
+ + \text{PostPeriod}_t
+ + \beta\,\text{Treated}_i \times \text{TreatedPeriod}_t
+ + \gamma\,\text{Treated}_i \times \text{PostPeriod}_t + T_t + Z_i + e_{it}.
+\]
+The outcome is sales, measured at group, merchant and product level; the paper
+also runs product variety, sales dispersion and logistics rating through the
+same design. The treatment variable is
+$\text{Treated}_i \times \text{TreatedPeriod}_t$. Controls are $T_t$,
+hour-of-day fixed effects, and $Z_i$, which holds average product price and
+product-category fixed effects ($397$ categories) where the outcome is at
+product level.
 
-\todo{confirm from the published article: the exact estimating equation, which
-fixed effects are included, the clustering of the standard errors, and the
-total number of SKU-by-period observations rather than the number of SKUs}
+The estimation sample is $129{,}448$ SKUs and $1{,}278{,}433$ transactions over
+the natural-experiment window. Regression observations differ by level of
+aggregation: $1{,}054$ at group level, $407{,}898$ at merchant level,
+$11{,}380{,}809$ at product level, and $191{,}209$ for logistics rating.
 
 \subsection{The source of treatment}
-A commercial dispute between Alibaba and SF Express in June 2017, in which
-Alibaba withdrew SF Express as a delivery option from its retail platform for
-about $42$ hours. The withdrawal was abrupt, short, and driven by a
-platform-level conflict rather than by conditions in any individual product
-market, which is what makes it usable as a natural experiment.
+A commercial dispute between Alibaba and SF Express. Alibaba removed SF Express
+as a shipping option from its retail platform from 6:00 p.m.\ on June 1 to
+12:00 p.m.\ on June 3, 2017 --- $42$ hours. The withdrawal was unexpected and
+originated in a conflict between the two firms rather than in demand conditions
+for any product.
 
 \subsection{Treatment and control groups}
-The treated group is the set of SKUs that relied on SF Express before the
-clash, since these lost their delivery option. The control group is comparable
-SKUs served by other couriers, which were unaffected. The control group is a
-reasonable comparison because the dispute originated between the two firms and
-was not a response to demand conditions for particular products, so which SKUs
-were exposed is plausibly unrelated to their contemporaneous sales prospects.
+Only non-Cainiao merchants could choose SF Express; Cainiao merchants could use
+only Cainiao Logistics. The treatment group is therefore products sold by
+non-Cainiao merchants ($124{,}490$ SKUs, $525$ merchants) and the control group
+is products sold by Cainiao merchants ($4{,}958$ SKUs, $249$ merchants), which
+were mechanically unaffected.
 
-\todo{confirm how the authors define the treated group precisely, and whether
-they match or otherwise restrict the control group}
+The control group is reasonable because exposure is determined by the
+merchant's pre-existing fulfilment arrangement, not by anything about the
+product's current demand, and the dispute that removed the option was external
+to both groups. The paper reinforces this with a matched DID in Section 8.2,
+pairing each product with a ``twin'' of similar price, discount and popularity
+from a different category.
 
 \subsection{The coefficient of interest}
-The coefficient on the interaction of the treatment indicator with the outage
-window, which measures the change in sales for exposed SKUs relative to the
-change for unexposed SKUs over the same hours. The authors interpret it as the
-demand value of high-quality logistics. They also report heterogeneity: the
-loss is larger for star products than for long-tail products, so that the
-long-tail share of sales rises while the option is unavailable.
+$\beta$, on $\text{Treated}_i \times \text{TreatedPeriod}_t$: the change in
+outcome for exposed products relative to unexposed products over the same
+hours. It is interpreted as the demand value of high-quality logistics.
 
-\todo{report the point estimate and standard error from the published article;
-a working-paper version gives a sales reduction of about 14.56 per cent and a
-rise of about 3 per cent in the long-tail contribution, but these figures need
-checking against the published text}
+The estimates are $-7{,}501.14$ (SE $3{,}079.54$) for group sales,
+$-20.42$ (SE $3.54$) for merchant sales and $-0.29$ (SE $0.08$) for product
+sales, which the abstract reports as a \textbf{$14.56$ per cent} reduction in
+sales during the clash. Sales dispersion rises by $0.03$ (SE $0.008$), so the
+long-tail contribution to total sales increases by $3$ per cent. Product
+variety ($-398.40$, SE $405.60$) and logistics rating ($0.002$, SE $0.01$) are
+not significant.
 
 \subsection{The parallel trends assumption}
-For the estimate to be causal, sales of SF Express SKUs and sales of SKUs on
-other couriers must have followed a common path in the absence of the dispute.
-The levels may differ, since premium logistics is plausibly selected by
-different products; what must not differ is the \emph{change}. The assumption
-would fail if, over the same hours, something else moved demand for the two
-groups differently.
+Sales of products sold by non-Cainiao merchants and by Cainiao merchants must
+have followed a common path over those $42$ hours had the clash not occurred.
+Their levels may differ --- and do, substantially --- but the \emph{change}
+must not. The assumption fails if anything else moved demand differently for
+the two groups over the same window.
 
 \subsection{Evidence for parallel trends}
-\todo{read the identification and robustness sections and report what they
-show: pre-trend plots, an event-study specification by hour or day, placebo
-windows before the clash, or balance of the two groups on observables}
+Yes, two pieces. First, a formal pre-trend test: the authors estimate
+\[
+\text{Sales}_{it} = c + \theta t + \lambda\,\text{Treated}_i \times t
+ + T_t + Z_i + e_{it},
+\]
+where $\lambda$ captures any difference in the pre-treatment sales trend across
+the two groups. The estimated $\lambda$ is statistically insignificant,
+reported in Appendix D. Second, Figure~\ref{fig:q2-trends} reproduces the
+paper's Figure 2, which plots both groups over the whole window with fitted
+second-order polynomial trends; the two move together before the vertical
+lines marking the clash. They also run a placebo test over a separate
+promotion period with no treatment, and the DID estimates there are
+insignificant.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/q2_trends.png}
+\caption{Sales, product variety, sales dispersion and logistics rating for the
+treatment and control groups. Dashed and solid lines are fitted second-order
+polynomial trends; the vertical lines mark the start and end of the $42$-hour
+clash. Reproduced from Figure 2 of Cui, Li and Li (2020).}
+\label{fig:q2-trends}
+\end{figure}
 
 \subsection{A story under which parallel trends fails}
-\todo{write after reading; one candidate is that SF Express SKUs are
-disproportionately time-sensitive or higher-priced goods whose demand responds
-differently to the same within-week or promotional cycle, so the two groups
-would have diverged over the window even without the withdrawal}
+The clash fell inside Alibaba's annual June promotion, which runs from June 1
+to June 18, and the two groups are not comparable in what they sell: in the
+pre-treatment window the control group's average product price is
+$1{,}199.93$ yuan against $135.96$ yuan for the treated group. Suppose the
+promotion discounted expensive goods more aggressively as it ramped up. The
+paper's own Table 2 is consistent with this: average discount was similar
+beforehand ($-0.25$ per cent control, $-0.44$ per cent treated) but diverged
+during the treatment window, to $5.31$ per cent for controls against $2.22$ per
+cent for the treated. If controls were being discounted more deeply in exactly
+the hours when SF Express was unavailable, part of the estimated sales drop is
+a relative price effect rather than a logistics effect, and the two groups
+would have diverged even with SF Express in place.
+
+The authors anticipate this and run a DID with price and discount as outcomes,
+finding the differences insignificant. That test is not decisive, however: the
+standard deviation of the treated group's discount in the treatment window is
+$38.06$, so it has limited power to detect a shift of a few percentage points.
 
 \clearpage
 %==============================================================================
