@@ -224,19 +224,12 @@ would have diverged over the window even without the withdrawal}
 %==============================================================================
 
 \subsection{The paper}
-The paper is \emph{The Cost of Intelligence: Impacts of AI Data Centers on US
-Electricity Prices}, by Vishrut Rana, Christian Kaps and Serguei Netessine. It
-estimates the effect of data-centre construction on retail electricity prices
-using a single-anchor synthetic-control design with cumulative, repeated
-treatment.
-
-I acknowledge that it is not published in one of the five journals listed in
-Homework 1. It is a working paper, available through SSRN and the Harvard
-Business School working paper series. I chose it because the synthetic control
-method is rare in operations journals, because the paper positions itself
-within the operations literature on sustainable and energy operations, and
-because the question is close to the topic I am proposing for the course
-project.
+\emph{The Cost of Intelligence: Impacts of AI Data Centers on US Electricity
+Prices}, by Vishrut Rana, Christian Kaps and Serguei Netessine. It is a working
+paper, not published in one of the five journals listed in Homework 1. I chose
+it because synthetic control is rare in operations journals, the paper
+positions itself in the operations literature on energy operations, and the
+topic is close to my proposed project.
 
 \subsection{Citation}
 Rana, V., Kaps, C., and Netessine, S. (2026). The cost of intelligence:
@@ -245,157 +238,93 @@ Impacts of AI data centers on US electricity prices. Working paper, September
 \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7580459}.
 
 \subsection{The main research question}
-The build-out of AI data centres adds large, geographically concentrated
-electricity demand, and public concern that this raises household bills has
-produced moratoria on new development. The paper argues that the sign of the
-effect is theoretically ambiguous: a data centre raises the utility's revenue
-requirement if it forces new generation, transmission or distribution capacity,
-but it also enlarges the sales base over which fixed costs are spread, and
-because its demand enters industrial rather than residential sales, the two
-customer classes are affected differently. The paper poses three questions:
-how data-centre additions affect retail prices for industrial and residential
-customers; which developer types and utility operating characteristics are
-associated with smaller residential spillovers; and which mechanism within the
-utility's cost of service explains the price effects. The identification
-problem is that siting is endogenous --- in 2020 utilities hosting data centres
-had industrial prices about $37$ per cent and residential prices about $7$ per
-cent below utilities without them --- so comparing hosts with non-hosts
-confounds the effect with the conditions that attracted the investment.
+How do data-centre additions affect retail electricity prices for industrial
+and residential customers? The effect is theoretically ambiguous: a data centre
+raises the utility's revenue requirement if new capacity is needed, but also
+enlarges the sales base over which costs are spread, and its demand enters
+industrial rather than residential sales. Identification is hard because siting
+is endogenous --- in 2020, utilities hosting data centres had industrial prices
+$37$ per cent and residential prices $7$ per cent below those without.
 
 \subsection{The treated unit and the treatment}
-The unit of analysis is the \emph{electric utility}, observed quarterly, chosen
-because the utility is the entity that incurs costs and recovers them through
-regulated retail rates. Facility-level data on location, activation date and
-power capacity come from Aterio; prices come from EIA Form 861M, aggregated to
-utility-quarter average revenue per MWh; utility costs come from FERC Forms 1
-and 3-Q.
-
-Treatment is the addition of data-centre capacity. The sample is restricted to
-facilities of at least $10$ MW activated after 2020, leaving $561$ eligible
-data centres, and further to bundled service territories, leaving $385$ data
-centres across $42$ treated utilities. Because capacity arrives repeatedly
-rather than once, utility $i$'s \emph{treatment anchor} is the first quarter
-from 2020 in which it receives positive new capacity,
-\[
-T_i = \min\left\{t \ge 2020\text{Q1} : A^{MW}_{it} > 0\right\},
-\]
-and exposure accumulates thereafter as $D_{it} = \sum_{s=T_i}^{t} A_{is}$.
-Intensity is measured either in MW or as a ratio to utility scale,
-$A^{Ratio}_{it} = 100 \times A^{MW}_{it}/\text{Peak}_i$, so that one unit is a
-one percentage point increase in capacity relative to the utility's
-pre-anchor peak demand.
+The treated unit is the \emph{electric utility}, observed quarterly; the paper
+uses this level because the utility incurs the costs and recovers them through
+regulated retail rates. Treatment is the addition of data-centre capacity of at
+least $10$ MW after 2020: $385$ facilities across $42$ treated utilities.
+Utility $i$'s treatment anchor is
+$T_i = \min\{t \ge 2020\text{Q1} : A^{MW}_{it} > 0\}$, and exposure accumulates
+as $D_{it} = \sum_{s=T_i}^{t} A_{is}$, measured in MW or as
+$A^{Ratio}_{it} = 100 \times A^{MW}_{it}/\text{Peak}_i$.
 
 \subsection{The donor pool}
-For each treated utility the donor pool $\mathcal{J}_i$ contains utilities with
-complete outcome data that receive \emph{no} positive addition of the treatment
-over that utility's post-anchor horizon. The restriction is there to stop
-post-treatment movement in the donor outcome being mechanically driven by the
-donors' own data-centre capacity. The pool is drawn from the $291$ utilities
-recorded as having no data-centre additions between 2020 and 2025.
+Utilities with complete outcome data that receive \emph{no} new data-centre
+capacity over the treated utility's post-anchor horizon, drawn from the $291$
+utilities with no additions in 2020--2025. The restriction prevents donor
+outcomes from being driven by their own data-centre capacity.
 
 \subsection{How the synthetic control is constructed}
-Let $X_i$ collect utility $i$'s pre-treatment outcome path over the $16$
-quarters preceding $T_i$, together with any matching characteristics. Weights
-are non-negative, sum to one, and minimise the distance to the weighted donors,
+Weights are non-negative, sum to one, and minimise the distance between the
+treated utility and the weighted donors on $X_i$, which contains the outcome
+path over the $16$ quarters preceding $T_i$:
 \[
 \hat{w}_i = \arg\min_{w \in \Delta_i}
 \left\| X_i - \sum_{j \in \mathcal{J}_i} w_{ij}X_j \right\|^2 ,
 \qquad
-\hat{Y}^0_{it} = \sum_{j \in \mathcal{J}_i} \hat{w}_{ij} Y_{jt},
+R_{it} = Y_{it} - \sum_{j \in \mathcal{J}_i} \hat{w}_{ij} Y_{jt}.
 \]
-and are chosen once on the pre-treatment window and then held fixed. The
-synthetic-control gap is $R_{it} = Y_{it} - \hat{Y}^0_{it}$.
-
-The second stage is what makes the design unusual. Rather than reading off a
-single post-treatment gap, the gaps are pooled across treated utilities and
-regressed on cumulative exposure,
-\[
-R_{it} = \beta D_{it} + \mu_i + \lambda_{q(t)} + \varepsilon_{it},
-\]
-with treated-utility fixed effects $\mu_i$, quarter-of-year fixed effects
-$\lambda_{q(t)}$ and utility-clustered standard errors. This follows the
-non-binary, non-absorbing treatment framework of De Chaisemartin and
-d'Haultfoeuille (2026). The coefficient $\beta$ is the average marginal change
-in the outcome, relative to the synthetic counterfactual, per unit of
-cumulative treatment. Four outcomes are run through the same machinery:
-industrial price, residential price, utility cost per MWh, and electricity
-sales.
+Weights are chosen once and held fixed. The gaps $R_{it}$ are then pooled
+across treated utilities and regressed on cumulative exposure,
+$R_{it} = \beta D_{it} + \mu_i + \lambda_{q(t)} + \varepsilon_{it}$, with
+utility and quarter-of-year fixed effects and utility-clustered standard
+errors, following De Chaisemartin and d'Haultfoeuille (2026) on non-binary
+treatments.
 
 \subsection{The estimated treatment effect}
-In the preferred ratio specification with fixed effects, a one percentage point
-increase in cumulative data-centre capacity relative to utility peak demand
-raises the industrial price by $0.807$ \$/MWh (SE $0.238$, $N = 648$, $42$
-treated utilities) and the residential price by $0.261$ \$/MWh (SE $0.158$,
-$N = 627$, $41$ utilities). The MW specifications are positive but
-insignificant for industrial prices, which the authors read as evidence that
-project scale \emph{relative to the receiving utility} matters more than
-capacity alone.
+The effect is the post-anchor gap between the treated utility and its synthetic
+counterpart, per unit of cumulative capacity. In the preferred ratio
+specification with fixed effects, one percentage point of capacity relative to
+peak demand raises the industrial price by $0.807$ \$/MWh (SE $0.238$,
+$N = 648$) and the residential price by $0.261$ \$/MWh (SE $0.158$,
+$N = 627$).
 
-Scaled to the average treated utility, which receives $456$ MW against peak
-demand of $6{,}804$ MW, these imply increases of about $5.4$ \$/MWh for
-industrial and $1.7$ \$/MWh for residential customers: respectively $8.1$ and
-$1.4$ per cent of the 2020 price level, but only $15.7$ and $4.0$ per cent of
-the total observed price increase between 2020 and 2025. The authors conclude
-that data centres are a real but minor contributor to recent bill increases.
-
-Two further results sharpen this. Splitting by developer, the residential
-spillover comes from third-party providers ($1.042$ \$/MWh, SE $0.477$) and not
-from the four large cloud providers ($0.158$, SE $0.160$), though the Wald test
-of equality is only marginal at $p = 0.101$. On mechanism, utility cost per
-MWh rises significantly only for the 2022--2025 window ($1.769$ \$/MWh, SE
-$0.967$), while electricity sales show no significant increase --- which the
-authors take as evidence that the price effect runs through infrastructure and
-capacity cost rather than through the volume of electricity procured.
+For the average treated utility ($456$ MW added against peak demand of
+$6{,}804$ MW) this is $5.4$ \$/MWh industrial and $1.7$ \$/MWh residential:
+$15.7$ and $4.0$ per cent of the observed 2020--2025 price increases. The
+residential spillover comes from third-party developers ($1.042$, SE $0.477$)
+and not the four large cloud providers ($0.158$, SE $0.160$), though the Wald
+test of equality gives only $p = 0.101$.
 
 \subsection{Pre-treatment fit}
-Fit is reported in detail rather than asserted. Across the $42$ industrial
-treated utilities the median pre-treatment RMSPE over the $16$-quarter window
-is $2.810$ \$/MWh, with a mean of $4.498$ and a $90$th percentile of $12.228$;
-for the $41$ residential utilities the corresponding figures are $2.485$,
-$3.504$ and $6.453$. The median synthetic control places positive weight on six
-donors, with a median largest single weight of $0.376$ for industrial and
-$0.341$ for residential prices, so the counterfactuals are not resting on one
-donor. The normalised RMSPE is below one for every treated residential utility.
-Figures 5 and 6 plot the gap in event time and show it flat before the anchor
-and opening afterwards.
+Yes, reported in Appendix B. Median pre-treatment RMSPE is $2.810$ \$/MWh for
+industrial prices and $2.485$ for residential, over the $16$-quarter window.
+The median synthetic control uses six positive-weight donors, with median
+largest weight $0.376$ and $0.341$ respectively, so the counterfactuals do not
+rest on a single donor. Figures 5 and 6 plot the gap in event time. Fit is
+weaker in the tail: the $90$th percentile RMSPE is $12.228$ for industrial and
+$6.453$ for residential.
 
 \subsection{Placebo and permutation tests}
-The paper reports \emph{no} placebo or permutation tests. There are no in-space
-placebos assigning treatment to donor utilities, no in-time placebos at false
-anchors, and no permutation inference of the kind usually paired with synthetic
-control. Inference comes instead from utility-clustered standard errors on the
-second-stage regression. What the paper offers in place of placebos is the fit
-diagnostics above and a sensitivity analysis restricting the treatment window
-to 2022--2025, in which the industrial effect falls to $0.563$ \$/MWh
-(SE $0.307$) while the residential effect rises to $0.371$ (SE $0.176$).
+\textbf{The paper reports none.} There are no in-space placebos on donor
+utilities, no in-time placebos at false anchors, and no permutation inference.
+Inference rests on utility-clustered standard errors. In their place the paper
+offers the fit diagnostics above and a sensitivity analysis restricting
+treatment to 2022--2025, where the industrial effect falls to $0.563$
+(SE $0.307$) and the residential effect rises to $0.371$ (SE $0.176$).
 
 \subsection{A criticism of the design}
-The authors concede three limitations: unobserved shocks coinciding with entry
-may survive in the estimated gap; the cumulative specification imposes a common
-linear marginal effect that cannot capture thresholds or scale economies; and
-the small number of treated utilities weakens the heterogeneity analysis. Two
-further points seem to me more damaging.
-
-First, the pre-treatment fit is reported as a distribution, and the tail of
-that distribution is poor. The $90$th percentile industrial RMSPE of $12.228$
-\$/MWh is larger than the estimated effect it is used to detect, and the
-utility-level diagnostics show normalised RMSPE above one for several treated
+The poor tail of the pre-treatment fit. The $90$th percentile industrial RMSPE
+of $12.228$ \$/MWh exceeds the $5.4$ \$/MWh effect being detected, and the
+utility-level diagnostics report normalised RMSPE above one for several treated
 utilities, including New York State Electric \& Gas at $2.594$ and Orange \&
-Rockland at $1.836$. For those utilities the synthetic control does not
-reproduce the pre-treatment path, so the post-treatment gap cannot be read as
-a treatment effect. Without placebo inference there is no way to judge how much
-of the pooled estimate is driven by them.
+Rockland at $1.836$. For those, the synthetic control does not reproduce the
+pre-treatment path, so the post-treatment gap cannot be read as a treatment
+effect --- and with no placebo inference, there is no way to tell how much of
+the pooled estimate they drive.
 
-Second, the donor pool is screened only on the absence of \emph{new}
-data-centre capacity, which rules out direct treatment but not spillovers.
-The authors acknowledge this. If data-centre entry raises wholesale
-procurement costs or tightens transmission across a region, neighbouring donor
-utilities are partially treated, their prices rise too, and the estimated gap
-understates the true effect. Given that the treatment window also coincides
-with the 2021--2022 natural gas price shock, which hit utilities differently
-according to generation mix, the identifying assumption that no contemporaneous
-shock moves treated and synthetic utilities differently is doing a great deal
-of work.
+A second problem, which the authors acknowledge, is that the donor pool is
+screened only on the absence of \emph{new} capacity. If data-centre entry
+raises regional wholesale costs, donor utilities are partially treated and the
+estimated gap understates the effect.
 
 \clearpage
 %==============================================================================
