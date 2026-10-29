@@ -295,13 +295,26 @@ and not the four large cloud providers ($0.158$, SE $0.160$), though the Wald
 test of equality gives only $p = 0.101$.
 
 \subsection{Pre-treatment fit}
-Yes, reported in Appendix B. Median pre-treatment RMSPE is $2.810$ \$/MWh for
-industrial prices and $2.485$ for residential, over the $16$-quarter window.
-The median synthetic control uses six positive-weight donors, with median
-largest weight $0.376$ and $0.341$ respectively, so the counterfactuals do not
-rest on a single donor. Figures 5 and 6 plot the gap in event time. Fit is
-weaker in the tail: the $90$th percentile RMSPE is $12.228$ for industrial and
-$6.453$ for residential.
+Yes, both graphically and numerically. Figure~\ref{fig:q3-gaps} reproduces the
+paper's Figures 5 and 6: the gap between each treated utility and its synthetic
+counterpart is flat around zero for the sixteen quarters before the anchor, and
+opens only afterwards. Numerically, Appendix B reports a median pre-treatment
+RMSPE of $2.810$ \$/MWh for industrial prices and $2.485$ for residential, with
+the median synthetic control using six positive-weight donors and a median
+largest weight of $0.376$ and $0.341$ respectively, so the counterfactuals do
+not rest on a single donor. Fit is weaker in the tail: the $90$th percentile
+RMSPE is $12.228$ for industrial and $6.453$ for residential.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/q3_gap_industrial.png}\\[0.8em]
+\includegraphics[width=0.92\textwidth]{figures/q3_gap_residential.png}
+\caption{Gap between actual and synthetic electricity prices around data-centre
+addition, industrial above and residential below. Event time zero is the first
+quarter since 2020 in which the utility receives new capacity. Reproduced from
+Figures 5 and 6 of Rana, Kaps and Netessine (2026).}
+\label{fig:q3-gaps}
+\end{figure}
 
 \subsection{Placebo and permutation tests}
 \textbf{The paper reports none.} There are no in-space placebos on donor
