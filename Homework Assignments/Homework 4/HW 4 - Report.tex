@@ -196,21 +196,16 @@ Only non-Cainiao merchants could choose SF Express; Cainiao merchants could use
 only Cainiao Logistics. The treatment group is therefore products sold by
 non-Cainiao merchants ($124{,}490$ SKUs, $525$ merchants) and the control group
 is products sold by Cainiao merchants ($4{,}958$ SKUs, $249$ merchants), which
-were mechanically unaffected.
-
-The control group is reasonable because exposure is determined by the
-merchant's pre-existing fulfilment arrangement, not by anything about the
-product's current demand, and the dispute that removed the option was external
-to both groups. The paper reinforces this with a matched DID in Section 8.2,
-pairing each product with a ``twin'' of similar price, discount and popularity
-from a different category.
+were mechanically unaffected. Exposure is therefore fixed by the merchant's
+pre-existing fulfilment arrangement, not by current demand. Section 8.2 adds a
+matched DID, pairing each product with a ``twin'' of similar price, discount
+and popularity from another category.
 
 \subsection{The coefficient of interest}
 $\beta$, on $\text{Treated}_i \times \text{TreatedPeriod}_t$: the change in
 outcome for exposed products relative to unexposed products over the same
-hours. It is interpreted as the demand value of high-quality logistics.
-
-The estimates are $-7{,}501.14$ (SE $3{,}079.54$) for group sales,
+hours, interpreted as the demand value of high-quality logistics. The estimates
+are $-7{,}501.14$ (SE $3{,}079.54$) for group sales,
 $-20.42$ (SE $3.54$) for merchant sales and $-0.29$ (SE $0.08$) for product
 sales, which the abstract reports as a \textbf{$14.56$ per cent} reduction in
 sales during the clash. Sales dispersion rises by $0.03$ (SE $0.008$), so the
@@ -233,17 +228,12 @@ Yes, two pieces. First, a formal pre-trend test: the authors estimate
 \]
 where $\lambda$ captures any difference in the pre-treatment sales trend across
 the two groups. The estimated $\lambda$ is statistically insignificant,
-reported in Appendix D. Second, the paper plots the two groups directly.
-Figure~\ref{fig:q2-sales} shows the sales panel: hollow circles are the
-treatment group, triangles the control group, and the dashed and solid lines
-are fitted second-order polynomial trends. The two series move together from
-May 20 until the first vertical line at June 1, 6:00 p.m., which is where the
-parallel-trends assumption has to hold; the treated series then falls while
-the control series does not. Figure~\ref{fig:q2-trends} shows all four
-outcomes on the same axes.
-
-They also run a placebo test over a separate promotion period with no
-treatment, and the DID estimates there are insignificant.
+reported in Appendix D. Second, Figure~\ref{fig:q2-sales} plots the two groups
+directly: they move together from May 20 up to the first vertical line at
+June 1, 6:00 p.m., and separate only after it.
+Figure~\ref{fig:q2-trends} shows all four outcomes. Third, a placebo test over
+a separate promotion period with no treatment gives insignificant DID
+estimates.
 
 \begin{figure}[htbp]
 \centering
@@ -265,23 +255,18 @@ Figure 2 of Cui, Li and Li (2020).}
 \end{figure}
 
 \subsection{A story under which parallel trends fails}
-The clash fell inside Alibaba's annual June promotion, which runs from June 1
-to June 18, and the two groups are not comparable in what they sell: in the
-pre-treatment window the control group's average product price is
-$1{,}199.93$ yuan against $135.96$ yuan for the treated group. Suppose the
-promotion discounted expensive goods more aggressively as it ramped up. The
-paper's own Table 2 is consistent with this: average discount was similar
-beforehand ($-0.25$ per cent control, $-0.44$ per cent treated) but diverged
-during the treatment window, to $5.31$ per cent for controls against $2.22$ per
-cent for the treated. If controls were being discounted more deeply in exactly
-the hours when SF Express was unavailable, part of the estimated sales drop is
-a relative price effect rather than a logistics effect, and the two groups
-would have diverged even with SF Express in place.
+The clash fell inside Alibaba's June promotion, which runs to June 18, and the
+groups sell very different goods: the control group's average product price is
+$1{,}199.93$ yuan against $135.96$ yuan for the treated. If the promotion
+discounted expensive goods harder as it ramped up, the two would diverge with
+or without SF Express. Table 2 is consistent with this: average discount was
+close beforehand ($-0.25$ against $-0.44$ per cent) but moved apart during the
+treatment window, to $5.31$ against $2.22$ per cent. Part of the measured sales
+drop would then be a relative price effect, not a logistics effect.
 
-The authors anticipate this and run a DID with price and discount as outcomes,
-finding the differences insignificant. That test is not decisive, however: the
-standard deviation of the treated group's discount in the treatment window is
-$38.06$, so it has limited power to detect a shift of a few percentage points.
+The authors run a DID on price and discount and find nothing, but with a
+standard deviation of $38.06$ on the treated group's discount that test has
+little power.
 
 \clearpage
 %==============================================================================
