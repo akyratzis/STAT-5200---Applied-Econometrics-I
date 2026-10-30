@@ -116,56 +116,62 @@
 
 \subsection{The problem to be considered}
 Fajgelbaum et al.\ (2024) show that during the 2018--2019 US--China trade war,
-bystander countries did not merely absorb trade diverted from the two
-combatants: they raised exports of tariff-exposed products to the rest of the
-world as well. The war created net export opportunities rather than shifting
-trade across destinations.
+bystander countries raised exports of tariff-exposed products not only to the
+United States but to the rest of the world, so the war created net export
+opportunities rather than merely shifting trade across destinations. The paper
+rationalises this through \emph{downward-sloping} product-level supply curves,
+identified from the sign pattern of export elasticities across destinations ---
+entirely from export \emph{values}. Prices never enter.
 
-The paper rationalises this through \emph{downward-sloping} product-level
-supply curves, which it identifies from the sign pattern of export elasticities
-across destinations --- entirely from export \emph{values}. Prices never enter.
-
-I propose to test that mechanism directly, on the same data. Export value
-decomposes as
+I propose to test that mechanism directly, where it should bite hardest.
+Export value decomposes as
 \[
 \Delta \ln X = \Delta \ln Q + \Delta \ln P,
 \]
-both recoverable from Comtrade. The two supply regimes predict opposite signs
-for the second term. Under an upward-sloping supply, a positive demand shock
-raises quantity and unit value together; under a downward-sloping one --- scale
-economies, or fixed costs spread over a larger volume --- quantity rises while
-unit value \emph{falls}. The sign of the unit-value response is therefore a
-direct test of a classification the paper reaches indirectly, and the countries
-it labels downward-sloping (Mexico, Thailand, Colombia, Ukraine) are a sharp
-prediction to check.
+both recoverable from Comtrade. The regimes predict opposite signs for the
+second term: under upward-sloping supply a demand shock raises quantity and
+unit value together, while under a downward-sloping one --- scale economies, or
+fixed costs spread over volume --- quantity rises and unit value \emph{falls}.
+The sign of the unit-value response is a direct test of what the paper infers
+indirectly.
 
-A second question follows from the same decomposition: did bystanders grow
-existing flows or open new ones? Scale effects and export-platform migration
-should appear as entry, so splitting growth into an intensive margin and an
-extensive margin of new exporter--product--destination pairs tests the same
-mechanism. The paper measures neither.
+The sharpest case is AI hardware. Many Section 301 products are the AI
+buildout's inputs --- integrated circuits, computers and servers, networking
+apparatus, and the converters and transformers that power data centres --- and
+these are where scale economies in assembly, packaging and test are most
+plausible. The prediction becomes a triple difference: if supply slopes
+downward, the unit-value decline should be \emph{larger} in AI-related lines
+than in other tariffed lines. A secondary question is whether bystanders grew
+existing flows or opened new ones, since scale effects should appear as entry
+on the extensive margin, which the paper never measures.
 
 The design is the paper's own --- a long-differences difference-in-differences
 with continuous treatment intensity, the 2015--2017 elasticity serving as the
-pre-trend for the 2017--2019 one. Only the dependent variable changes.
+pre-trend for the 2017--2019 one --- estimated by OLS with
+heteroskedasticity-robust standard errors, with the bootstrap as an
+alternative. Only the dependent variable changes.
 
 \subsection{The data set}
 UN Comtrade bilateral trade at the HS6 product level, the source the paper
-itself uses, aggregated into 24-month intervals (2014/2015, 2016/2017,
-2018/2019) by exporter, destination and product. Comtrade reports trade
-\emph{value} and, for most lines, a physical \emph{quantity}, so unit values
-are value over quantity and the extensive margin is the presence or absence of
-a flow. Nothing beyond the paper's own source is needed. Tariffs come from
-Fajgelbaum et al.\ (2020) and Bown, Jung and Zhang (2019), both public.
+itself uses, aggregated into 24-month intervals by exporter, destination and
+product. Comtrade reports trade \emph{value} and, for most lines, a physical
+\emph{quantity}, so unit values are value over quantity and the extensive
+margin is the presence or absence of a flow. Tariffs come from Fajgelbaum et
+al.\ (2020) and Bown, Jung and Zhang (2019), both public. Nothing beyond the
+paper's own sources is required.
 
-The main risk is quantity coverage: Comtrade quantity fields are missing or
-unit-inconsistent on a non-trivial share of HS6 lines. The sample will have to
-be restricted to lines reporting a consistent unit across periods, and that
-restriction must be shown not to select on tariff exposure.
+Two risks. First, there is no AI category in HS6: the relevant headings are
+broad buckets containing much non-AI hardware, so the AI basket is a judgment
+call that must be stated explicitly and shown robust to alternative
+definitions. Second, unit values built as value over quantity carry
+measurement error in the dependent variable. On the log scale this is the
+multiplicative case of Notes 7: $\ln P = \ln P^{*} + e_0$, so OLS stays
+consistent provided $e_0$ is uncorrelated with tariff exposure, and the cost is
+an inflated error variance rather than bias. That condition is testable and
+will be checked, since Comtrade quantity coverage is uneven across HS6 lines.
 
 \todo{Still to do before submission: pull the Comtrade extract and compute
-descriptive statistics of the variables of interest, which the homework
-requires to be on hand.}
+descriptive statistics of the variables of interest.}
 
 \subsection{The paper to be replicated}
 Fajgelbaum, P., Goldberg, P., Kennedy, P., Khandelwal, A., and Taglioni, D.
@@ -175,17 +181,14 @@ Fajgelbaum, P., Goldberg, P., Kennedy, P., Khandelwal, A., and Taglioni, D.
 I will replicate the average export responses of Section III: the regression
 $\Delta \ln X = \alpha + \beta\,\Delta \ln T + \varepsilon$ run separately for
 bystanders' exports to the United States, to China and to the rest of the
-world, reproducing Figure 1 and Appendix Table A.2. The headline estimates are
-an elasticity of $0.31$ (SE $0.10$) for exports to the United States against a
-pre-war $-0.19$, and $0.20$ (SE $0.08$) and $0.29$ (SE $0.08$) for exports to
-the rest of the world against the US and Chinese tariffs respectively.
+world, reproducing Figure 1 and Appendix Table A.2. The targets are an
+elasticity of $0.31$ (SE $0.10$) to the United States against a pre-war
+$-0.19$, and $0.20$ and $0.29$ (SE $0.08$) to the rest of the world.
 
-The paper suits the project on three counts. Its data is public and free, so
-replication and extension draw on one Comtrade pull. Its specification is a
-long-differences design with an explicit pre-period comparison, the
-difference-in-differences structure covered in class. And the extension is not
-bolted on: it tests the paper's own central mechanism with a variable already
-in its data and left unused.
+\textbf{Fallback.} If the AI basket cannot be defined credibly from HS6 codes,
+the unit-value and extensive-margin tests stand on their own over all tariffed
+products, on the paper's original window and with no change to the data. The
+extension degrades to a weaker question rather than to no question.
 
 \clearpage
 %==============================================================================
