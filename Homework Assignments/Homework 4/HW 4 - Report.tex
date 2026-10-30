@@ -118,81 +118,73 @@
 Fajgelbaum et al.\ (2024) show that during the 2018--2019 US--China trade war,
 bystander countries raised exports of tariff-exposed products not only to the
 United States but to the rest of the world, so the war created net export
-opportunities rather than merely shifting trade across destinations. The paper
-rationalises this through \emph{downward-sloping} product-level supply curves,
-identified from the sign pattern of export elasticities across destinations ---
-entirely from export \emph{values}. Prices never enter.
+opportunities rather than merely redirecting trade. The paper attributes this
+to \emph{downward-sloping} product-level supply curves, which it identifies
+from the sign pattern of export elasticities across destinations --- from
+export \emph{values} alone. Prices do not enter.
 
-I propose to test that mechanism directly, where it should bite hardest.
-Export value decomposes as
+I propose to test that mechanism directly. Export value decomposes as
 \[
-\Delta \ln X = \Delta \ln Q + \Delta \ln P,
+\Delta \ln X = \Delta \ln Q + \Delta \ln P ,
 \]
-both recoverable from Comtrade. The regimes predict opposite signs for the
-second term: under upward-sloping supply a demand shock raises quantity and
-unit value together, while under a downward-sloping one --- scale economies, or
-fixed costs spread over volume --- quantity rises and unit value \emph{falls}.
-The sign of the unit-value response is a direct test of what the paper infers
-indirectly.
+both terms recoverable from Comtrade. The two regimes imply opposite signs for
+the second: under an upward-sloping supply a demand shock raises quantity and
+unit value together, whereas under a downward-sloping one quantity rises and
+unit value \emph{falls}. The sign of the unit-value response therefore tests
+directly what the paper infers indirectly.
 
-The sharpest case is AI hardware. Many Section 301 products are the AI
-buildout's inputs --- integrated circuits, computers and servers, networking
-apparatus, and the converters and transformers that power data centres --- and
-these are where scale economies in assembly, packaging and test are most
-plausible. The prediction becomes a triple difference: if supply slopes
-downward, the unit-value decline should be \emph{larger} in AI-related lines
-than in other tariffed lines. A secondary question is whether bystanders grew
-existing flows or opened new ones, since scale effects should appear as entry
-on the extensive margin, which the paper never measures.
+AI hardware provides the most informative case. Several products on the
+Section 301 lists are inputs to the AI buildout --- integrated circuits,
+servers, networking apparatus, and the converters and transformers that supply
+data centres --- and are the goods for which scale economies are most
+plausible. The prediction becomes a triple difference: the unit-value decline
+should be \emph{larger} in AI-related lines than in other tariffed lines. I
+will also decompose growth into intensive and extensive margins, since scale
+effects should generate entry; the paper measures neither.
 
-The design is the paper's own --- a long-differences difference-in-differences
+The design is the paper's own: a long-differences difference-in-differences
 with continuous treatment intensity, the 2015--2017 elasticity serving as the
-pre-trend for the 2017--2019 one. Only the dependent variable changes.
-Estimation is OLS. Since tariffs are assigned at the HS6 level while
-observations are exporter--product--destination triples, the dependence runs
-within product, so I will cluster by product as the paper does, reporting the
-number of clusters alongside $N$, and check the choice against
-heteroskedasticity-robust and wild-bootstrap alternatives.
+pre-trend for the 2017--2019 one, with only the dependent variable changed.
+Estimation is by OLS. Because tariffs are assigned at HS6 level while
+observations are exporter--product--destination triples, dependence runs within
+product, so I will cluster by product as the paper does, report the number of
+clusters alongside $N$, and compare against heteroskedasticity-robust and
+wild-bootstrap alternatives.
 
 \subsection{The data set}
 UN Comtrade bilateral trade at the HS6 product level, the paper's own source,
 aggregated into 24-month intervals by exporter, destination and product. It
 reports trade \emph{value} and, for most lines, a physical \emph{quantity}, so
-unit values are value over quantity and the extensive margin is the presence or
-absence of a flow. Tariffs come from Fajgelbaum et al.\ (2020) and Bown, Jung
-and Zhang (2019). Nothing beyond the paper's own sources is needed.
+unit values are obtained as value over quantity and the extensive margin as the
+presence or absence of a flow. Tariffs are taken from Fajgelbaum et al.\ (2020)
+and Bown, Jung and Zhang (2019). Descriptive statistics will cover value,
+quantity and unit value by sector and destination, the share of lines with
+usable quantity data, and the distribution of tariff changes.
 
-Two risks. First, HS6 has no AI category: the relevant headings are broad
-buckets holding much non-AI hardware, so the basket is a judgment call to be
-stated explicitly and shown robust to alternative definitions. Second, unit
-values carry measurement error in the dependent variable. On the log scale this
-is the multiplicative case of Notes 7, $\ln P = \ln P^{*} + e_0$, so OLS stays
-consistent provided $e_0$ is uncorrelated with tariff exposure and the cost is
-an inflated error variance rather than bias --- a condition I will test, since
-Comtrade quantity coverage is uneven across lines.
-
-The descriptive statistics I will report on the assembled extract are export
-value, quantity and the implied unit value by sector and destination for each
-24-month interval, the share of HS6 lines with usable quantity data and how
-that share varies with tariff exposure, and the distribution of tariff changes
-across products, separately for the AI basket and the remainder.
+Two limitations require attention. HS6 contains no AI classification, so the
+basket must be defined explicitly and shown robust to alternative definitions.
+And unit values carry measurement error in the dependent variable: on the log
+scale this is the multiplicative case of Notes 7, $\ln P = \ln P^{*} + e_0$,
+under which OLS remains consistent provided $e_0$ is uncorrelated with tariff
+exposure, the consequence being an inflated error variance rather than bias.
+I will test that condition, as quantity coverage is uneven across lines.
 
 \subsection{The paper to be replicated}
 Fajgelbaum, P., Goldberg, P., Kennedy, P., Khandelwal, A., and Taglioni, D.
 (2024). The US--China trade war and global reallocations. \emph{AER: Insights}
 6(2):295--312. \url{https://doi.org/10.1257/aeri.20230094}.
 
-I will replicate the average export responses of Section III: the regression
-$\Delta \ln X = \alpha + \beta\,\Delta \ln T + \varepsilon$ run separately for
-bystanders' exports to the United States, to China and to the rest of the
-world, reproducing Figure 1 and Appendix Table A.2. The targets are an
-elasticity of $0.31$ (SE $0.10$) to the United States against a pre-war
+I will replicate the average export responses of Section III, estimating
+$\Delta \ln X = \alpha + \beta\,\Delta \ln T + \varepsilon$ separately for
+exports to the United States, to China and to the rest of the world, and
+reproducing Figure 1 and Appendix Table A.2. The target estimates are
+elasticities of $0.31$ (SE $0.10$) to the United States against a pre-war
 $-0.19$, and $0.20$ and $0.29$ (SE $0.08$) to the rest of the world.
 
 \textbf{Fallback.} If the AI basket cannot be defined credibly from HS6 codes,
-the unit-value and extensive-margin tests stand on their own over all tariffed
-products, on the paper's original window and with no change to the data. The
-extension degrades to a weaker question rather than to no question.
+the unit-value and extensive-margin tests remain valid across all tariffed
+products, with no change to the data; the extension then addresses a less novel
+question rather than none.
 
 \clearpage
 %==============================================================================
@@ -446,8 +438,8 @@ RMSPE of $2.810$ \$/MWh for industrial prices and $2.485$ for residential, with
 the median synthetic control using six positive-weight donors and a median
 largest weight of $0.376$ and $0.341$ respectively, so the counterfactuals do
 not rest on a single donor. For the median utility the fit is good: an error of
-$2.810$ \$/MWh sits well below the $5.4$ \$/MWh effect the paper goes on to
-estimate. The tail is another matter --- the $90$th percentile RMSPE is
+$2.810$ \$/MWh is well below the $5.4$ \$/MWh effect subsequently estimated.
+Fit is poorer in the tail: the $90$th percentile RMSPE is
 $12.228$ for industrial and $6.453$ for residential, so for the worst-fitting
 utilities the pre-treatment error is larger than the effect itself.
 
@@ -481,7 +473,7 @@ the sample window rather than assigning treatment to untreated units or
 untreated dates, so it has no falsification content. Its results are also not
 reassuring. The industrial effect falls from $0.807$ to $0.563$ (SE $0.307$),
 about a third, while the residential effect rises from $0.261$ to $0.371$
-(SE $0.176$) --- the headline estimates move substantially with the window.
+(SE $0.176$); the principal estimates are therefore sensitive to the window.
 
 \subsection{A criticism of the design}
 The poor tail of the industrial pre-treatment fit. That $90$th percentile
@@ -491,8 +483,8 @@ Electric \& Gas at $2.594$ and Orange \& Rockland at $1.836$ the worst. For
 those the synthetic control does not reproduce the pre-treatment path, so the
 post-treatment gap cannot be read as a treatment effect, and with no placebo
 inference there is no way to tell how much of the pooled estimate they drive.
-The residential diagnostics are clean on this count: normalised RMSPE is below
-one for every treated residential utility.
+The residential diagnostics do not exhibit this problem: normalised RMSPE is
+below one for every treated residential utility.
 
 A second problem is that the donor pool is screened only on the absence of
 \emph{new} capacity, not on exposure to the regional wholesale markets that
@@ -588,17 +580,17 @@ $\beta$, the effect of the discretionary procedure itself: the jump in the
 outcome at the threshold divided by the jump in the probability of treatment,
 which is a local average treatment effect for compliers at the cutoff. The
 reduced form (ITT) is the numerator alone, the effect of being on the
-discretionary side whether or not the procedure was used. The headline result
-is on \emph{incumbent winner}: the ITT is
+discretionary side whether or not the procedure was used. The principal result
+concerns \emph{incumbent winner}: the ITT is
 $0.0839$ (SE $0.0377$, significant at $5$ per cent) and the fuzzy-RDD estimate
 is $0.440$ (SE $0.209$, significant at $5$ per cent), against a sample mean of
-$0.0957$. Discretion thus raises sharply the chance that the buyer's past
-supplier wins again.
+$0.0957$. Discretion therefore substantially increases the probability that
+the buyer's previous supplier wins again.
 
 No performance outcome is significant --- not rebates, number of bidders, work
 length, delay, cost overrun, local winner or S.R.L. Only the delay ITT reaches
-$10$ per cent ($29.97$, SE $16.60$), and the authors later disown it as
-sensitive to specification and sample.
+$10$ per cent ($29.97$, SE $16.60$), which the authors subsequently report to
+be sensitive to specification and sample selection.
 
 The paper is careful not to read repeated winning as favouritism on this
 evidence alone: it ``can signal the presence of either productive relational
@@ -609,9 +601,9 @@ null performance coefficients here.
 \subsection{Bandwidth and robustness}
 Bandwidths are chosen outcome by outcome using the \textbf{Imbens and
 Kalyanaraman (2012)} optimal rule, so there is no single bandwidth: they range
-from $0.572$ to $1.836$ in units of $100{,}000$ euros. The headline
-incumbent-winner regression uses $0.775$, that is contracts within
-\texteuro$77{,}500$ of the threshold, and the first stage uses $0.730$. Table 5 re-estimates with linear, quadratic and quartic
+from $0.572$ to $1.836$ in units of $100{,}000$ euros. The incumbent-winner
+regression uses $0.775$, that is contracts within \texteuro$77{,}500$ of the
+threshold, and the first stage uses $0.730$. Table 5 re-estimates with linear, quadratic and quartic
 polynomials for $g(\cdot)$ against the cubic baseline, and
 Figure~\ref{fig:q4-bw} re-estimates each reduced-form effect across a
 continuum of bandwidths. The incumbent-winner effect stays positive and
@@ -690,19 +682,29 @@ competition effect cancelling. The paper never tests this, and it cannot:
 the two rules change at the same point, so no design on this data can
 separate them.
 
-Manipulation of the running variable is the second worry, and here a concrete
-story is easy to tell. The buyer who gains discretion is the same party that
-sets the reserve price, and Table 4 says discretion raises the incumbent's
-chance of winning by $0.440$. A buyer who wants a favoured incumbent to win
-has a reason to shade an engineering estimate of \texteuro$310{,}000$ down to
-\texteuro$295{,}000$: it buys the easier procedure and the shorter invitation
-list at once. That selection is not random. The contracts pushed below the
-line would be exactly those where the buyer most wants to steer the award, so
-the compliers would be the contracts with the largest favouritism effect, and
-$\beta$ would overstate what discretion does to a randomly chosen contract.
+Manipulation of the running variable is a second concern, and a concrete
+mechanism is available. The buyer who gains discretion is the same party that
+sets the reserve price, and Table 4 reports that discretion raises the
+incumbent's probability of winning by $0.440$. A buyer favouring an incumbent
+therefore has an incentive to reduce an engineering estimate of
+\texteuro$310{,}000$ to \texteuro$295{,}000$, which secures both the less
+demanding procedure and the shorter invitation list. Such selection is not
+random: the contracts moved below the threshold would be those in which the
+buyer has the strongest incentive to influence the award, so the compliers
+would carry the largest favouritism effect and $\beta$ would overstate the
+effect of discretion on a randomly selected contract.
 The pooled McCrary test does not reject, but the $2005$ coefficient is
-significant at $10$ per cent and the municipality indicator jumps in Figure 5
---- so the evidence against sorting is not uniform, and sorting by a minority
-of buyers is all this story needs.
+significant at $10$ per cent and the municipality indicator is discontinuous
+in Figure 5, so the evidence against sorting is not uniform; sorting by a
+minority of buyers would suffice for this mechanism.
+
+%==============================================================================
+\section*{Note on the use of AI tools}
+%==============================================================================
+AI assistance was used to summarise the three papers discussed in Questions 2
+to 4 and to support the literature search behind the project proposal in
+Question 1. Every model, equation, estimate and standard error reported here
+was checked against the original papers, and the interpretations, criticisms
+and conclusions are my own.
 
 \end{document}
