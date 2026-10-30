@@ -147,9 +147,12 @@ on the extensive margin, which the paper never measures.
 
 The design is the paper's own --- a long-differences difference-in-differences
 with continuous treatment intensity, the 2015--2017 elasticity serving as the
-pre-trend for the 2017--2019 one --- estimated by OLS with
-heteroskedasticity-robust standard errors and the bootstrap as an alternative.
-Only the dependent variable changes.
+pre-trend for the 2017--2019 one. Only the dependent variable changes.
+Estimation is OLS. Since tariffs are assigned at the HS6 level while
+observations are exporter--product--destination triples, the dependence runs
+within product, so I will cluster by product as the paper does, reporting the
+number of clusters alongside $N$, and check the choice against
+heteroskedasticity-robust and wild-bootstrap alternatives.
 
 \subsection{The data set}
 UN Comtrade bilateral trade at the HS6 product level, the paper's own source,
