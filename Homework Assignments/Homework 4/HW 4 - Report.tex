@@ -161,8 +161,8 @@ The specification is
   + \gamma\,\text{Treated}_i \times \text{PostPeriod}_t \\
  &+ T_t + Z_i + e_{it}.
 \end{align*}
-This is Equation (1), for sales, measured at group, merchant and product
-level. Product variety and sales dispersion use Equation (3), at group level
+This is Equation (1). The outcome $y_{it}$ is $\text{Sales}_{it}$, sales per
+hour, run separately at group, merchant and product level. Product variety and sales dispersion use Equation (3), at group level
 with group average price in place of $Z_i$; logistics rating uses Equation (5),
 at period level with category fixed effects and no $T_t$. The treatment
 variable is
@@ -200,12 +200,20 @@ Only non-Cainiao merchants could choose SF Express; Cainiao merchants could use
 only Cainiao Logistics. The treatment group is therefore products sold by
 non-Cainiao merchants ($124{,}490$ SKUs, $525$ merchants) and the control group
 is products sold by Cainiao merchants ($4{,}958$ SKUs, $249$ merchants), which
-were mechanically unaffected. Exposure is therefore fixed by the merchant's
-pre-existing fulfilment arrangement, not by current demand. Section 8.1 adds a
-matched DID, pairing each product with a Mahalanobis-matched ``twin'' of the
-same category and similar price and pre-treatment sales ($4{,}393$ SKUs per
-group); Section 8.2 repeats the exercise with twins from \emph{different}
-categories to rule out cannibalisation.
+could not use SF Express in the first place.
+
+The control group is reasonable for three reasons. Exposure is fixed by the
+merchant's pre-existing fulfilment arrangement rather than by current demand,
+so it cannot respond to the shock. Both groups trade on the same platform in
+the same hours and face the same platform-wide promotions and shopper traffic,
+so common shocks are differenced out. And the control group is unaffected
+mechanically, by contract, not merely by assumption. The two groups are not
+alike in composition --- the control group's products are roughly nine times
+more expensive, which is the basis of the criticism below --- so the paper adds
+a matched DID in Section 8.1, pairing each product with a Mahalanobis-matched
+``twin'' of the same category and similar price and pre-treatment sales
+($4{,}393$ SKUs per group), with Section 8.2 repeating it across categories to
+rule out cannibalisation.
 
 \subsection{The coefficient of interest}
 $\beta$, on $\text{Treated}_i \times \text{TreatedPeriod}_t$: the change in
@@ -224,7 +232,11 @@ not significant.
 Sales of products sold by non-Cainiao merchants and by Cainiao merchants must
 have followed a common path over those $42$ hours had the clash not occurred.
 Their levels may differ --- and do, substantially --- but the \emph{change}
-must not.
+must not. Three things must hold for $\beta$ to be causal: no differential
+shock hit the two groups over the treatment window; merchants did not
+anticipate the withdrawal and shift sales before it; and treated demand did not
+spill over onto control products, which would move the control group in the
+opposite direction and inflate $\beta$.
 
 \subsection{Evidence for parallel trends}
 Yes, three pieces. First, a formal pre-trend test: the authors estimate
@@ -234,7 +246,8 @@ Yes, three pieces. First, a formal pre-trend test: the authors estimate
 \]
 where $\lambda$ captures any difference in the pre-treatment sales trend across
 the two groups. The estimated $\lambda$ is statistically insignificant,
-reported in Appendix D. Second, Figure~\ref{fig:q2-sales} plots the two groups
+reported in Appendix D. They do not estimate an event-study specification with
+leads and lags. Second, Figure~\ref{fig:q2-sales} plots the two groups
 directly: they move together from May 20 up to the first vertical line at
 June 1, 6:00 p.m., and separate only after it; Figure~\ref{fig:q2-trends}
 repeats this for all four outcomes. Third, a placebo test over a separate
@@ -337,8 +350,13 @@ errors, following De Chaisemartin and d'Haultfoeuille (2026) on non-binary
 treatments.
 
 \subsection{The estimated treatment effect}
-The effect is the post-anchor gap between the treated utility and its synthetic
-counterpart, per unit of cumulative capacity. In the preferred ratio
+It is obtained in two steps. For each treated utility the gap
+$R_{it} = Y_{it} - \sum_j \hat{w}_{ij}Y_{jt}$ is formed quarter by quarter: the
+actual price minus the price its synthetic control would have charged. These
+gaps are then pooled across the treated utilities and regressed on cumulative
+exposure $D_{it}$, so the reported effect is a dose-response slope --- how much
+of the gap each unit of added capacity buys --- rather than a single
+post-period difference. In the preferred ratio
 specification with fixed effects, one percentage point of capacity relative to
 peak demand raises the industrial price by $0.807$ \$/MWh (SE $0.238$,
 $N = 648$) and the residential price by $0.261$ \$/MWh (SE $0.158$,
@@ -377,9 +395,23 @@ Figures 5 and 6 of Rana, Kaps and Netessine (2026).}
 \subsection{Placebo and permutation tests}
 \textbf{The paper reports none.} There are no in-space placebos on donor
 utilities, no in-time placebos at false anchors, and no permutation inference.
-Inference rests on utility-clustered standard errors. In their place the paper
-offers a sensitivity analysis restricting treatment to 2022--2025, where the industrial effect falls to $0.563$
-(SE $0.307$) and the residential effect rises to $0.371$ (SE $0.176$).
+Inference rests on utility-clustered standard errors.
+
+Because there are none, there is nothing to report on what they show --- and
+that absence costs the paper something specific. A placebo distribution of
+gaps over donor utilities would say whether a gap of the estimated size is
+unusual against gaps the method produces where no treatment occurred; without
+it, the standard errors test the pooled regression but not the synthetic
+control step that generated the gaps, and the badly-fitted utilities discussed
+below cannot be ruled out as the source of the result.
+
+The closest thing the paper offers is \emph{not} a placebo or permutation
+test: a sensitivity analysis restricting treatment to 2022--2025, which varies
+the sample window rather than assigning treatment to untreated units or
+untreated dates, so it has no falsification content. Its results are also not
+reassuring. The industrial effect falls from $0.807$ to $0.563$ (SE $0.307$),
+about a third, while the residential effect rises from $0.261$ to $0.371$
+(SE $0.176$) --- the headline estimates move substantially with the window.
 
 \subsection{A criticism of the design}
 The poor tail of the industrial pre-treatment fit. That $90$th percentile
@@ -392,10 +424,13 @@ inference there is no way to tell how much of the pooled estimate they drive.
 The residential diagnostics are clean on this count: normalised RMSPE is below
 one for every treated residential utility.
 
-A second problem, which the authors acknowledge, is that the donor pool is
-screened only on the absence of \emph{new} capacity. If data-centre entry
-raises regional wholesale costs, donor utilities are partially treated and the
-estimated gap understates the effect.
+A second problem is that the donor pool is screened only on the absence of
+\emph{new} capacity, not on exposure to the regional wholesale markets that
+data centres tighten. A donor utility buying power in a market where treated
+utilities have just added gigawatts of demand sees its own costs rise, so it
+is partially treated; the synthetic control then tracks a counterfactual that
+is itself moving with the treatment, and the gap understates the true effect.
+The authors acknowledge the point but do not bound it.
 
 \clearpage
 %==============================================================================
@@ -434,13 +469,14 @@ estimated by two-stage least squares,
 \text{first stage:}\quad T_i &= g(Y_i - y_0) + \gamma Z_i + \alpha X_i
   + \nu_i,
 \end{align*}
-where $Z_i$ is the instrument, $g(\cdot)$ is a \textbf{third-order polynomial}
-in the distance from the cutoff, and $X_i$ is a set of five year dummies.
-Standard errors are heteroskedasticity-adjusted. Equation (3) prints the
-instrument as $\mathbf{1}\{(Y_i - y_0) \geq 0\}$, but the notes to Tables 4--6
-define it as an indicator equal to one if the reserve price is \emph{below}
-\texteuro$300{,}000$, which is the side on which discretion is available and
-the only reading under which the positive first stage makes sense.
+where $Z_i$ is the instrument, equal to one on the side of the threshold where
+discretion is available,\footnote{Equation (3) prints the instrument as
+$\mathbf{1}\{(Y_i - y_0) \geq 0\}$, but the notes to Tables 4--6 define it as an
+indicator equal to one if the reserve price is \emph{below}
+\texteuro$300{,}000$. The latter is the only reading under which the positive
+first stage makes sense.} $g(\cdot)$ is a \textbf{third-order polynomial} in
+the distance from the cutoff, and $X_i$ is a set of five year dummies.
+Standard errors are heteroskedasticity-adjusted.
 
 The outcomes $O_i$ are the winning rebate (the discount on the reserve price),
 the number of bidders, the length of the works, delay, cost overrun, whether
@@ -453,7 +489,8 @@ threshold falls inside the window. The database holds \textbf{$3{,}362$ public
 works}, of which $8$ per cent are awarded by Trattativa Privata and the average
 project size is \texteuro$316{,}000$. Because the bandwidth is chosen per
 outcome, each regression uses a subset of this: between $1{,}310$ and $3{,}314$
-contracts.
+contracts. The widest bandwidth almost covers the window, which is why the
+upper figure is close to the full sample.
 
 \subsection{How the cutoff determines treatment}
 The threshold changes the legal conditions under which \emph{Trattativa
@@ -461,9 +498,10 @@ Privata} may be used. Below \texteuro$300{,}000$ the buyer may use it under
 less demanding conditions, does not have to notify the procurement authority,
 and must invite at least five firms. Above the threshold it is allowed only in
 extreme circumstances such as a disaster, the authority must be notified, and
-at least fifteen firms must be invited. Crossing the cutoff therefore shifts
-the \emph{probability} that a contract is awarded discretionarily, not the
-procedure itself.
+at least fifteen firms must be invited. Crossing the cutoff raises the legal
+and administrative cost of discretion without forbidding it, so fewer buyers
+choose it. What shifts is the \emph{probability} that a contract is awarded
+discretionarily, not the procedure itself.
 
 \subsection{Sharp or fuzzy}
 \textbf{Fuzzy.} The paper states it explicitly: ``In this paper, we have a case
@@ -476,8 +514,12 @@ large relative shift, but far short of one, which is why the design is fuzzy.
 The estimand is a local average treatment effect for compliers at the cutoff.
 
 \subsection{The coefficient of interest}
-$\beta$, the jump in the outcome attributable to the discretionary procedure at
-the threshold. The headline result is on \emph{incumbent winner}: the ITT is
+$\beta$, the effect of the discretionary procedure itself: the jump in the
+outcome at the threshold divided by the jump in the probability of treatment,
+which is a local average treatment effect for compliers at the cutoff. The
+reduced form (ITT) is the numerator alone, the effect of being on the
+discretionary side whether or not the procedure was used. The headline result
+is on \emph{incumbent winner}: the ITT is
 $0.0839$ (SE $0.0377$, significant at $5$ per cent) and the fuzzy-RDD estimate
 is $0.440$ (SE $0.209$, significant at $5$ per cent), against a sample mean of
 $0.0957$. Discretion thus raises sharply the chance that the buyer's past
@@ -496,8 +538,10 @@ null performance coefficients here.
 
 \subsection{Bandwidth and robustness}
 Bandwidths are chosen outcome by outcome using the \textbf{Imbens and
-Kalyanaraman (2012)} optimal rule, and range from $0.572$ to $1.836$ in units
-of $100{,}000$ euros. Table 5 re-estimates with linear, quadratic and quartic
+Kalyanaraman (2012)} optimal rule, so there is no single bandwidth: they range
+from $0.572$ to $1.836$ in units of $100{,}000$ euros. The headline
+incumbent-winner regression uses $0.775$, that is contracts within
+\texteuro$77{,}500$ of the threshold, and the first stage uses $0.730$. Table 5 re-estimates with linear, quadratic and quartic
 polynomials for $g(\cdot)$ against the cubic baseline, and
 Figure~\ref{fig:q4-bw} re-estimates each reduced-form effect across a
 continuum of bandwidths. The incumbent-winner effect stays positive and
@@ -518,10 +562,14 @@ Figure 7 of Coviello, Guglielmo and Spagnolo (2018).}
 \subsection{The identifying assumption}
 All determinants of procurement outcomes other than the award procedure must be
 continuous in the reserve price at \texteuro$300{,}000$, and buyers must not be
-able to place contracts precisely on their preferred side of the threshold. A
-project priced marginally below the cutoff is then, in substance, the same kind
-of project as one priced marginally above, and the only thing that changes
-discontinuously is the legal regime. Because the design is fuzzy, the usual
+able to place contracts precisely on their preferred side of the threshold.
+The reserve price is an engineering estimate of what the works will cost, built
+from quantities and unit prices, so a buyer cannot tune it to the euro; which
+side of \texteuro$300{,}000$ a marginal project falls on is close to random
+with respect to everything else about it. Project size, complexity, location
+and buyer quality all vary smoothly through the threshold, so a project priced
+just below is in substance the same kind of project as one priced just above,
+and only the legal regime changes discontinuously. Because the design is fuzzy, the usual
 instrumental-variables conditions are also needed: the instrument must shift
 the probability of treatment, which the first stage confirms, and must affect
 outcomes only through that procedure.
@@ -556,20 +604,35 @@ bands. Reproduced from Figures 3 and 4 of Coviello, Guglielmo and Spagnolo
 \end{figure}
 
 \subsection{A criticism of the design}
-Manipulation of the running variable is the natural worry, because the buyer
-who gains discretion is often the same party that sets the reserve price.
-Nothing in the design prevents a buyer from pricing a project just under
-\texteuro$300{,}000$ to obtain it. The pooled McCrary test does not reject,
-but the $2005$ coefficient is significant at $10$ per cent and the municipality
-indicator jumps in Figure 5, so the evidence against sorting is not uniform.
+The threshold does not change one thing, it changes several, and only one of
+them is the treatment. By the paper's own account of the law, crossing
+\texteuro$300{,}000$ also raises the minimum number of firms the buyer must
+invite from five to fifteen. That rule binds on \emph{every} contract above
+the threshold, not only on the discretionary ones, and it acts directly on
+competition --- more invited bidders should mean deeper rebates, more bidders
+and different winners. So the instrument moves the outcomes through a second
+channel that has nothing to do with Trattativa Privata, which is precisely the
+exclusion restriction the fuzzy design needs. The estimates in Table 4 scale
+the reduced form by the first stage as though discretion were the only thing
+the threshold switched on; if the invitation rule also matters, $\beta$ is
+contaminated and the performance nulls could be a discretion effect and a
+competition effect cancelling. The paper never tests this, and it cannot:
+the two rules change at the same point, so no design on this data can
+separate them.
 
-A second concern is power. The incumbent-winner result is significant, but
-every performance outcome has a confidence interval wide enough to contain
-economically large effects in both directions --- delay carries a standard
-error of $109.2$ days against a sample mean of $137.3$. The conclusion that
-discretion does not worsen delivery is therefore a failure to reject, not
-evidence of no effect. Finally, the LATE applies to compliers at the cutoff,
-and the paper gives no basis for extending it to larger contracts, where the
-stakes of discretion are greater and the procedural safeguards differ.
+Manipulation of the running variable is the second worry, and here a concrete
+story is easy to tell. The buyer who gains discretion is the same party that
+sets the reserve price, and Table 4 says discretion raises the incumbent's
+chance of winning by $0.440$. A buyer who wants a favoured incumbent to win
+has a reason to shade an engineering estimate of \texteuro$310{,}000$ down to
+\texteuro$295{,}000$: it buys the easier procedure and the shorter invitation
+list at once. That selection is not random. The contracts pushed below the
+line would be exactly those where the buyer most wants to steer the award, so
+the compliers would be the contracts with the largest favouritism effect, and
+$\beta$ would overstate what discretion does to a randomly chosen contract.
+The pooled McCrary test does not reject, but the $2005$ coefficient is
+significant at $10$ per cent and the municipality indicator jumps in Figure 5
+--- so the evidence against sorting is not uniform, and sorting by a minority
+of buyers is all this story needs.
 
 \end{document}
