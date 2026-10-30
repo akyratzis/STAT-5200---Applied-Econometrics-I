@@ -16,6 +16,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{textcomp}
+\hyphenation{Gian-carlo Khan-del-wal Fajgel-baum}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{graphicx}
@@ -177,7 +178,8 @@ Fajgelbaum, P., Goldberg, P., Kennedy, P., Khandelwal, A., and Taglioni, D.
 I will replicate the average export responses of Section III, estimating
 $\Delta \ln X = \alpha + \beta\,\Delta \ln T + \varepsilon$ separately for
 exports to the United States, to China and to the rest of the world, and
-reproducing Figure 1 and Appendix Table A.2. The target estimates are
+reproducing the paper's Figure 1 and Appendix Table A.2. The target estimates
+are
 elasticities of $0.31$ (SE $0.10$) to the United States against a pre-war
 $-0.19$, and $0.20$ and $0.29$ (SE $0.08$) to the rest of the world.
 
@@ -281,7 +283,7 @@ hours, interpreted as the demand value of high-quality logistics. The estimates
 are $-7{,}501.14$ (SE $3{,}079.54$) for group sales,
 $-20.42$ (SE $3.54$) for merchant sales and $-0.29$ (SE $0.08$) for product
 sales. Against a historical base of $51{,}503.58$ in hourly group sales, the
-group-level coefficient is the \textbf{$14.56$ per cent} reduction reported in
+group-level coefficient is the \textbf{14.56 per cent} reduction reported in
 the abstract. Sales dispersion rises by $0.03$ (SE $0.008$), so the
 long-tail contribution to total sales increases by $3$ per cent. Product
 variety ($-398.40$, SE $405.60$) and logistics rating ($0.002$, SE $0.01$) are
@@ -523,7 +525,7 @@ contracts where the scope for discretion changes at a legal value threshold.
 \subsection{The empirical model}
 Treatment $T_i$ is the use of \emph{Trattativa Privata}, the discretionary
 award procedure. The running variable $Y_i$ is the reserve price of the
-contract and the cutoff $y_0$ is \textbf{\texteuro$300{,}000$}. The design is
+contract and the cutoff $y_0$ is \textbf{\texteuro 300,000}. The design is
 estimated by two-stage least squares,
 \begin{align*}
 \text{second stage:}\quad O_i &= g(Y_i - y_0) + \beta T_i + \eta X_i
@@ -532,11 +534,11 @@ estimated by two-stage least squares,
   + \nu_i,
 \end{align*}
 where $Z_i$ is the instrument, equal to one on the side of the threshold where
-discretion is available,\footnote{Equation (3) prints the instrument as
+discretion is available,\footnote{Equation~(3) prints the instrument as
 $\mathbf{1}\{(Y_i - y_0) \geq 0\}$, but the notes to Tables 4--6 define it as an
 indicator equal to one if the reserve price is \emph{below}
 \texteuro$300{,}000$. The latter is the only reading under which the positive
-first stage makes sense.} $g(\cdot)$ is a \textbf{third-order polynomial} in
+first stage makes sense.} $g(\cdot)$ is a third-order polynomial in
 the distance from the cutoff, and $X_i$ is a set of five year dummies.
 Standard errors are heteroskedasticity-adjusted.
 
@@ -547,7 +549,7 @@ whether the winner is a limited-liability firm (S.R.L.). The sample is Italian
 public construction works tendered between $2000$ and $2005$, taken from the
 Authority for Public Contracts (AVCP), restricted to reserve prices between
 \texteuro$200{,}000$ and \texteuro$500{,}000$ so that no other regulatory
-threshold falls inside the window. The database holds \textbf{$3{,}362$ public
+threshold falls inside the window. The database holds \textbf{3,362 public
 works}, of which $8$ per cent are awarded by Trattativa Privata and the average
 project size is \texteuro$316{,}000$. Because the bandwidth is chosen per
 outcome, each regression uses a subset of this: between $1{,}310$ and $3{,}314$
@@ -599,8 +601,8 @@ reading comes from the propensity-score matching in Section 7, not from the
 null performance coefficients here.
 
 \subsection{Bandwidth and robustness}
-Bandwidths are chosen outcome by outcome using the \textbf{Imbens and
-Kalyanaraman (2012)} optimal rule, so there is no single bandwidth: they range
+Bandwidths are chosen outcome by outcome using the Imbens and Kalyanaraman
+(2012) optimal rule, so there is no single bandwidth: they range
 from $0.572$ to $1.836$ in units of $100{,}000$ euros. The incumbent-winner
 regression uses $0.775$, that is contracts within \texteuro$77{,}500$ of the
 threshold, and the first stage uses $0.730$. Table 5 re-estimates with linear, quadratic and quartic
@@ -642,14 +644,15 @@ Figure~\ref{fig:q4-density} shows the histogram of reserve prices and the
 McCrary plot, and Table 3 reports the McCrary test. Pooled over all years the
 estimated log-density discontinuity is $-0.154$ (SE $0.131$), insignificant.
 Year by year it is also insignificant for $2000$--$2004$, but in $2005$ it is
-$-0.549$ (SE $0.322$), \textbf{significant at $10$ per cent}.
+$-0.549$ (SE $0.322$), \textbf{significant at 10 per cent}.
 
-Second, continuity of predetermined characteristics (Figure 5, following Lee
-2008): the share of works in the north, in Rome and in Piedmont, whether the
+Second, continuity of predetermined characteristics (the paper's Figure 5,
+following Lee 2008): the share of works in the north, in Rome and in Piedmont, whether the
 buyer is a province, population, the length of the local civil trial,
 corruption and social capital. The authors conclude there is no substantial
 evidence of sorting ``other than the municipality'' --- one of the nine
-covariates does jump. Third, graphical analysis of the outcomes (Figure 6),
+covariates does jump. Third, graphical analysis of the outcomes (the paper's
+Figure 6),
 which shows visible discontinuities in the use of Trattativa Privata, work
 length and incumbent winner, weak evidence on S.R.L., and none on rebates,
 number of bidders, cost overrun or local winner.
@@ -695,7 +698,8 @@ would carry the largest favouritism effect and $\beta$ would overstate the
 effect of discretion on a randomly selected contract.
 The pooled McCrary test does not reject, but the $2005$ coefficient is
 significant at $10$ per cent and the municipality indicator is discontinuous
-in Figure 5, so the evidence against sorting is not uniform; sorting by a
+in the paper's Figure 5, so the evidence against sorting is not uniform;
+sorting by a
 minority of buyers would suffice for this mechanism.
 
 %==============================================================================
