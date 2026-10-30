@@ -148,27 +148,25 @@ on the extensive margin, which the paper never measures.
 The design is the paper's own --- a long-differences difference-in-differences
 with continuous treatment intensity, the 2015--2017 elasticity serving as the
 pre-trend for the 2017--2019 one --- estimated by OLS with
-heteroskedasticity-robust standard errors, with the bootstrap as an
-alternative. Only the dependent variable changes.
+heteroskedasticity-robust standard errors and the bootstrap as an alternative.
+Only the dependent variable changes.
 
 \subsection{The data set}
-UN Comtrade bilateral trade at the HS6 product level, the source the paper
-itself uses, aggregated into 24-month intervals by exporter, destination and
-product. Comtrade reports trade \emph{value} and, for most lines, a physical
-\emph{quantity}, so unit values are value over quantity and the extensive
-margin is the presence or absence of a flow. Tariffs come from Fajgelbaum et
-al.\ (2020) and Bown, Jung and Zhang (2019), both public. Nothing beyond the
-paper's own sources is required.
+UN Comtrade bilateral trade at the HS6 product level, the paper's own source,
+aggregated into 24-month intervals by exporter, destination and product. It
+reports trade \emph{value} and, for most lines, a physical \emph{quantity}, so
+unit values are value over quantity and the extensive margin is the presence or
+absence of a flow. Tariffs come from Fajgelbaum et al.\ (2020) and Bown, Jung
+and Zhang (2019). Nothing beyond the paper's own sources is needed.
 
-Two risks. First, there is no AI category in HS6: the relevant headings are
-broad buckets containing much non-AI hardware, so the AI basket is a judgment
-call that must be stated explicitly and shown robust to alternative
-definitions. Second, unit values built as value over quantity carry
-measurement error in the dependent variable. On the log scale this is the
-multiplicative case of Notes 7: $\ln P = \ln P^{*} + e_0$, so OLS stays
-consistent provided $e_0$ is uncorrelated with tariff exposure, and the cost is
-an inflated error variance rather than bias. That condition is testable and
-will be checked, since Comtrade quantity coverage is uneven across HS6 lines.
+Two risks. First, HS6 has no AI category: the relevant headings are broad
+buckets holding much non-AI hardware, so the basket is a judgment call to be
+stated explicitly and shown robust to alternative definitions. Second, unit
+values carry measurement error in the dependent variable. On the log scale this
+is the multiplicative case of Notes 7, $\ln P = \ln P^{*} + e_0$, so OLS stays
+consistent provided $e_0$ is uncorrelated with tariff exposure and the cost is
+an inflated error variance rather than bias --- a condition I will test, since
+Comtrade quantity coverage is uneven across lines.
 
 \todo{Still to do before submission: pull the Comtrade extract and compute
 descriptive statistics of the variables of interest.}
