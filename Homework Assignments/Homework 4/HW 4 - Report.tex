@@ -122,56 +122,46 @@ world as well. The war created net export opportunities rather than shifting
 trade across destinations.
 
 The paper rationalises this through \emph{downward-sloping} product-level
-supply curves, and identifies the slope from the sign pattern of export
-elasticities across destinations: a country whose exports to the rest of the
-world \emph{fall} when demand from the United States rises is read as operating
-on an upward-sloping supply, and one whose exports rise everywhere at once as
-operating on a downward-sloping one. This inference is made entirely from
-export \emph{values}. Prices never enter.
+supply curves, which it identifies from the sign pattern of export elasticities
+across destinations --- entirely from export \emph{values}. Prices never enter.
 
 I propose to test that mechanism directly, on the same data. Export value
 decomposes as
 \[
 \Delta \ln X = \Delta \ln Q + \Delta \ln P,
 \]
-into a quantity and a unit-value component, both recoverable from Comtrade.
-The two supply regimes make opposite predictions about the second term. Under a
-standard upward-sloping supply, a positive demand shock raises quantity and
-unit value together. Under a downward-sloping supply --- scale economies,
-learning, or fixed costs spread over a larger volume --- quantity rises while
-unit value \emph{falls}. So the sign of the unit-value response to the same
-tariff shock is a direct test of the classification the paper reaches
-indirectly, and the countries it labels as downward-sloping (Mexico, Thailand,
-Colombia, Ukraine) are a sharp out-of-sample prediction to check.
+both recoverable from Comtrade. The two supply regimes predict opposite signs
+for the second term. Under an upward-sloping supply, a positive demand shock
+raises quantity and unit value together; under a downward-sloping one --- scale
+economies, or fixed costs spread over a larger volume --- quantity rises while
+unit value \emph{falls}. The sign of the unit-value response is therefore a
+direct test of a classification the paper reaches indirectly, and the countries
+it labels downward-sloping (Mexico, Thailand, Colombia, Ukraine) are a sharp
+prediction to check.
 
 A second question follows from the same decomposition: did bystanders grow
-existing trade flows or open new ones? Splitting export growth into an
-intensive margin and an extensive margin of new exporter--product--destination
-pairs speaks to the same mechanism, since scale effects and export-platform
-migration should show up as entry rather than as growth in incumbent flows.
-The paper measures neither margin.
+existing flows or open new ones? Scale effects and export-platform migration
+should appear as entry, so splitting growth into an intensive margin and an
+extensive margin of new exporter--product--destination pairs tests the same
+mechanism. The paper measures neither.
 
-The design is the paper's own: a difference-in-differences in long differences
-with continuous treatment intensity, with the 2015--2017 elasticity serving as
-the pre-trend against which the 2017--2019 elasticity is read. Only the
-dependent variable changes.
+The design is the paper's own --- a long-differences difference-in-differences
+with continuous treatment intensity, the 2015--2017 elasticity serving as the
+pre-trend for the 2017--2019 one. Only the dependent variable changes.
 
 \subsection{The data set}
 UN Comtrade bilateral trade at the HS6 product level, the source the paper
 itself uses, aggregated into 24-month intervals (2014/2015, 2016/2017,
 2018/2019) by exporter, destination and product. Comtrade reports trade
-\emph{value} and, for most lines, a physical \emph{quantity} with its unit, so
-unit values are constructed as value over quantity and the extensive margin is
-read off the presence or absence of a flow. No data beyond the paper's own
-source is required. Tariff measures come from Fajgelbaum et al.\ (2020) and
-Bown, Jung and Zhang (2019), both public.
+\emph{value} and, for most lines, a physical \emph{quantity}, so unit values
+are value over quantity and the extensive margin is the presence or absence of
+a flow. Nothing beyond the paper's own source is needed. Tariffs come from
+Fajgelbaum et al.\ (2020) and Bown, Jung and Zhang (2019), both public.
 
-The main data risk is quantity coverage: Comtrade quantity fields are missing
-or unit-inconsistent on a non-trivial share of HS6 lines, and unit values are
-noisy where they exist. The sample will have to be restricted to lines
-reporting a consistent unit across the three periods, and that restriction must
-be shown not to select on tariff exposure --- which is itself a result worth
-reporting.
+The main risk is quantity coverage: Comtrade quantity fields are missing or
+unit-inconsistent on a non-trivial share of HS6 lines. The sample will have to
+be restricted to lines reporting a consistent unit across periods, and that
+restriction must be shown not to select on tariff exposure.
 
 \todo{Still to do before submission: pull the Comtrade extract and compute
 descriptive statistics of the variables of interest, which the homework
@@ -190,12 +180,12 @@ an elasticity of $0.31$ (SE $0.10$) for exports to the United States against a
 pre-war $-0.19$, and $0.20$ (SE $0.08$) and $0.29$ (SE $0.08$) for exports to
 the rest of the world against the US and Chinese tariffs respectively.
 
-The paper suits the project for three reasons. Its data source is public and
-free, so both the replication and the extension draw on one Comtrade pull. Its
-specification is a long-differences design with an explicit pre-period
-comparison, which is the difference-in-differences structure covered in class.
-And the extension is not a new topic bolted on: it tests the paper's own
-central mechanism with a variable already present in its data and left unused.
+The paper suits the project on three counts. Its data is public and free, so
+replication and extension draw on one Comtrade pull. Its specification is a
+long-differences design with an explicit pre-period comparison, the
+difference-in-differences structure covered in class. And the extension is not
+bolted on: it tests the paper's own central mechanism with a variable already
+in its data and left unused.
 
 \clearpage
 %==============================================================================
