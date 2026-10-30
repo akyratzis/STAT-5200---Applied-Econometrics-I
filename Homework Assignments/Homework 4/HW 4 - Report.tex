@@ -15,6 +15,7 @@
 \usepackage[margin=1in]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage{textcomp}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{graphicx}
@@ -152,12 +153,13 @@ quality is correlated with unobserved product appeal.
 
 \subsection{The empirical model}
 The specification is
-\[
-\text{Sales}_{it} = c + \text{Treated}_i + \text{TreatedPeriod}_t
- + \text{PostPeriod}_t
- + \beta\,\text{Treated}_i \times \text{TreatedPeriod}_t
- + \gamma\,\text{Treated}_i \times \text{PostPeriod}_t + T_t + Z_i + e_{it}.
-\]
+\begin{align*}
+\text{Sales}_{it} ={}& c + \text{Treated}_i + \text{TreatedPeriod}_t
+  + \text{PostPeriod}_t \\
+ &+ \beta\,\text{Treated}_i \times \text{TreatedPeriod}_t
+  + \gamma\,\text{Treated}_i \times \text{PostPeriod}_t \\
+ &+ T_t + Z_i + e_{it}.
+\end{align*}
 The outcome is sales, measured at group, merchant and product level; the paper
 also runs product variety, sales dispersion and logistics rating through the
 same design. The treatment variable is
@@ -317,12 +319,11 @@ outcomes from being driven by their own data-centre capacity.
 Weights are non-negative, sum to one, and minimise the distance between the
 treated utility and the weighted donors on $X_i$, which contains the outcome
 path over the $16$ quarters preceding $T_i$:
-\[
-\hat{w}_i = \arg\min_{w \in \Delta_i}
-\left\| X_i - \sum_{j \in \mathcal{J}_i} w_{ij}X_j \right\|^2 ,
-\qquad
-R_{it} = Y_{it} - \sum_{j \in \mathcal{J}_i} \hat{w}_{ij} Y_{jt}.
-\]
+\begin{align*}
+\hat{w}_i &= \arg\min_{w \in \Delta_i}
+\left\| X_i - \sum_{j \in \mathcal{J}_i} w_{ij}X_j \right\|^2 , \\
+R_{it} &= Y_{it} - \sum_{j \in \mathcal{J}_i} \hat{w}_{ij} Y_{jt}.
+\end{align*}
 Weights are chosen once and held fixed. The gaps $R_{it}$ are then pooled
 across treated utilities and regressed on cumulative exposure,
 $R_{it} = \beta D_{it} + \mu_i + \lambda_{q(t)} + \varepsilon_{it}$, with
@@ -408,74 +409,152 @@ on procurement performance. \emph{Management Science} 64(2):715--738.
 \url{https://doi.org/10.1287/mnsc.2016.2628}.
 
 \subsection{The main research question}
-Public buyers can be given discretion over whom to invite to bid, or be
-required to run an open auction. Discretion may let a buyer use knowledge of
+Public buyers can be given discretion over whom to invite to bid, or be forced
+into an open competitive procedure. Discretion may let a buyer use knowledge of
 supplier quality that a mechanical rule cannot encode, improving delivery; it
 may equally let the buyer favour connected firms, raising costs and entrenching
-incumbents. The paper asks which effect dominates in practice, using Italian
-public works contracts where the procedure is determined by a legal value
-threshold rather than by the buyer's choice.
+incumbents. The paper asks which effect dominates, using Italian public works
+contracts where the scope for discretion changes at a legal value threshold.
 
 \subsection{The empirical model}
-Italian law sets a value threshold for public works. Contracts above it must be
-awarded by open auction, which leaves the buyer little say over who bids and
-wins; contracts below it may be awarded by restricted auction, in which the
-buyer selects whom to invite. The running variable is therefore the value of
-the contract, the cutoff is the legal threshold, and treatment is the
-discretionary procedure. Outcomes include the repeat-winning of the same firm
-and measures of delivery performance such as cost and time overruns.
+Treatment $T_i$ is the use of \emph{Trattativa Privata}, the discretionary
+award procedure. The running variable $Y_i$ is the reserve price of the
+contract and the cutoff $y_0$ is \textbf{\texteuro$300{,}000$}. The design is
+estimated by two-stage least squares,
+\begin{align*}
+\text{second stage:}\quad O_i &= g(Y_i - y_0) + \beta T_i + \eta X_i
+  + \omega_i, \\
+\text{first stage:}\quad T_i &= g(Y_i - y_0) + \gamma Z_i + \alpha X_i
+  + \nu_i,
+\end{align*}
+where $Z_i = \mathbf{1}\{(Y_i - y_0) \geq 0\}$ is the instrument, equal to one
+for contracts on the side of the threshold where discretion is permitted,
+$g(\cdot)$ is a \textbf{third-order polynomial} in the distance from the
+cutoff, and $X_i$ is a set of five year dummies. Standard errors are
+heteroskedasticity-adjusted.
 
-\todo{confirm from the paper: the exact threshold in euros, the full list of
-outcome variables, any covariates included, the polynomial order used for the
-running variable, and the total number of contracts in the estimation sample}
+The outcomes $O_i$ are the winning rebate (the discount on the reserve price),
+the number of bidders, the length of the works, delay, cost overrun, whether
+the winner is local, whether the winner is an incumbent of the same buyer, and
+whether the winner is a limited-liability firm (S.R.L.). The sample is Italian
+public construction works tendered between $2000$ and $2005$, taken from the
+Authority for Public Contracts (AVCP), restricted to reserve prices between
+\texteuro$200{,}000$ and \texteuro$500{,}000$ so that no other regulatory
+threshold falls inside the window. Sample sizes run from $1{,}310$ to $3{,}314$
+contracts depending on the outcome and its bandwidth.
 
 \subsection{How the cutoff determines treatment}
-Crossing the threshold changes the legally permitted award procedure. Below it,
-the buyer may run a restricted auction and choose the invitees; above it, an
-open auction is mandatory and that choice disappears. Discretion is therefore a
-deterministic function of contract value at the cutoff, so a contract's
-position relative to the threshold determines the regime it faces.
+The threshold changes the legal conditions under which \emph{Trattativa
+Privata} may be used. Below \texteuro$300{,}000$ the buyer may use it under
+less demanding conditions, does not have to notify the procurement authority,
+and must invite at least five firms. Above the threshold it is allowed only in
+extreme circumstances such as a disaster, the authority must be notified, and
+at least fifteen firms must be invited. Crossing the cutoff therefore shifts
+the \emph{probability} that a contract is awarded discretionarily: the first
+stage is a jump of $0.174$ (SE $0.0367$) against a sample mean of $0.0889$.
 
 \subsection{Sharp or fuzzy}
-\todo{confirm from the paper; the legal rule assigns the procedure
-deterministically, which points to a sharp design, but the authors may treat
-compliance as imperfect, in which case the discontinuity is used as an
-instrument for the procedure actually used}
+\textbf{Fuzzy.} The paper states it explicitly: ``in this paper, we have a case
+of fuzzy-RDD as the contracting authorities have some flexibility in deciding
+the works that are assigned with Trattativa Privata.'' The threshold changes
+the conditions under which discretion may be used, not whether it is used, so
+compliance is imperfect in both directions, and $Z_i$ is used as an instrument
+for $T_i$ rather than as treatment itself. The estimand is therefore a local
+average treatment effect for compliers at the cutoff.
 
 \subsection{The coefficient of interest}
-The jump in outcomes at the threshold, which identifies the effect of giving
-the buyer discretion. The authors find that discretion raises the probability
-that the same firm wins repeatedly, and that it does not worsen procurement
-outcomes, and may improve them. They read the combination as evidence that
-repeated dealing reflects relational contracting with suppliers whose
-performance the buyer has learned, rather than simple favouritism.
+$\beta$, the jump in the outcome attributable to the discretionary procedure at
+the threshold. The headline result is on \emph{incumbent winner}: the ITT is
+$0.0839$ (SE $0.0377$, significant at $5$ per cent) and the fuzzy-RDD estimate
+is $0.440$ (SE $0.209$, significant at $5$ per cent), against a sample mean of
+$0.0957$. Discretion thus raises sharply the chance that the buyer's past
+supplier wins again.
 
-\todo{report the point estimates and standard errors}
+Every performance outcome is statistically insignificant: winning rebate
+$0.389$ (SE $4.308$), number of bidders $-17.22$ (SE $11.85$), work length
+$-78.21$ (SE $117.3$), delay $174.8$ (SE $109.2$), cost overrun $-0.0562$
+(SE $0.125$), local winner $0.0929$ (SE $0.358$) and S.R.L.\ $0.373$
+(SE $0.430$). The ITT on delay is significant only at $10$ per cent
+($29.97$, SE $16.60$). The authors read the combination --- more repeated
+dealing, no measurable deterioration in delivery or price --- as evidence of
+relational contracting rather than of pure favouritism.
 
 \subsection{Bandwidth and robustness}
-\todo{report the bandwidth used in the main specification, how it is chosen,
-and whether results survive alternative bandwidths and polynomial orders}
+Bandwidths are chosen outcome by outcome using the \textbf{Imbens and
+Kalyanaraman (2012)} optimal rule, and range from $0.585$ to $1.836$ in units
+of $100{,}000$ euros. Robustness is shown in two ways. Table 5 re-estimates
+with different polynomial orders for $g(\cdot)$, and Figure~\ref{fig:q4-bw}
+re-estimates each reduced-form effect across a continuum of bandwidths from
+$0.05$ to $2.0$. The incumbent-winner effect stays positive and bounded away
+from zero over essentially the whole range, while the performance outcomes
+stay centred on zero once the bandwidth is wide enough to be informative.
+Table 6 further controls for local corruption, social capital and judicial
+efficiency.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/q4_bandwidths.png}
+\caption{Reduced-form effects estimated at bandwidths from $0.05$ to $2.0$
+(in $100{,}000$ euros), with $95$ per cent confidence bands; the vertical line
+marks the Imbens--Kalyanaraman bandwidth used in the baseline. Reproduced from
+Figure 7 of Coviello, Guglielmo and Spagnolo (2018).}
+\label{fig:q4-bw}
+\end{figure}
 
 \subsection{The identifying assumption}
-Contracts just below and just above the threshold must be comparable in
-everything except the award procedure, so that all other determinants of
-procurement outcomes are continuous at the cutoff. The reasoning is that a
-project worth marginally more than the threshold is, in substance, the same
-kind of project as one worth marginally less; only the legal regime differs
-discontinuously. Formally, the conditional expectation of potential outcomes
-must be continuous in contract value at the threshold.
+All determinants of procurement outcomes other than the award procedure must be
+continuous in the reserve price at \texteuro$300{,}000$, and buyers must not be
+able to place contracts precisely on their preferred side of the threshold. A
+project priced marginally below the cutoff is then, in substance, the same kind
+of project as one priced marginally above, and the only thing that changes
+discontinuously is the legal regime. Because the design is fuzzy, the usual
+instrumental-variables conditions are also needed: the instrument must shift
+the probability of treatment, which the first stage confirms, and must affect
+outcomes only through that procedure.
 
 \subsection{Evidence for validity}
-\todo{report what the authors provide: a density test on the running variable
-such as McCrary, continuity of predetermined contract and buyer
-characteristics at the cutoff, and graphical analysis of the discontinuity}
+Three pieces. First, a density test on the running variable:
+Figure~\ref{fig:q4-density} shows the histogram of reserve prices and the
+McCrary plot, and Table 3 reports the McCrary test. Pooled over all years the
+estimated log-density discontinuity is $-0.154$ (SE $0.131$), insignificant.
+Year by year it is also insignificant for $2000$--$2004$, but in $2005$ it is
+$-0.549$ (SE $0.322$), \textbf{significant at $10$ per cent}.
+
+Second, continuity of predetermined characteristics (Figure 5, following Lee
+2008): the share of works in the north, in Rome and in Piedmont, whether the
+buyer is a municipality or a province, population, the length of the local
+civil trial, corruption and social capital are all smooth through the cutoff.
+Third, graphical analysis of the outcomes themselves (Figure 6), which shows
+no visible jump except for incumbent winner.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/q4_density.png}
+\caption{Density of the running variable. Left: histogram of the distance of
+the reserve price from the \texteuro$300{,}000$ threshold, in $100{,}000$
+euros. Right: the McCrary (2008) local linear density estimate with confidence
+bands. Reproduced from Figures 3 and 4 of Coviello, Guglielmo and Spagnolo
+(2018).}
+\label{fig:q4-density}
+\end{figure}
 
 \subsection{A criticism of the design}
-\todo{write after reading; the natural line of attack is manipulation of the
-running variable, since the buyer who benefits from discretion is often the
-same party that sets the contract value, and the wider procurement literature
-documents bunching of contract values just below such thresholds; if buyers
-sort across the cutoff then contracts either side differ in unobserved ways and
-the continuity assumption fails}
+Manipulation of the running variable is the natural worry, because the buyer
+who gains discretion is often the same party that sets the reserve price.
+Nothing in the design prevents a buyer from pricing a project just under
+\texteuro$300{,}000$ to obtain it. The pooled McCrary test does not reject,
+but the $2005$ coefficient of $-0.549$ is significant at $10$ per cent, so the
+evidence against sorting is not uniform across the sample.
+
+A second concern is power. The incumbent-winner result is significant, but
+every performance outcome has a confidence interval wide enough to contain
+economically large effects in both directions --- the fuzzy-RDD estimate for
+delay is $174.8$ days with a standard error of $109.2$, against a sample mean
+of $137.3$. The conclusion that discretion does not worsen delivery is
+therefore a failure to reject, not evidence of no effect. Finally, the fuzzy
+design identifies a LATE for compliers at the cutoff, that is, for contracts
+near \texteuro$300{,}000$ whose procedure the threshold actually changed, and
+the paper gives no basis for extending it to larger contracts where the stakes
+of discretion are greater.
 
 \end{document}
