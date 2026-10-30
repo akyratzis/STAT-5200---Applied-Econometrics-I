@@ -335,8 +335,8 @@ data-centre capacity.
 \subsection{How the synthetic control is constructed}
 Weights are non-negative, sum to one, and minimise the distance between the
 treated utility and the weighted donors on $X_i$, which contains the outcome
-path over the $16$ quarters preceding $T_i$ together with unnamed utility
-matching characteristics:
+path over the $16$ quarters preceding $T_i$ together with utility
+characteristics that the paper refers to but never lists:
 \begin{align*}
 \hat{w}_i &= \argmin_{w \in \Delta_i}
 \left\| X_i - \sum_{j \in \mathcal{J}_i} w_{ij}X_j \right\|^2 , \\
@@ -378,8 +378,11 @@ opens only afterwards. Numerically, Appendix B reports a median pre-treatment
 RMSPE of $2.810$ \$/MWh for industrial prices and $2.485$ for residential, with
 the median synthetic control using six positive-weight donors and a median
 largest weight of $0.376$ and $0.341$ respectively, so the counterfactuals do
-not rest on a single donor. Fit is weaker in the tail: the $90$th percentile
-RMSPE is $12.228$ for industrial and $6.453$ for residential.
+not rest on a single donor. For the median utility the fit is good: an error of
+$2.810$ \$/MWh sits well below the $5.4$ \$/MWh effect the paper goes on to
+estimate. The tail is another matter --- the $90$th percentile RMSPE is
+$12.228$ for industrial and $6.453$ for residential, so for the worst-fitting
+utilities the pre-treatment error is larger than the effect itself.
 
 \begin{figure}[htbp]
 \centering
