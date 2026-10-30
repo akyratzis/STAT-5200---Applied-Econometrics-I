@@ -44,3 +44,9 @@ Replication/data/raw/*
 !Replication/data/raw/.gitkeep
 Replication/data/processed/*
 !Replication/data/processed/.gitkeep
+
+# Secrets. API keys live in ~/.Renviron, outside the repository; these
+# patterns are a backstop so a stray copy cannot be committed.
+.Renviron
+.env
+*.secret
