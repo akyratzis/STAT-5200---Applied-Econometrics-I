@@ -114,18 +114,71 @@
 \label{sec:q1}
 %==============================================================================
 
-\todo{no more than one page in total}
-
 \subsection{The problem to be considered}
-\todo{what question the project will ask}
+When the United States taxes or restricts a trading partner, where does the
+trade go? Fajgelbaum et al.\ (2024) show that during the 2018--2019
+US--China trade war, bystander countries did not merely absorb trade diverted
+from the two combatants: they raised exports of tariff-exposed products to the
+rest of the world as well, so the war created net export opportunities.
+
+I propose to ask whether the same holds for a restriction of a different kind.
+In October 2022 the United States imposed export controls on advanced
+semiconductors and semiconductor manufacturing equipment destined for China ---
+a quantity restriction on a narrow set of products, rather than a price
+instrument applied broadly. The two policies differ in a way that matters for
+the mechanism the paper identifies. A tariff raises the cost of a Chinese
+variety and leaves buyers free to substitute; an export control removes the US
+variety from the Chinese market outright. If bystanders' exports substitute for
+US production, the control should raise their exports to China in covered
+products. Whether their exports to the rest of the world rise alongside, as the
+tariff evidence suggests, or fall, is the question: it distinguishes
+downward-sloping product-level supply from simple reallocation across
+destinations.
+
+The design is a difference-in-differences with continuous treatment intensity.
+Products covered by the controls are the treated group, comparable
+uncovered products the control group, and the comparison is of export growth
+before and after October 2022. This mirrors the paper's own structure, in which
+the 2015--2017 elasticity serves as the pre-trend against which the 2017--2019
+elasticity is read.
 
 \subsection{The data set}
-\todo{which data, where it comes from, and confirmation that it is already
-on hand; the question asks for descriptive statistics of the variables of
-interest to have been computed}
+UN Comtrade bilateral trade at the HS6 product level, the same source the paper
+uses, aggregated into 24-month intervals by exporter, destination and product.
+Comtrade is public and accessible through its API at no cost. Treatment status
+comes from the October 2022 Bureau of Industry and Security rule, mapped from
+Export Control Classification Numbers to HS6 codes.
+
+\todo{Still to do before submission: pull the Comtrade extract and compute
+descriptive statistics of the variables of interest, which the homework
+requires to be on hand.}
+
+The ECCN-to-HS6 mapping is the main feasibility risk, since the control list is
+written in terms of performance thresholds rather than tariff codes. If the
+mapping proves too coarse to define a credible treated group, the fallback is
+to keep the replication and instead extend the paper along its own dimension,
+using the 2021--2024 extension of the trade-war tariffs.
 
 \subsection{The paper to be replicated}
-\todo{which paper, and why it helps with the literature and the data}
+Fajgelbaum, P., Goldberg, P., Kennedy, P., Khandelwal, A., and Taglioni, D.
+(2024). The US--China trade war and global reallocations. \emph{AER: Insights}
+6(2):295--312. \url{https://doi.org/10.1257/aeri.20230094}.
+
+I will replicate the average export responses in the paper's Section III: the
+regression $\Delta \ln X = \alpha + \beta\,\Delta \ln T + \varepsilon$ run
+separately for bystanders' exports to the United States, to China and to the
+rest of the world, reproducing Figure 1 and Appendix Table A.2. The headline
+estimates are an elasticity of $0.31$ (SE $0.10$) for exports to the United
+States against a pre-war $-0.19$, and $0.20$ (SE $0.08$) and $0.29$ (SE $0.08$)
+for exports to the rest of the world against the US and Chinese tariffs.
+
+The paper suits the project for three reasons. Its data source is public and
+free, so the replication is feasible. Its specification is a
+long-differences design with an explicit pre-period comparison, which is the
+difference-in-differences structure covered in class. And it supplies the
+literature the extension needs: it establishes the bystander-reallocation
+result for tariffs and leaves open whether it extends to non-tariff
+restrictions, which is the gap the project would address.
 
 \clearpage
 %==============================================================================
