@@ -37,3 +37,10 @@ STAT 5200 - Syllabus.pdf
 .Ruserdata
 .Rproj.user/
 *.Rproj
+
+# Replication data. Raw extracts are large and redistributable only from their
+# original sources; processed files are rebuilt by the scripts in Replication/R.
+Replication/data/raw/*
+!Replication/data/raw/.gitkeep
+Replication/data/processed/*
+!Replication/data/processed/.gitkeep
