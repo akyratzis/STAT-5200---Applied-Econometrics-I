@@ -1,0 +1,183 @@
+%==============================================================================
+%  STAT 5200 - Applied Econometrics I
+%  Homework 5
+%
+%  Compile with:  pdflatex "HW 5 - Report.tex"  (run twice for refs)
+%
+%  Directory layout assumed by this file:
+%     HW 5 - Report.tex
+%     R/        (R scripts)
+%     figures/  (generated figures)
+%     output/   (captured console output)
+%==============================================================================
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[hidelinks]{hyperref}
+
+%------------------------------------------------------------------------------
+%  Code presentation
+%
+%  Code is set as selectable text on a fixed character grid, source and console
+%  output are given visually distinct styles, and source lines are kept to 76
+%  characters so that nothing wraps.
+%------------------------------------------------------------------------------
+\definecolor{codekeyword}{RGB}{0,86,148}
+\definecolor{codestring} {RGB}{163,21,21}
+\definecolor{codecomment}{RGB}{106,115,125}
+\definecolor{codebg}     {RGB}{248,248,250}
+\definecolor{coderule}   {RGB}{220,220,226}
+
+\lstdefinestyle{Rcode}{
+  language        = R,
+  basicstyle      = \ttfamily\footnotesize,
+  keywordstyle    = \color{codekeyword}\bfseries,
+  stringstyle     = \color{codestring},
+  commentstyle    = \color{codecomment}\itshape,
+  numbers         = left,
+  numberstyle     = \ttfamily\scriptsize\color{codecomment},
+  numbersep       = 9pt,
+  backgroundcolor = \color{codebg},
+  frame           = single,
+  rulecolor       = \color{coderule},
+  framesep        = 4pt,
+  xleftmargin     = 15pt,
+  xrightmargin    = 0pt,
+  columns         = fixed,
+  basewidth       = 0.5em,
+  keepspaces      = true,
+  tabsize         = 2,
+  showstringspaces = false,
+  breaklines      = true,
+  breakatwhitespace = true,
+  postbreak       = \mbox{\textcolor{codekeyword}{$\hookrightarrow$}\space},
+  captionpos      = b,
+  abovecaptionskip = 6pt,
+}
+
+\lstdefinestyle{Routput}{
+  language        = {},
+  basicstyle      = \ttfamily\footnotesize,
+  keywordstyle    = \ttfamily,
+  commentstyle    = \ttfamily,
+  stringstyle     = \ttfamily,
+  numbers         = none,
+  backgroundcolor = \color{white},
+  frame           = leftline,
+  rulecolor       = \color{coderule},
+  framesep        = 6pt,
+  xleftmargin     = 20pt,
+  breaklines      = true,
+  captionpos      = b,
+  abovecaptionskip = 6pt,
+}
+
+\lstset{style=Rcode}
+\renewcommand{\lstlistingname}{Listing}
+
+% Short inline code fragments.
+\newcommand{\code}[1]{\texttt{#1}}
+
+% Operators used throughout.
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Avar}{Avar}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator*{\plim}{plim}
+
+% Placeholder marker. Every occurrence should be gone before submission;
+% search the source for "\todo" to find what is still outstanding.
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO:} #1\textbf{]}}}
+
+%------------------------------------------------------------------------------
+\title{\vspace{-2em}Homework 5\\[0.3em]
+       \large STAT 5200 --- Applied Econometrics I --- Fall 2026}
+\author{Apostolos Kyratzis - 13130833}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% The handout says five questions in its introduction but numbers Q1--Q6.
+% This template follows the numbered questions. No answers are completed yet.
+
+\section{Q1: Reflection on Homework 3}
+\label{sec:q1}
+\subsection{Comparison with the solutions}
+\todo{Compare your HW3 answers with the solutions and list any missed questions.}
+\subsection{Areas for improvement}
+\todo{Discuss what you could have done better.}
+
+\section{Q2: Review}
+\label{sec:q2}
+% Read lab session notes 04 and 05 before working on the assignment.
+% The handout requires no written answer for this question.
+No written response required.
+
+\section{Q3: Bootstrap and the delta method}
+\label{sec:q3}
+\subsection{(a) Nonparametric pairs bootstrap for HW3-Q3}
+\todo{Describe the sampling, re-estimation, and inference procedure.}
+\subsection{(b) Preferred method for future research}
+\todo{State your preference and explain the reason.}
+
+\section{Q4: Monte Carlo simulation and coverage rates}
+\label{sec:q4}
+% Use N = 100; B = 1000 for bootstrap methods. The handout permits a
+% smaller Monte Carlo replication count, such as M = 500, if needed.
+% Save scripts in R/, console results in output/, and plots in figures/.
+\subsection{(a) Sample from the population}
+\todo{Specify the data-generating process and generate the first sample.}
+\subsection{(b) OLS estimation}
+\todo{Compute the OLS coefficient estimates.}
+\subsection{(c) Asymptotic confidence interval}
+\todo{Compute the 95\% interval for the slope and its coverage indicator.}
+\subsection{(d) Empirical coverage under homoscedasticity}
+\todo{Repeat the experiment and discuss the empirical coverage rate.}
+\subsection{(e) Empirical coverage under heteroscedasticity}
+\todo{Repeat with the modified error term and compare coverage rates.}
+\subsection{(f) Heteroscedasticity-consistent confidence intervals}
+\todo{Report and discuss coverage for HC0, HC1, HC2, and HC3.}
+\subsection{(g) Bootstrap and jackknife confidence intervals}
+\todo{Report and discuss coverage for pairs, residual, and wild bootstrap,
+and for the jackknife.}
+
+\section{Q5: Proxy variables and the return to education}
+\label{sec:q5}
+\subsection{(a) Estimates with and without IQ}
+\todo{Compare the parameter estimates reported in lab05.}
+\subsection{(b) Requirements for a valid proxy}
+\todo{State the two requirements and discuss whether IQ satisfies them.}
+\subsection{(c) Sign of the education coefficient in the ability model}
+\todo{Infer the sign of the coefficient from the empirical results and explain.}
+
+\section{Q6: Bootstrapping in an empirical paper}
+\label{sec:q6}
+\subsection{(1--2) Paper selection and citation}
+\todo{Find a qualifying published empirical paper and give its full citation.}
+\subsection{(3) Research question}
+\todo{Summarize the main research question in one paragraph.}
+\subsection{(4) Empirical model}
+\todo{Describe the model, outcome, regressors, number of variables, and sample size.}
+\subsection{(5) Resampling method}
+\todo{Identify the bootstrap or jackknife method used.}
+\subsection{(6) Motivation for the method}
+\todo{Explain the authors' motivation and assess whether it is convincing.}
+\subsection{(7) Robustness to heteroscedasticity}
+\todo{Discuss whether the method is robust to heteroscedasticity.}
+
+% Add code and output listings with \lstinputlisting when scripts exist.
+% Example (uncomment after creating the file):
+% \appendix
+% \section{R code}
+% \lstinputlisting[style=Rcode]{R/q4_coverage_rate.R}
+
+\end{document}
