@@ -107,7 +107,7 @@
 \maketitle
 
 % The handout says five questions in its introduction but numbers Q1--Q6.
-% This template follows the numbered questions. No answers are completed yet.
+% This report follows the numbered questions. TODO markers identify unfinished parts.
 
 \section{Q1: Reflection on Homework 3}
 \label{sec:q1}
@@ -125,9 +125,104 @@ No written response required.
 \section{Q3: Bootstrap and the delta method}
 \label{sec:q3}
 \subsection{(a) Nonparametric pairs bootstrap for HW3-Q3}
-\todo{Describe the sampling, re-estimation, and inference procedure.}
+In HW3-Q3, we estimated the wage equation
+\[
+\log(\text{wage}_i)
+= \beta_0 + \beta_1\text{educ}_i + \beta_2\text{exper}_i
+  + \beta_3\text{exper}_i^2 + u_i.
+\]
+The parameter of interest was the percentage change in the wage from
+increasing education by one year and decreasing experience by one year.
+At a fixed experience level $e$, the expression given in HW3 is
+\[
+\theta(e)=g_e(\beta)
+=100\left[\exp\!\left(\beta_1-\beta_2+(1-2e)\beta_3\right)-1\right].
+\]
+The point estimate remains $\hat\theta(e)=g_e(\hat\beta)$, where
+$\hat\beta$ is the OLS estimate from the original sample. The pairs
+bootstrap provides an alternative to the delta method for estimating
+the uncertainty in this nonlinear function of the coefficients.
+
+I would use the following procedure:
+\begin{enumerate}
+\item Estimate the original regression using all $N=531$ observations
+from \code{CPS85.txt}. Calculate $\hat\theta(e)$ at
+$e=0,5,\ldots,55$.
+
+\item For bootstrap repetition $b$, draw $N$ indices independently and
+uniformly with replacement from $\{1,\ldots,N\}$. Select the corresponding
+complete rows $(\log(\text{wage}_i),\text{educ}_i,\text{exper}_i)$,
+retaining each person's outcome and explanatory variables together.
+Construct squared experience from the selected experience values.
+Some observations will appear multiple times and others will be omitted.
+
+\item Re-estimate the same wage regression on this bootstrap sample,
+obtaining $\hat\beta^{*(b)}$. For each of the same fixed experience
+levels, compute
+\[
+\hat\theta^{*(b)}(e)
+=100\left[\exp\!\left(\hat\beta_1^{*(b)}-\hat\beta_2^{*(b)}
+ +(1-2e)\hat\beta_3^{*(b)}\right)-1\right].
+\]
+The evaluation grid is held fixed across repetitions; the estimated
+coefficients change with each bootstrap sample.
+
+\item Repeat the resampling and estimation $B=1{,}000$ times. At each
+experience level, estimate the standard error by the sample standard
+deviation of the bootstrap returns:
+\[
+\widehat{\text{se}}_{\mathrm{boot}}\!\left(\hat\theta(e)\right)
+=\left\{\frac{1}{B-1}\sum_{b=1}^{B}
+ \left[\hat\theta^{*(b)}(e)-\bar\theta^*(e)\right]^2\right\}^{1/2},
+\qquad
+\bar\theta^*(e)=\frac{1}{B}\sum_{b=1}^{B}\hat\theta^{*(b)}(e).
+\]
+An approximate normal-based $95\%$ confidence interval is
+\[
+\hat\theta(e)\ \pm\ 1.96\,
+\widehat{\text{se}}_{\mathrm{boot}}\!\left(\hat\theta(e)\right).
+\]
+Alternatively, use the empirical $2.5$th and $97.5$th percentiles of
+the bootstrap returns to form a percentile interval. These intervals
+are pointwise for each $e$, rather than a simultaneous confidence band.
+\end{enumerate}
+
+The essential additional step relative to the coefficient standard
+errors in Lab 4 is to calculate $g_e(\hat\beta^{*(b)})$ in every
+resample and measure the variability of these returns. This replaces
+the delta method's derivative calculation. Under i.i.d. sampling and
+suitable regularity conditions, the pairs bootstrap accommodates
+heteroskedasticity because it resamples the joint observations rather
+than treating residuals as interchangeable across different regressors.
+
 \subsection{(b) Preferred method for future research}
-\todo{State your preference and explain the reason.}
+As an operations management PhD student at Wharton, I would generally
+prefer bootstrap methods when analytical standard errors are difficult
+to derive. My future research may involve operational outcomes or
+policy effects calculated through several estimation steps. Repeating
+the entire estimation procedure in each bootstrap sample offers a
+practical way to estimate uncertainty in the final quantity without
+deriving its gradient. Percentile bootstrap intervals can also reflect
+asymmetry in the bootstrap distribution, whereas the usual delta-method
+normal interval is symmetric around the point estimate.
+
+I would nevertheless prefer the delta method for a simple, smooth
+transformation such as the return-to-education formula in HW3-Q3.
+Its derivatives are straightforward, it requires only one regression,
+and it avoids the computational cost and simulation variability of
+repeated resampling. Heteroskedasticity does not by itself require a
+bootstrap: the delta method can use a heteroskedasticity-consistent
+covariance matrix for the estimated coefficients.
+
+The bootstrap is not automatically more accurate, and its validity
+depends on the estimator and the resampling scheme. For example,
+observations within a store, hospital, or firm may be dependent, in
+which case resampling individual rows would be inappropriate and a
+cluster bootstrap may be needed. Time dependence may instead call
+for a block bootstrap. Neither method corrects endogeneity or
+omitted-variable bias. Thus, my preference would be the bootstrap
+for complex applications where valid resampling is available, while
+retaining the delta method for straightforward differentiable statistics.
 
 \section{Q4: Monte Carlo simulation and coverage rates}
 \label{sec:q4}
