@@ -145,6 +145,16 @@ The point estimate remains $\hat\theta(\text{exper})=g_{\text{exper}}(\hat\beta)
 $\hat\beta$ is the OLS estimate from the original sample. The pairs
 bootstrap provides an alternative to the delta method for estimating
 the uncertainty in this nonlinear function of the coefficients.
+In the HW3 solution, the delta-method standard error is
+\[
+\widehat{\text{se}}_{\Delta}\!\left(\hat\theta(\text{exper})\right)
+=\sqrt{C\,\widehat{\Var}(\hat\beta)\,C'},
+\qquad
+C=\left.\frac{\partial g_{\text{exper}}(\beta)}{\partial\beta'}
+\right|_{\beta=\hat\beta}.
+\]
+The bootstrap instead estimates the standard error from the variation
+in the returns recalculated across resamples, as described below.
 
 I would use the following procedure:
 \begin{enumerate}
@@ -182,7 +192,8 @@ where
 \[
 \bar\theta^*(\text{exper})=\frac{1}{B}\sum_{b=1}^{B}\hat\theta^{*(b)}(\text{exper}).
 \]
-An approximate normal-based $95\%$ confidence interval is
+When a normal approximation is appropriate, an approximate $95\%$
+confidence interval is
 \[
 \hat\theta(\text{exper})\ \pm\ 1.96\,
 \widehat{\text{se}}_{\mathrm{boot}}\!\left(\hat\theta(\text{exper})\right).
@@ -206,7 +217,8 @@ to derive. My future research may involve operational outcomes or
 policy effects calculated through several estimation steps. Repeating
 the entire estimation procedure in each bootstrap sample offers a
 practical way to estimate uncertainty in the final quantity without
-deriving its gradient. Percentile bootstrap intervals can also reflect
+deriving its gradient, provided the bootstrap is valid for that statistic.
+Percentile bootstrap intervals can also reflect
 asymmetry in the bootstrap distribution, whereas the usual delta-method
 normal interval is symmetric around the point estimate.
 
@@ -221,7 +233,9 @@ covariance matrix for the estimated coefficients, obtained in R using
 
 Thus, I would use bootstrap methods when the analytical calculation is
 complicated, while retaining the delta method for straightforward
-transformations such as the one in HW3-Q3.
+transformations such as the one in HW3-Q3. This is a preference based
+on ease of implementation, not a claim that the bootstrap is always
+more accurate: Notes 5 also illustrates a case in which it fails.
 
 \clearpage
 \section{Q4: Monte Carlo simulation and coverage rates}
