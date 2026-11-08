@@ -138,6 +138,8 @@ At a fixed experience level $e$, the expression given in HW3 is
 \theta(e)=g_e(\beta)
 =100\left[\exp\!\left(\beta_1-\beta_2+(1-2e)\beta_3\right)-1\right].
 \]
+(codex: plese make sure that every question starts on after a page break)
+(codex: please replace e with exper as a notation in this question)
 The point estimate remains $\hat\theta(e)=g_e(\hat\beta)$, where
 $\hat\beta$ is the OLS estimate from the original sample. The pairs
 bootstrap provides an alternative to the delta method for estimating
@@ -164,12 +166,12 @@ levels, compute
 =100\left[\exp\!\left(\hat\beta_1^{*(b)}-\hat\beta_2^{*(b)}
  +(1-2e)\hat\beta_3^{*(b)}\right)-1\right].
 \]
-The evaluation grid is held fixed across repetitions; the estimated
+The evaluation grid for the values of exper is held fixed across repetitions; the estimated
 coefficients change with each bootstrap sample.
 
 \item Repeat the resampling and estimation $B=1{,}000$ times. At each
 experience level, estimate the standard error by the sample standard
-deviation of the bootstrap returns:
+deviation of the bootstrap results:
 \[
 \widehat{\text{se}}_{\mathrm{boot}}\!\left(\hat\theta(e)\right)
 =\left\{\frac{1}{B-1}\sum_{b=1}^{B}
@@ -184,7 +186,7 @@ An approximate normal-based $95\%$ confidence interval is
 \]
 Alternatively, use the empirical $2.5$th and $97.5$th percentiles of
 the bootstrap returns to form a percentile interval. These intervals
-are pointwise for each $e$, rather than a simultaneous confidence band.
+are pointwise for each $e$, rather than a simultaneous confidence band. (codex: what does this pointwise means? is this necessary?)
 \end{enumerate}
 
 The essential additional step relative to the coefficient standard
@@ -212,7 +214,7 @@ Its derivatives are straightforward, it requires only one regression,
 and it avoids the computational cost and simulation variability of
 repeated resampling. Heteroskedasticity does not by itself require a
 bootstrap: the delta method can use a heteroskedasticity-consistent
-covariance matrix for the estimated coefficients.
+covariance matrix for the estimated coefficients (codex: is this  the "sandwitch" package?).
 
 The bootstrap is not automatically more accurate, and its validity
 depends on the estimator and the resampling scheme. For example,
@@ -222,7 +224,7 @@ cluster bootstrap may be needed. Time dependence may instead call
 for a block bootstrap. Neither method corrects endogeneity or
 omitted-variable bias. Thus, my preference would be the bootstrap
 for complex applications where valid resampling is available, while
-retaining the delta method for straightforward differentiable statistics.
+retaining the delta method for straightforward differentiable statistics. (codex: i believe this last paragrah introduces stuff that we have not really seen in class, so i would avoid saying anything more than strictly required by the course)
 
 \section{Q4: Monte Carlo simulation and coverage rates}
 \label{sec:q4}
