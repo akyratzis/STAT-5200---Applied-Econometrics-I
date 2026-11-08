@@ -154,9 +154,8 @@ C=\left.\frac{\partial g_{\text{exper}}(\beta)}{\partial\beta'}
 \right|_{\beta=\hat\beta}.
 \]
 The bootstrap instead estimates the standard error from the variation
-in the returns recalculated across resamples, as described below.
+in the returns recalculated across resamples. I would use the following procedure:
 
-I would use the following procedure:
 \begin{enumerate}
 \item Estimate the original regression using all $N=531$ observations
 from \code{CPS85.txt}. Calculate $\hat\theta(\text{exper})$ at
@@ -234,9 +233,7 @@ covariance matrix for the estimated coefficients, obtained in R using
 Thus, I would use bootstrap methods when the analytical calculation is
 complicated, while retaining the delta method for straightforward
 transformations such as the one in HW3-Q3. This is a preference based
-on ease of implementation, not a claim that the bootstrap is always
-more accurate: Notes 5 also illustrates a case in which it fails.
-
+on ease of implementation.
 \clearpage
 \section{Q4: Monte Carlo simulation and coverage rates}
 \label{sec:q4}
