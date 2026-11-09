@@ -630,8 +630,8 @@ after controlling for experience, tenure, and marital status.
 \subsection{(1--2)}
 I chose a paper from \emph{Manufacturing \& Service Operations Management},
 one of the journals listed in Homework 1. It uses bootstrapping to
-calculate standard errors and confidence intervals for the mediation-model
-results reported in Table~3.
+calculate standard errors and confidence intervals for the results of
+Equations~(2) and~(3), reported in Table~3.
 
 Altman, D., Yom-Tov, G. B., Olivares, M., Ashtar, S., and Rafaeli, A.
 (2021). Do customer emotions affect agent speed? An empirical study of
@@ -694,10 +694,11 @@ The authors use a grouped version of the pairs bootstrap, resampling
 whole conversations rather than individual messages. Endnote~2
 (p.~873) describes the steps: draw conversations with replacement,
 keep their messages together, and re-estimate Equations~(2) and~(3)
-by 2SLS on each resampled dataset. Confidence intervals are calculated
-from the empirical distribution of the resulting estimates. This is
-also called a conversation-level cluster bootstrap. The paper does not
-state the number of bootstrap repetitions.
+on each resampled dataset. Confidence intervals are calculated from
+the distribution of the resulting estimates. The connection to the
+pairs bootstrap in Notes 5 is that the data are resampled together;
+here, a whole conversation is the unit drawn rather than a single
+message. The paper does not state the number of bootstrap repetitions.
 
 \subsection{(6)}
 Yes. Their main stated reason, at the end of Section~4.1 (p.~862), is
@@ -711,9 +712,10 @@ The authors explain that inference for this product is complicated
 because the two coefficient estimates are correlated. Bootstrapping
 makes sense here: estimating both equations on the same resampled
 conversations captures how their estimates vary together, and gives a
-distribution for the product. The delta method is another possible
-approach, but would require the joint covariance of the two estimates.
-The bootstrap avoids that analytical calculation.
+distribution for the product. This is similar to Q3: we need a standard error for a function of
+estimated coefficients. The delta method could also be used, but would
+require the covariance between the two coefficient estimates. The
+bootstrap avoids deriving that calculation analytically.
 
 There is also a reason to resample at the conversation level. Section~5.3
 (p.~868) notes correlation between errors within conversations and
@@ -722,15 +724,14 @@ whole conversations preserves the grouping of related messages, whereas
 resampling individual messages would break it.
 
 \subsection{(7)}
-Yes, this form of pairs bootstrap accommodates heteroskedasticity under
-the usual conditions for valid inference with independent conversation
-clusters. It resamples the observed outcomes and explanatory variables
-together, without imposing a common error variance across observations.
-Keeping whole conversations together also allows errors to be correlated
-within a conversation. This differs from the ordinary residual bootstrap,
-which assumes homoskedasticity. Thus, the authors' resampling method is
-appropriate for allowing both unequal error variances and dependence
-between messages within the same conversation.
+Yes, this version of the pairs bootstrap allows for heteroskedasticity,
+provided the conversations can be treated as independently sampled
+units and the usual conditions for the bootstrap hold. As in Notes 5,
+it resamples the outcomes and explanatory variables together rather
+than assuming the same error variance for every observation. Keeping
+all messages from a conversation together also preserves their
+within-conversation dependence. The ordinary residual bootstrap instead
+assumes homoskedasticity, as we discussed in Q4(g).
 
 \clearpage
 \appendix
