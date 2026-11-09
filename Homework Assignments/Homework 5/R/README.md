@@ -39,3 +39,15 @@ HC coverage on the same datasets for verification; the report's part (g) table
 focuses on the four requested resampling methods. `Monte_Carlo_SE_pp` measures
 simulation uncertainty in the coverage estimate, in percentage points; it is
 different from the coefficient SE used to construct each confidence interval.
+
+# HW5 Q5 proxy regressions
+
+From the `Homework 5` directory, run:
+
+```sh
+Rscript R/q5_proxy_variables.R > Output/q5_proxy_variables.txt
+```
+
+The script uses the locally supplied `Datasets & Labs/Lab 5/nls80.raw`
+dataset and reproduces Lab 5's coefficients and conventional/HC3 standard
+errors. Instructor-distributed datasets remain excluded from Git.

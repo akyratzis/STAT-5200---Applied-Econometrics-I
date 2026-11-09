@@ -473,11 +473,101 @@ heteroskedasticity and all achieve higher coverage in this experiment.
 \section{Q5}
 \label{sec:q5}
 \subsection{(a)}
-\todo{Compare the parameter estimates reported in lab05.}
+Yes, the estimates change when IQ is included. Reproducing the two
+regressions in Lab 5 gives:
+\begin{table}[htbp]
+\centering
+\caption{Wage-regression coefficient estimates, without and with IQ.}
+\label{tab:q5-proxy}
+\begin{tabular}{lrr}
+\toprule
+Variable & Without IQ & With IQ \\
+\midrule
+Intercept & 5.33065 & 5.04974 \\
+Experience & 0.01412 & 0.01423 \\
+Tenure & 0.01276 & 0.01177 \\
+Married & 0.19917 & 0.19609 \\
+Education & 0.07536 & 0.05630 \\
+IQ & --- & 0.00539 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The main change is that the education coefficient falls from $0.07536$
+to $0.05630$: the approximate wage association with one additional year
+of education falls from $7.54\%$ to $5.63\%$, holding the included
+regressors fixed. The intercept also falls, while the other slope
+estimates change relatively little. This pattern is consistent with
+some of the original education coefficient reflecting omitted ability.
+It does not by itself establish that IQ is a valid proxy.
+
 \subsection{(b)}
-\todo{State the two requirements and discuss whether IQ satisfies them.}
+Let $w=\log(\text{wage})$, $q=\text{ability}$, $z=\text{IQ}$, and let
+$X$ contain an intercept, experience, tenure, marital status, and
+education. Notes 6 gives two requirements for a good proxy:
+\begin{enumerate}
+\item \textbf{IQ adds no information about wages once actual ability
+and the other regressors are accounted for:}
+\[
+E[w\mid X,q,z]=E[w\mid X,q].
+\]
+In practical terms, workers with the same actual ability and the same
+other characteristics should have the same expected wage, even if
+their IQ scores differ. This is plausible if IQ predicts wages through
+its measurement of productive ability and has no separate role in wage
+determination once ability and the controls are held fixed.
+
+\item \textbf{The other regressors add no linear predictive information
+about ability once IQ is accounted for:}
+\[
+L(q\mid X,z)=L(q\mid 1,z),
+\]
+where $L$ denotes a population linear projection. Among workers with
+the same IQ, education, experience, tenure, and marital status should
+not help linearly predict actual ability. An argument for this
+condition is that IQ measures cognitive ability and, if it captures
+the relevant ability differences sufficiently well, the other
+regressors would add no further linear predictive information.
+IQ need not measure ability perfectly, but the remaining projection
+error must be uncorrelated with the other regressors.
+\end{enumerate}
+These are assumptions about IQ's role as a proxy, not conclusions
+established by the regressions. In particular, Notes 6 cautions that
+the second condition will seldom hold exactly in applications.
+
 \subsection{(c)}
-\todo{Infer the sign of the coefficient from the empirical results and explain.}
+Let $Z=(\text{exper},\text{tenure},\text{married})'$ collect the other
+controls. The wage equation and the ability projection in the question
+can be written as
+\[
+w=\beta_0+Z'\beta_Z+\beta_4\text{educ}+\gamma q+v,
+\qquad
+q=\delta_0+Z'\delta_Z+\delta_4\text{educ}+r.
+\]
+Substituting the second equation into the first gives
+\[
+w=(\beta_0+\gamma\delta_0)+Z'(\beta_Z+\gamma\delta_Z)
+ +(\beta_4+\gamma\delta_4)\text{educ}+\gamma r+v.
+\]
+The projection residual $r$ is uncorrelated with education and the other
+regressors. Under the wage model's exogeneity assumption, so is
+$\gamma r+v$. Therefore, the population education coefficient when
+ability is omitted is
+\[
+\eta_4=\beta_4+\gamma\delta_4.
+\]
+If IQ satisfies the two proxy conditions, including it permits
+consistent estimation of $\beta_4$. The observed decline in the
+education coefficient suggests positive omitted-variable bias:
+\[
+\widehat{\gamma\delta_4}
+=0.07535682-0.05629634\approx0.01906>0.
+\]
+Assuming ability increases wages, so $\gamma>0$, this suggests
+$\delta_4>0$. Education is therefore positively associated with ability
+after controlling for experience, tenure, and marital status. This is
+a conditional association; it does not establish that education causes
+ability to increase.
 
 \clearpage
 \section{Q6}
@@ -507,5 +597,15 @@ standard errors and HC0--HC3 comparisons under heteroskedasticity.},label={lst:q
 Lab 4.},label={lst:q4-bootstrap-methods}]{R/q4_bootstrap_methods.R}
 \lstinputlisting[style=Rcode,caption={Coverage experiment on the saved
 heteroskedastic data sets.},label={lst:q4-bootstrap-driver}]{R/q4_bootstrap_coverage.R}
+
+\clearpage
+\section{R code for Q5}
+\lstinputlisting[style=Rcode,caption={Reproducing the Lab 5 wage regressions
+with and without IQ.},label={lst:q5-code}]{R/q5_proxy_variables.R}
+
+\section*{AI usage disclosure}
+OpenAI Codex was used to help generate and adapt the R code included
+in this report, using the course lab notes as references. The reported
+numerical results were obtained by running the code.
 
 \end{document}
