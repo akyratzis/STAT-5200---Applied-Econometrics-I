@@ -21,9 +21,7 @@ From the repository root, restore names and stage the Git path renames with:
 python3 .github/Scripts/normalize_folder_names.py --fix
 ```
 
-The GitHub workflow checks pull requests. After a push or merge into `main`,
-including an Overleaf merge, it restores lowercase directory names in a follow-up
-commit. It preserves file contents, including changes to answers and comments.
-This requires GitHub Actions to be enabled and its token to have write access.
-It does not change the names in Overleaf itself; an Overleaf merge may briefly
-reintroduce lowercase names before the repair workflow finishes.
+After pulling or merging changes from Overleaf, run the check again. If folder
+names have reverted to lowercase, run the repair command locally. No GitHub
+workflow is configured. The repair preserves file contents, including changes
+to answers and comments.

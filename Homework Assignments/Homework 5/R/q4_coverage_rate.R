@@ -1,5 +1,6 @@
-# HW5 Q4(a)-(d): adapted from HW3/R/q4_coverage_rate.R.
-# Uses t(10) errors and conventional OLS3 standard errors; stops before (e).
+# HW5 Q4(a)-(e): adapted from HW3/R/q4_coverage_rate.R.
+# Uses t(10) errors and conventional standard errors throughout.
+# In (e), the population violates OLS3; we retain the same interval formula.
 rm(list = ls()); # refresh memory
 set.seed(1);
 
@@ -71,3 +72,26 @@ for (m in 1:M){
 print("Part (d). Empirical coverage rate over M data sets ...");
 print(c(M = M, N = N));
 print(round(mean(I_all), 4));
+
+# ------------------------------------------------------------------
+# Part (e): repeat with heteroskedastic errors, keeping conventional SEs
+# ------------------------------------------------------------------
+#   y = beta0 + beta1*x + beta2*x^2 + (|x|/2)*u
+# Continue the random sequence from (d); do not reset the seed.
+I_all_het = rep(NA, M);
+
+for (m in 1:M){
+  x = rnorm(N, mean = 1, sd = sqrt(4));
+  u = rt(N, df = 10);
+  y = beta0 + beta1*x + beta2*x^2 + (abs(x)/2)*u;
+  x2 = x^2;
+
+  fit = lm(y ~ x + x2);
+  b = coef(fit);
+  # Deliberately retain the conventional covariance estimate from (c).
+  ci = b[2] + c(-1, 1)*1.96*sqrt(vcov(fit)[2,2]);
+  I_all_het[m] = as.numeric(ci[1] <= beta1 & beta1 <= ci[2]);
+}
+
+print("Part (e). Empirical coverage rate, heteroskedastic model ...");
+print(round(mean(I_all_het), 4));
