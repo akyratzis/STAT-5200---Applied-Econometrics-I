@@ -125,7 +125,9 @@ Following the solution's use of HC0, the correct line would be
 se_b1 = sqrt(sandwich::vcovHC(fit, type = "HC0")[2,2]);
 \end{lstlisting}
 The same correction was needed in both Monte Carlo loops. My OLS
-coefficient estimates and data-generation process were correct, but the confidence intervals used in the evaluation of the coverage rate used the different standard-errors than the ones requested.
+coefficient estimates and data-generation process were correct, but
+the confidence intervals used different standard errors from those
+requested.
 
 In particular, my heteroskedasticity discussion explained why
 conventional standard errors become invalid when OLS3 fails. The
@@ -543,7 +545,7 @@ and the other regressors are accounted for:}
 \end{aligned}
 \]
 As a practical example, workers with the same actual ability and the same
-other characteristics should have the same expected wage, even if
+other characteristics should have the same expected log wage, even if
 their IQ scores differ. This is plausible if IQ predicts wages through
 its measurement of ability and has no separate role in wage
 determination once ability and the controls are held fixed.
@@ -561,7 +563,7 @@ not help linearly predict actual ability. An argument for this
 condition is that IQ measures cognitive ability and, if it captures
 the relevant ability differences sufficiently well, the other
 regressors would add no further linear predictive information.
-IQ does not need to be a perfecrt measure for ability, but the remaining projection
+IQ does not need to be a perfect measure of ability, but the remaining projection
 error must be uncorrelated with the other regressors.
 \end{enumerate}
 These are assumptions about IQ's role as a proxy. It is pointed out in the notes that condition two will seldom hold exactly in practical applications.
@@ -671,9 +673,10 @@ explanatory variables, in addition to conversation fixed effects:
 ($EMO_{i,t-1}$); higher scores indicate more positive emotion.
 \item The log number of words in the agent's reply ($\log(NumWords_{it})$),
 used as a measure of effort.
-\item The number of simultaneous chats handled by the agent
-($Concurrent_{it}$).
-\item The number of customers waiting in the queue ($NumInQueue_{it}$).
+\item The average number of simultaneous chats handled by the agent
+during the response-time interval ($Concurrent_{it}$).
+\item The number of customers waiting in the queue at the start of
+the response-time interval ($NumInQueue_{it}$).
 \item The stage of the conversation ($ConvStage_{it}$), measured by the
 current turn divided by the conversation's total number of turns.
 \end{enumerate}
