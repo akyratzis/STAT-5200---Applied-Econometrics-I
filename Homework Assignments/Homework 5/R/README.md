@@ -32,7 +32,8 @@ checkpoint explicitly before intentionally changing the resampling procedure.
 
 Results are written to `Output/q4_bootstrap_coverage_M500.txt` and
 `Output/q4_bootstrap_coverage_M10000.txt`. The script also generates
-`Output/q4_bootstrap_table_M10000.tex`, which the report includes directly.
+`Output/q4_bootstrap_table_M10000.tex` as a reference copy. The report embeds
+the table directly so compilation does not depend on this generated file.
 The text output files also show conventional and
 HC coverage on the same datasets for verification; the report's part (g) table
 focuses on the four requested resampling methods. `Monte_Carlo_SE_pp` measures
