@@ -598,145 +598,139 @@ after controlling for experience, tenure, and marital status.
 \section{Q6}
 \label{sec:q6}
 \subsection{(1--2)}
-\emph{Creating Reciprocal Value Through Operational Transparency}, by Ryan W.
-Buell, Tami Kim and Chia-Jung Tsay, in \emph{Management Science}, one of the
-five journals listed in Homework 1. The paper contains the term ``wild
-cluster bootstrap'', and the regression tables of its main field experiment
-(Tables 4--6) report significance levels from wild cluster bootstrapped
-$p$-values.
+\emph{Do Customer Emotions Affect Agent Speed? An Empirical Study of
+Emotional Load in Online Customer Contact Centers}, by Daniel Altman, Galit
+B. Yom-Tov, Marcelo Olivares, Shelly Ashtar and Anat Rafaeli, in
+\emph{Manufacturing \& Service Operations Management}, one of the five
+journals listed in Homework 1. The paper contains the term
+``bootstrapping'', and its main results table (Table~3) reports standard
+errors for Models~(2) and~(3) and for the indirect effect that are computed
+by the bootstrap.
 
-Buell, R. W., Kim, T., and Tsay, C.-J. (2017). Creating reciprocal value
-through operational transparency. \emph{Management Science}
-63(6):1673--1695. \url{https://doi.org/10.1287/mnsc.2015.2411}.
+Altman, D., Yom-Tov, G. B., Olivares, M., Ashtar, S., and Rafaeli, A.
+(2021). Do customer emotions affect agent speed? An empirical study of
+emotional load in online customer contact centers. \emph{Manufacturing \&
+Service Operations Management} 23(4):854--875.
+\url{https://doi.org/10.1287/msom.2020.0897}.
 
 \subsection{(3)}
-Does letting customers and employees see each other create value, and for
-whom? Many services hide production from customers, and operations theory
-warns that more customer contact disrupts workers and lowers efficiency.
-The paper asks whether visual transparency in face-to-face service pays off
-in two directions. \emph{Process transparency}, where customers watch the
-work being done, may raise how much they value the service.
-\emph{Customer transparency}, where employees see the people they serve,
-may raise employees' effort and the quality of what they produce. The
-authors' answer is that both sides gain: transparency sets off ``a positive
-feedback loop through which value is created for both parties'' (abstract),
-and consumers ``may not be the sole beneficiaries'' of transparent designs
-(Section~4).
+Do the emotions that customers express slow service agents down?
+Operations research usually measures an agent's load by system-level
+quantities such as queue length or the number of customers served at
+once, and ignores the fact that customers also express emotions. The
+authors introduce \emph{emotional load}, ``the emotional demands that
+customer behaviors impose on service agents'' (abstract), and ask whether
+it affects agent behaviour over and above operational load. They also ask
+whether the effect works partly through agent effort, and whether agent
+behaviour feeds back into customer emotion. Their answer is that negative
+customer emotion increases agent response time, effort and the number of
+messages needed to resolve a case, and that the effect is comparable to
+adding another customer to the agent (Section~7). Emotional load should
+therefore be monitored and used in staffing and routing decisions
+(Section~6).
 
 \subsection{(4)}
-The main model is Equation~(1) of the first field experiment (p.~1679),
-estimated by OLS:
-\[
-Y_i=\alpha_0+\alpha_1\,\text{CUST\_TRANS\_ONLY}_i
-     +\alpha_2\,\text{PROCESS\_TRANS\_ONLY}_i
-     +\alpha_3\,\text{BOTH\_ONLY}_i+X_i\alpha_4+\varepsilon_i .
-\]
-This is also the model to which the bootstrap is applied; the second field
-experiment (Table~8) uses robust standard errors and no bootstrap. I take
-the fully specified food satisfaction regression, Table~4, column~(5).
-
+The bootstrap is applied to the mediation model of Section~4.1,
+Equations~(2) and~(3), estimated at the level of individual messages:
+\begin{align*}
+\log(RT_{it}) &= \delta_i+\beta_1 EMO_{i,t-1}
+  +\beta_2\log(NumWords_{it})+\gamma W_{it}
+  +\tau\,ConvStage_{it}+u_{it}, \\
+\log(NumWords_{it}) &= \delta_i+\beta_3 EMO_{i,t-1}+\gamma W_{it}
+  +\tau\,ConvStage_{it}+v_{it}.
+\end{align*}
+I take Equation~(2), Model~(2) in Table~3, as the main regression. It
+fits the form $y_{it}=x_{it}\beta+\delta_i+u_{it}$, where $i$ is a
+chat conversation and $t$ a turn within it.
 \begin{itemize}
-\item $y_i$: customer $i$'s answer to ``On a scale of 1 to 7, how satisfied
-are you with today's orders?'', used as the measure of food quality.
-\item $x_i$: three treatment dummies (customer transparency only, process
-transparency only, both), with no transparency as the omitted baseline, plus
-a dinner indicator, the number of employees scheduled, grill order volume in
-the shift, age and a female indicator. That is eight variables plus a
-constant.
-\item Observations: $254$. Of the $299$ customers surveyed, only $263$
-reported their gender and $275$ their age (endnote~2).
+\item $y_{it}$: the log of the agent's response time to customer message
+$t$ in conversation $i$.
+\item $x_{it}$: the emotion of the customer's previous message
+$EMO_{i,t-1}$, the log of the number of words in the agent's reply (the
+proxy for effort), the number of chats the agent handles at the same time
+($Concurrent_{it}$), the number of customers in the queue
+($NumInQueue_{it}$), and the stage of the conversation ($ConvStage_{it}$).
+That is five variables, plus a fixed effect $\delta_i$ for each
+conversation.
+\item Observations: $650{,}856$ messages from $141{,}654$ conversations.
 \end{itemize}
-
-The key estimate is $\hat\alpha_3=1.003$ (SE $0.126$): when chefs and
-customers could see each other, food satisfaction was $22.2$ per cent above
-the baseline. Tables~5 and~6 use the same equation for throughput time
-($473$ orders) and perceived value.
+$EMO_{i,t-1}$ is instrumented with a second sentiment measure,
+$CustSent_{i,t-1}$, to correct for measurement error, so the equation is
+estimated by 2SLS rather than OLS. The key estimate is
+$\hat\beta_1=-0.197$: a one-point more positive customer message reduces
+response time by $19.7$ per cent. The quantity that needs the bootstrap is
+the indirect effect $\beta_3\times\beta_2$, emotion acting through the
+length of the agent's reply, estimated at $0.003$ (SE $0.0011$).
 
 \subsection{(5)}
-The authors use the \emph{wild cluster bootstrap} of Cameron, Gelbach and
-Miller (2008), a method we did not cover in class. It extends the wild
-bootstrap to clustered data. Instead of flipping the sign of each residual
-separately, it flips all residuals in a cluster together. With OLS
-residuals $\hat u_g$ for cluster $g$, each bootstrap sample is
-\[
-y_g^{*}=X_g\hat\beta+v_g\,\hat u_g,\qquad
-v_g=\pm1\ \text{with probability } 1/2,
-\]
-where one draw $v_g$ is shared by every observation in cluster $g$. The
-cluster-robust $t$-statistic is recomputed in each sample, and the
-$p$-value is the share of bootstrap $|t^{*}|$ above the original $|t|$.
+The authors use a nonparametric \emph{pairs bootstrap at the conversation
+level}, following the mediation method of Hayes and Rockwood (2020).
+Footnote~2 describes it: the method draws ``conversations with
+replacements from the data in the re-sampling procedure. For each
+re-sample, Equations (2) and (3) are estimated separately using 2SLS
+\ldots{} Confidence intervals are calculated based on the empirical
+distribution of the estimates from each re-sample.''
 
-The bootstrap is used only for $p$-values, shown as $^{+}$, $^{++}$ and
-$^{+++}$ next to the standard errors. The coefficients and the standard
-errors in parentheses are ordinary OLS with cluster-robust standard errors.
-The paper does not report the number of replications, the weight
-distribution, or whether the null hypothesis is imposed when generating
-$y^{*}$.
+This is the pairs bootstrap from Notes~5, with one change: the unit drawn
+is a whole conversation, with all its messages, rather than a single
+message. In each bootstrap sample $b$, both equations are re-estimated and
+the indirect effect $\hat\beta_3^{*(b)}\hat\beta_2^{*(b)}$ is computed.
+The standard errors in Table~3 are taken from the spread of these
+estimates, and the confidence intervals from their percentiles. The paper
+does not report the number of bootstrap samples.
 
 \subsection{(6)}
 Yes. The evidence is spread across the paper:
 \begin{itemize}
-\item \emph{Stated reason} (Section~3.1.6, p.~1679): ``Because of the
-limited number of clusters in our analyses of these experimental data, we
-also present significance levels from the wild cluster bootstrap estimation
-procedure in our results tables. With a small number of clusters,
-cluster-robust standard errors are downward biased, and bootstrapping to
-obtain asymptotic refinement in such cases has been shown to lead to
-improved inference for ordinary least squares (OLS) estimation (Cameron et
-al. 2008).''
-\item \emph{Why clusters are needed} (Section~3.1.2 and Table~1,
-pp.~1676--1677): transparency was switched on and off by meal shift in a
-staggered design, so all customers in a shift share the same treatment,
-chefs and crowd. Standard errors are clustered ``by meal and day''
-(p.~1679).
-\item \emph{How few clusters there are} (Table~3, p.~1679, and endnote~4,
-p.~1693): twelve meal shifts are listed and one is dropped, leaving $11$.
-Only two shifts ran process transparency alone, and two ran customer
-transparency alone.
-\item \emph{Where the bootstrap appears} (notes to Tables~4, 5 and~6,
-pp.~1680--1682): ``$^{+++}$, $^{++}$, and $^{+}$ denote significance with
-wild cluster bootstrapped $p$-values (Cameron et al. 2008).''
-\item \emph{Result} (p.~1679): ``the results are substantively similar
-under this alternative estimation technique.''
+\item \emph{Main reason} (end of Section~4.1): ``calculating confidence
+intervals for the indirect effect $\beta_3\times\beta_2$ is complicated
+because the two estimators are correlated due to sampling error. We use a
+bootstrapping approach to estimate the models and compute confidence
+intervals, using the methods developed by Hayes and Rockwood (2020).''
+\item \emph{Procedure} (Section~5.1 and footnote~2): Models~(2) and~(3)
+``are estimated using a mediation model based on Hayes and Rockwood
+(2020), using bootstrapping to compute the standard errors'', with
+conversations drawn with replacement.
+\item \emph{Second reason} (Section~5.3): the residuals of Model~(1) show
+serial correlation within a conversation, and ``the estimates of Models
+(2) and (3) use bootstrapped standard errors which account for correlation
+between the error terms within cluster.''
+\item \emph{Results} (Table~3): the bootstrapped standard errors for
+Models~(2) and~(3), and the indirect effect in the bottom panel. The table
+note names the Hayes and Rockwood (2020) macro used.
 \end{itemize}
 
-The reasoning makes sense to me. The cluster-robust variance estimator is
-justified as the number of clusters grows, and with $11$ clusters the usual
-$t$-test rejects too often. The tables show the bootstrap being more
-conservative, as expected. In Table~4, the customer-transparency-only
-effect is significant at 5 per cent with clustered standard errors in
-columns~(2)--(3) but only at 10 per cent with the bootstrap. In column~(5)
-it is marginally significant ($0.651$, $p<0.10$) with no bootstrap marker
-at all. The combined effect keeps $^{+++}$ in every column. The headline
-result survives, while the weaker one-sided effect does not.
+The reasoning makes sense to me, and it is the same comparison as Q3. The
+indirect effect is a nonlinear function of two coefficients from two
+different equations. A delta-method standard error would need
+$\operatorname{Cov}(\hat\beta_2,\hat\beta_3)$, which separate estimation
+does not deliver. Re-estimating both equations on the same bootstrap
+sample keeps that covariance automatically. A product of two estimates
+also tends to have a skewed sampling distribution, so percentile intervals
+are more suitable than a symmetric normal interval. Resampling whole
+conversations deals with the serial correlation the authors found. With
+$141{,}654$ conversations, the large-sample justification for the bootstrap
+is comfortably met. My one criticism is that the number of bootstrap
+samples is not reported.
 
 \subsection{(7)}
-Yes, the method is robust to heteroskedasticity. Like the wild bootstrap in
-Notes~5, it keeps the regressors fixed and attaches each residual to its
-own observation. The bootstrap error $v_g\hat u_g$ therefore keeps the
-variance that belongs to that observation's $x_i$. The residual bootstrap
-does not: it shuffles residuals across observations and so implicitly
-assumes homoskedasticity. Because the cluster version multiplies all
-residuals in a cluster by the same $v_g$, it also preserves correlation of
-errors within a shift. The cluster-robust standard errors reported
-alongside it are heteroskedasticity-robust as well.
+Yes, the method is robust to heteroskedasticity. The pairs bootstrap
+resamples the outcome and the regressors together, so each resampled
+observation keeps its own error variance. It makes no assumption that the
+error variance is constant across observations. The residual bootstrap
+does make that assumption, because it attaches residuals to regressor
+values they did not come from. Because the resampling unit is a whole
+conversation, the method is also robust to correlation between messages
+within the same conversation.
 
-My assessment is that the method fits the design but is stretched by it.
-Robustness to heteroskedasticity and within-shift correlation is the right
-property here, since satisfaction varies with the crowd and the chefs in
-each shift. But both the cluster-robust estimator and the bootstrap rely on
-asymptotics in the number of clusters, and $11$ is very few. With $\pm1$
-weights there are only $2^{11}=2{,}048$ distinct bootstrap samples, so the
-$p$-values are coarse. MacKinnon and Webb (2018) show that the wild cluster
-bootstrap can itself over- or under-reject when very few clusters are
-treated, which is the case for the two single-transparency arms. The
-evidence is most convincing for the combined treatment, which is
-significant under every method, and least convincing for the one-sided
-effects. Reporting the number of replications and the weight distribution
-would have made the check easier to assess.
-
-MacKinnon, J. G., and Webb, M. D. (2018). The wild bootstrap for few
-(treated) clusters. \emph{The Econometrics Journal} 21(2):114--135.
+My assessment is that this robustness matters here. The variance of
+response times is likely to differ across conditions, for example when an
+agent handles three chats rather than one, or late in a long conversation.
+One contrast is worth noting. The paper's Model~(1) standard errors are
+computed ``assuming i.i.d.\ random errors'' (Section~5.3), which are not
+robust to heteroskedasticity. The authors check that model with
+conversation-clustered standard errors in their online appendix. The
+bootstrapped Models~(2) and~(3) are robust without that extra check.
 
 \clearpage
 \appendix
