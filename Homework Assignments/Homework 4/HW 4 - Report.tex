@@ -115,7 +115,7 @@
 \label{sec:q1}
 %==============================================================================
 
-\subsection{The problem to be considered}
+\subsection{}
 Fajgelbaum et al.\ (2024) show that during the 2018--2019 US--China trade war,
 bystander countries raised exports of tariff-exposed products not only to the
 United States but to the rest of the world, so the war created net export
@@ -152,7 +152,7 @@ product, so I will cluster by product as the paper does, report the number of
 clusters alongside $N$, and compare against heteroskedasticity-robust and
 wild-bootstrap alternatives.
 
-\subsection{The data set}
+\subsection{}
 UN Comtrade bilateral trade at the HS6 product level, the paper's own source,
 aggregated into 24-month intervals by exporter, destination and product. It
 reports trade \emph{value} and, for most lines, a physical \emph{quantity}, so
@@ -170,7 +170,7 @@ under which OLS remains consistent provided $e_0$ is uncorrelated with tariff
 exposure, the consequence being an inflated error variance rather than bias.
 I will test that condition, as quantity coverage is uneven across lines.
 
-\subsection{The paper to be replicated}
+\subsection{}
 Fajgelbaum, P., Goldberg, P., Kennedy, P., Khandelwal, A., and Taglioni, D.
 (2024). The US--China trade war and global reallocations. \emph{AER: Insights}
 6(2):295--312. \url{https://doi.org/10.1257/aeri.20230094}.
@@ -194,18 +194,18 @@ question rather than none.
 \label{sec:q2}
 %==============================================================================
 
-\subsection{The paper}
+\subsection{}
 \emph{Value of High-Quality Logistics: Evidence from a Clash Between SF Express
 and Alibaba}, by Ruomeng Cui, Meng Li and Qiang Li, in \emph{Management
 Science}, one of the five journals listed in Homework 1. The abstract states
 that the authors use ``a difference-in-differences design''.
 
-\subsection{Citation}
+\subsection{}
 Cui, R., Li, M., and Li, Q. (2020). Value of high-quality logistics: Evidence
 from a clash between SF Express and Alibaba. \emph{Management Science}
 66(9):3879--3902. \url{https://doi.org/10.1287/mnsc.2019.3411}.
 
-\subsection{The main research question}
+\subsection{}
 What is a high-quality delivery option worth to an online retail platform? The
 authors ask how sales, product variety, sales dispersion and logistics ratings
 respond when the premium courier is withdrawn, and which products bear the
@@ -213,7 +213,7 @@ loss. Observational data cannot answer this, because merchants choose their
 courier: sellers of popular or expensive goods may select better logistics, so
 quality is correlated with unobserved product appeal.
 
-\subsection{The empirical model}
+\subsection{}
 The specification is
 \begin{align*}
 \text{Sales}_{it} ={}& c + \text{Treated}_i + \text{TreatedPeriod}_t
@@ -238,7 +238,7 @@ Regression observations differ by level of aggregation: $1{,}054$ at group
 level, $407{,}898$ at merchant level, $11{,}380{,}809$ at product level, and
 $191{,}209$ for logistics rating.
 
-\subsection{The source of treatment}
+\subsection{}
 A commercial dispute between Alibaba and SF Express. Alibaba removed SF Express
 as a shipping option from its retail platform from 6:00 p.m.\ on June 1 to
 12:00 p.m.\ on June 3, 2017 --- $42$ hours. The withdrawal was unexpected and
@@ -256,7 +256,7 @@ Figure 1 of Cui, Li and Li (2020).}
 \label{fig:q2-timeline}
 \end{figure}
 
-\subsection{Treatment and control groups}
+\subsection{}
 Only non-Cainiao merchants could choose SF Express; Cainiao merchants could use
 only Cainiao Logistics. The treatment group is therefore products sold by
 non-Cainiao merchants ($124{,}490$ SKUs, $525$ merchants) and the control group
@@ -276,7 +276,7 @@ a matched DID in Section 8.1, pairing each product with a Mahalanobis-matched
 ($4{,}393$ SKUs per group), with Section 8.2 repeating it across categories to
 rule out cannibalisation.
 
-\subsection{The coefficient of interest}
+\subsection{}
 $\beta$, on $\text{Treated}_i \times \text{TreatedPeriod}_t$: the change in
 outcome for exposed products relative to unexposed products over the same
 hours, interpreted as the demand value of high-quality logistics. The estimates
@@ -289,7 +289,7 @@ long-tail contribution to total sales increases by $3$ per cent. Product
 variety ($-398.40$, SE $405.60$) and logistics rating ($0.002$, SE $0.01$) are
 not significant.
 
-\subsection{The parallel trends assumption}
+\subsection{}
 Sales of products sold by non-Cainiao merchants and by Cainiao merchants must
 have followed a common path over those $42$ hours had the clash not occurred.
 Their levels may differ --- and do, substantially --- but the \emph{change}
@@ -299,7 +299,7 @@ anticipate the withdrawal and shift sales before it; and treated demand did not
 spill over onto control products, which would move the control group in the
 opposite direction and inflate $\beta$.
 
-\subsection{Evidence for parallel trends}
+\subsection{}
 Yes, three pieces. First, a formal pre-trend test: the authors estimate
 \[
 \text{Sales}_{it} = c + \theta t + \lambda\,\text{Treated}_i \times t
@@ -334,7 +334,7 @@ Figure 2 of Cui, Li and Li (2020).}
 \label{fig:q2-trends}
 \end{figure}
 
-\subsection{A story under which parallel trends fails}
+\subsection{}
 The clash fell inside Alibaba's June promotion, which runs to June 18, and the
 groups sell very different goods: the control group's average product price is
 $1{,}199.93$ yuan against $135.96$ yuan for the treated. If the promotion
@@ -354,19 +354,19 @@ little power.
 \label{sec:q3}
 %==============================================================================
 
-\subsection{The paper}
+\subsection{}
 \emph{The Cost of Intelligence: Impacts of AI Data Centers on US Electricity
 Prices}, by Vishrut Rana, Christian Kaps and Serguei Netessine. It is a working
 paper, not published in one of the five journals listed in Homework 1. It
 applies ``the synthetic control method'' and is close to my proposed project.
 
-\subsection{Citation}
+\subsection{}
 Rana, V., Kaps, C., and Netessine, S. (2026). The cost of intelligence:
 Impacts of AI data centers on US electricity prices. Working paper, updated
 frequently; version retrieved October 2026. Available at SSRN,
 \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7580459}.
 
-\subsection{The main research question}
+\subsection{}
 How do data-centre additions affect retail electricity prices for industrial
 and residential customers? The effect is theoretically ambiguous: a data centre
 raises the utility's revenue requirement if new capacity is needed, but also
@@ -375,7 +375,7 @@ industrial rather than residential sales. Identification is hard because siting
 is endogenous --- in 2020, utilities hosting data centres had industrial prices
 $37$ per cent and residential prices $7$ per cent below those without.
 
-\subsection{The treated unit and the treatment}
+\subsection{}
 The treated unit is the \emph{electric utility}, observed quarterly; the paper
 uses this level because the utility incurs the costs and recovers them through
 regulated retail rates. Treatment is the addition of data-centre capacity of at
@@ -385,7 +385,7 @@ $T_i = \min\{t \ge 2020\text{Q1} : A^{\mathrm{MW}}_{it} > 0\}$, and exposure acc
 as $D_{it} = \sum_{s=T_i}^{t} A_{is}$, measured in MW or as
 $A^{\mathrm{Ratio}}_{it} = 100 \times A^{\mathrm{MW}}_{it}/\text{Peak}_i$.
 
-\subsection{The donor pool}
+\subsection{}
 Utilities with complete outcome data that receive \emph{no} new data-centre
 capacity over the treated utility's post-anchor horizon. The screen is
 therefore horizon-specific, so the pool differs across treated utilities; for
@@ -393,7 +393,7 @@ reference, $291$ utilities receive no additions at all over 2020--2025. The
 restriction prevents donor outcomes from being driven by their own
 data-centre capacity.
 
-\subsection{How the synthetic control is constructed}
+\subsection{}
 Weights are non-negative, sum to one, and minimise the distance between the
 treated utility and the weighted donors on $X_i$, which contains the outcome
 path over the $16$ quarters preceding $T_i$ together with utility
@@ -410,7 +410,7 @@ utility and quarter-of-year fixed effects and utility-clustered standard
 errors, following De Chaisemartin and d'Haultfoeuille (2026) on non-binary
 treatments.
 
-\subsection{The estimated treatment effect}
+\subsection{}
 It is obtained in two steps. For each treated utility the gap
 $R_{it} = Y_{it} - \sum_j \hat{w}_{ij}Y_{jt}$ is formed quarter by quarter: the
 actual price minus the price its synthetic control would have charged. These
@@ -431,7 +431,7 @@ residential spillover comes from third-party developers ($1.042$, SE $0.477$)
 and not the four large cloud providers ($0.158$, SE $0.160$), though the Wald
 test of equality gives only $p = 0.101$.
 
-\subsection{Pre-treatment fit}
+\subsection{}
 Yes, both graphically and numerically. Figure~\ref{fig:q3-gaps} reproduces the
 paper's Figures 5 and 6: the gap between each treated utility and its synthetic
 counterpart is flat around zero for the sixteen quarters before the anchor, and
@@ -456,7 +456,7 @@ Figures 5 and 6 of Rana, Kaps and Netessine (2026).}
 \label{fig:q3-gaps}
 \end{figure}
 
-\subsection{Placebo and permutation tests}
+\subsection{}
 \textbf{The paper reports none.} There are no in-space placebos on donor
 utilities, no in-time placebos at false anchors, and no permutation inference.
 Inference rests on utility-clustered standard errors.
@@ -477,7 +477,7 @@ reassuring. The industrial effect falls from $0.807$ to $0.563$ (SE $0.307$),
 about a third, while the residential effect rises from $0.261$ to $0.371$
 (SE $0.176$); the principal estimates are therefore sensitive to the window.
 
-\subsection{A criticism of the design}
+\subsection{}
 The poor tail of the industrial pre-treatment fit. That $90$th percentile
 RMSPE of $12.228$ \$/MWh exceeds the $5.4$ \$/MWh effect being detected, and
 seven treated utilities have normalised RMSPE above one --- New York State
@@ -502,19 +502,19 @@ The authors acknowledge the point but do not bound it.
 \label{sec:q4}
 %==============================================================================
 
-\subsection{The paper}
+\subsection{}
 \emph{The Effect of Discretion on Procurement Performance}, by Decio
 Coviello, Andrea Guglielmo and Giancarlo Spagnolo, in \emph{Management
 Science}, one of the five journals listed in Homework 1. The paper states that
 it has ``a case of fuzzy-RDD'' built on a legal threshold in Italian public
 procurement.
 
-\subsection{Citation}
+\subsection{}
 Coviello, D., Guglielmo, A., and Spagnolo, G. (2018). The effect of discretion
 on procurement performance. \emph{Management Science} 64(2):715--738.
 \url{https://doi.org/10.1287/mnsc.2016.2628}.
 
-\subsection{The main research question}
+\subsection{}
 Public buyers can be given discretion over whom to invite to bid, or be forced
 into an open competitive procedure. Discretion may let a buyer use knowledge of
 supplier quality that a mechanical rule cannot encode, improving delivery; it
@@ -522,7 +522,7 @@ may equally let the buyer favour connected firms, raising costs and entrenching
 incumbents. The paper asks which effect dominates, using Italian public works
 contracts where the scope for discretion changes at a legal value threshold.
 
-\subsection{The empirical model}
+\subsection{}
 Treatment $T_i$ is the use of \emph{Trattativa Privata}, the discretionary
 award procedure. The running variable $Y_i$ is the reserve price of the
 contract and the cutoff $y_0$ is \textbf{\texteuro 300,000}. The design is
@@ -556,7 +556,7 @@ outcome, each regression uses a subset of this: between $1{,}310$ and $3{,}314$
 contracts. The widest bandwidth almost covers the window, which is why the
 upper figure is close to the full sample.
 
-\subsection{How the cutoff determines treatment}
+\subsection{}
 The threshold changes the legal conditions under which \emph{Trattativa
 Privata} may be used. Below \texteuro$300{,}000$ the buyer may use it under
 less demanding conditions, does not have to notify the procurement authority,
@@ -567,7 +567,7 @@ and administrative cost of discretion without forbidding it, so fewer buyers
 choose it. What shifts is the \emph{probability} that a contract is awarded
 discretionarily, not the procedure itself.
 
-\subsection{Sharp or fuzzy}
+\subsection{}
 \textbf{Fuzzy.} The paper states it explicitly: ``In this paper, we have a case
 of fuzzy-RDD as the contracting authorities have some flexibility in deciding
 the works that are assigned with Trattativa Privata.'' Compliance is imperfect
@@ -577,7 +577,7 @@ of treatment by $0.174$ (SE $0.0367$) against a sample mean of $0.0889$ --- a
 large relative shift, but far short of one, which is why the design is fuzzy.
 The estimand is a local average treatment effect for compliers at the cutoff.
 
-\subsection{The coefficient of interest}
+\subsection{}
 $\beta$, the effect of the discretionary procedure itself: the jump in the
 outcome at the threshold divided by the jump in the probability of treatment,
 which is a local average treatment effect for compliers at the cutoff. The
@@ -600,7 +600,7 @@ contracts or corrupt buyer--seller relations.'' The relational-contracting
 reading comes from the propensity-score matching in Section 7, not from the
 null performance coefficients here.
 
-\subsection{Bandwidth and robustness}
+\subsection{}
 Bandwidths are chosen outcome by outcome using the Imbens and Kalyanaraman
 (2012) optimal rule, so there is no single bandwidth: they range
 from $0.572$ to $1.836$ in units of $100{,}000$ euros. The incumbent-winner
@@ -623,7 +623,7 @@ Figure 7 of Coviello, Guglielmo and Spagnolo (2018).}
 \label{fig:q4-bw}
 \end{figure}
 
-\subsection{The identifying assumption}
+\subsection{}
 All determinants of procurement outcomes other than the award procedure must be
 continuous in the reserve price at \texteuro$300{,}000$, and buyers must not be
 able to place contracts precisely on their preferred side of the threshold.
@@ -638,7 +638,7 @@ instrumental-variables conditions are also needed: the instrument must shift
 the probability of treatment, which the first stage confirms, and must affect
 outcomes only through that procedure.
 
-\subsection{Evidence for validity}
+\subsection{}
 Three pieces. First, a density test on the running variable:
 Figure~\ref{fig:q4-density} shows the histogram of reserve prices and the
 McCrary plot, and Table 3 reports the McCrary test. Pooled over all years the
@@ -668,7 +668,7 @@ bands. Reproduced from Figures 3 and 4 of Coviello, Guglielmo and Spagnolo
 \label{fig:q4-density}
 \end{figure}
 
-\subsection{A criticism of the design}
+\subsection{}
 The threshold does not change one thing, it changes several, and only one of
 them is the treatment. By the paper's own account of the law, crossing
 \texteuro$300{,}000$ also raises the minimum number of firms the buyer must

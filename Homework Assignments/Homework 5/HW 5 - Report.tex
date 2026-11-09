@@ -112,9 +112,9 @@
 \clearpage
 \section{Q1}
 \label{sec:q1}
-\subsection{Comparison with the solutions}
+\subsection{}
 \todo{Compare your HW3 answers with the solutions and list any missed questions.}
-\subsection{Areas for improvement}
+\subsection{}
 \todo{Discuss what you could have done better.}
 
 \clearpage
@@ -127,7 +127,7 @@ No written response required.
 \clearpage
 \section{Q3}
 \label{sec:q3}
-\subsection{(a) Nonparametric pairs bootstrap for HW3-Q3}
+\subsection{(a)}
 In HW3-Q3, we estimated the wage equation
 \[
 \log(\text{wage}_i)
@@ -209,7 +209,7 @@ suitable regularity conditions, the pairs bootstrap accommodates
 heteroskedasticity because it resamples the joint observations rather
 than treating residuals as interchangeable across different regressors.
 
-\subsection{(b) Preferred method for future research}
+\subsection{(b)}
 As an operations management PhD student at Wharton, I would generally
 prefer bootstrap methods when analytical standard errors are difficult
 to derive. My future research may involve operational outcomes or
@@ -240,7 +240,7 @@ on ease of implementation.
 % Use N = 100; B = 1000 for bootstrap methods. The handout permits a
 % smaller Monte Carlo replication count, such as M = 500, if needed.
 % Save scripts in R/, console results in Output/, and plots in Figures/.
-\subsection{(a) Sample from the population}
+\subsection{(a)}
 I adapt the HW3 simulation, changing the error distribution to $t_{10}$
 as required here. Set $N=100$ and draw $x_i\sim N(1,4)$ and
 $u_i\sim t_{10}$ independently, then construct
@@ -269,7 +269,7 @@ u = rt(N, df = 10);
 y = beta0 + beta1*x + beta2*x^2 + u;
 \end{lstlisting}
 
-\subsection{(b) OLS estimation}
+\subsection{(b)}
 Regress $y$ on an intercept, $x$, and $x^2$:
 \begin{lstlisting}[style=Rcode]
 x2 = x^2;
@@ -283,7 +283,7 @@ The estimates from the sample in (a) are
 \hat\beta_2=0.1747.
 \]
 
-\subsection{(c) Asymptotic confidence interval}
+\subsection{(c)}
 Under OLS1, OLS2, and OLS3, use the conventional covariance estimator
 \[
 \widehat{\Var}(\hat\beta)=\hat\sigma^2(X'X)^{-1},
@@ -309,7 +309,7 @@ For the sample in (a), the standard error is $0.0855$ and the interval
 is $[0.7812,\;1.1163]$. It contains the true value $\beta_1=1$, so
 $I^{(1)}=1$.
 
-\subsection{(d) Empirical coverage under homoscedasticity}
+\subsection{(d)}
 Repeat (a)--(c) on $M=10{,}000$ independently generated data sets,
 each with $N=100$. The empirical coverage rate is
 \[
@@ -324,38 +324,38 @@ approximation, which works well in this simulation.
 The full script is included in the appendix. Its captured console output
 is saved in \code{Output/q4\_coverage\_rate.txt}.
 
-\subsection{(e) Empirical coverage under heteroscedasticity}
+\subsection{(e)}
 \todo{Repeat with the modified error term and compare coverage rates.}
-\subsection{(f) Heteroscedasticity-consistent confidence intervals}
+\subsection{(f)}
 \todo{Report and discuss coverage for HC0, HC1, HC2, and HC3.}
-\subsection{(g) Bootstrap and jackknife confidence intervals}
+\subsection{(g)}
 \todo{Report and discuss coverage for pairs, residual, and wild bootstrap,
 and for the jackknife.}
 
 \clearpage
 \section{Q5}
 \label{sec:q5}
-\subsection{(a) Estimates with and without IQ}
+\subsection{(a)}
 \todo{Compare the parameter estimates reported in lab05.}
-\subsection{(b) Requirements for a valid proxy}
+\subsection{(b)}
 \todo{State the two requirements and discuss whether IQ satisfies them.}
-\subsection{(c) Sign of the education coefficient in the ability model}
+\subsection{(c)}
 \todo{Infer the sign of the coefficient from the empirical results and explain.}
 
 \clearpage
 \section{Q6}
 \label{sec:q6}
-\subsection{(1--2) Paper selection and citation}
+\subsection{(1--2)}
 \todo{Find a qualifying published empirical paper and give its full citation.}
-\subsection{(3) Research question}
+\subsection{(3)}
 \todo{Summarize the main research question in one paragraph.}
-\subsection{(4) Empirical model}
+\subsection{(4)}
 \todo{Describe the model, outcome, regressors, number of variables, and sample size.}
-\subsection{(5) Resampling method}
+\subsection{(5)}
 \todo{Identify the bootstrap or jackknife method used.}
-\subsection{(6) Motivation for the method}
+\subsection{(6)}
 \todo{Explain the authors' motivation and assess whether it is convincing.}
-\subsection{(7) Robustness to heteroscedasticity}
+\subsection{(7)}
 \todo{Discuss whether the method is robust to heteroscedasticity.}
 
 \clearpage
