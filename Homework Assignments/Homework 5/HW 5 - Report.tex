@@ -499,14 +499,18 @@ alone does not show that IQ satisfies the two proxy conditions discussed
 in (b).
 
 \subsection{(b)}
-Let $w=\log(\text{wage})$, $q=\text{ability}$, $z=\text{IQ}$, and let
-$X$ contain an intercept, experience, tenure, marital status, and
-education. Notes 6 gives two requirements for a good proxy:
+Notes 6 gives two requirements for IQ to be a good proxy for ability.
+Using the original variable names, with $\text{logwage}=\log(\text{wage})$:
 \begin{enumerate}
 \item \textbf{IQ adds no information about wages once actual ability
 and the other regressors are accounted for:}
 \[
-E[w\mid X,q,z]=E[w\mid X,q].
+\begin{aligned}
+&E[\text{logwage}\mid\text{exper},\text{tenure},\text{married},
+   \text{educ},\text{ability},\text{iq}]\\
+&\quad=E[\text{logwage}\mid\text{exper},\text{tenure},\text{married},
+   \text{educ},\text{ability}].
+\end{aligned}
 \]
 In practical terms, workers with the same actual ability and the same
 other characteristics should have the same expected wage, even if
@@ -517,7 +521,9 @@ determination once ability and the controls are held fixed.
 \item \textbf{The other regressors add no linear predictive information
 about ability once IQ is accounted for:}
 \[
-L(q\mid X,z)=L(q\mid 1,z),
+L(\text{ability}\mid 1,\text{exper},\text{tenure},\text{married},
+  \text{educ},\text{iq})
+=L(\text{ability}\mid 1,\text{iq}),
 \]
 where $L$ denotes a population linear projection. Among workers with
 the same IQ, education, experience, tenure, and marital status should
@@ -533,7 +539,8 @@ established by the regressions. In particular, Notes 6 cautions that
 the second condition will seldom hold exactly in applications.
 
 \subsection{(c)}
-Let $Z=(\text{exper},\text{tenure},\text{married})'$ collect the other
+Let $w=\log(\text{wage})$, $q=\text{ability}$, and
+$Z=(\text{exper},\text{tenure},\text{married})'$ collect the other
 controls. The wage equation and the ability projection in the question
 can be written as
 \[
