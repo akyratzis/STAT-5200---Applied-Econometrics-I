@@ -118,37 +118,213 @@
 \clearpage
 \section{}
 \label{sec:q2}
-% Write your answer here.
+Starting from the population wage equation
+\[
+    y=\beta_0+\beta_1s+u,
+\]
+take the covariance of both sides with the instrument $z$. By linearity of
+covariance,
+\begin{align*}
+    \Cov(y,z)
+    &=\Cov(\beta_0,z)+\beta_1\Cov(s,z)+\Cov(u,z)\\
+    &=\beta_1\Cov(s,z).
+\end{align*}
+The covariance with the constant $\beta_0$ is zero, and instrument validity
+implies $\Cov(u,z)=0$. Relevance implies $\Cov(s,z)\ne0$, so division gives
+\[
+    \boxed{\displaystyle \beta_1=\frac{\Cov(y,z)}{\Cov(s,z)}.}
+\]
+Thus, although schooling is correlated with the wage equation's error, a valid
+instrument identifies its slope through variation in schooling that is
+uncorrelated with that error. This argument assumes the relevant second moments
+exist and follows Notes 8.
 
 \clearpage
 \section{}
 \label{sec:q3}
-\subsection{}
-% Write your answer here.
+All estimates below use the same 428 working women with positive wages and
+complete observations on the model variables in the Mroz data. The dependent
+variable is $\log(\text{wage})$; controls are experience, experience squared,
+age, the number of children under six, and the number aged six to eighteen.
+Every instrument set also includes an intercept and these exogenous controls.
+The calculations reproduce Lab 7 to its reported precision. The observations
+come from Stata's Wooldridge textbook data archive.\footnote{Data source:
+\url{https://www.stata.com/data/jwooldridge/eacsap/mroz.dta}. The local
+Lab 7 \code{mroz.txt} contains variable descriptions rather than observations.}
 
 \subsection{}
-% Write your answer here.
+The estimated coefficient on education is $0.10783$ under OLS, $0.04653$
+using mother's education as the sole excluded instrument, and $0.07913$
+using mother's, father's, and husband's education as three excluded instruments.
+The following table reports the coefficients and their standard errors.
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+Estimator & Estimate & Conventional SE & HC1 robust SE\\
+\midrule
+OLS & 0.10783 & 0.01440 & 0.01362\\
+IV: mother's education & 0.04653 & 0.03800 & 0.03880\\
+2SLS: three instruments & 0.07913 & 0.02241 & 0.02228\\
+\bottomrule
+\end{tabular}
+\end{center}
+Assuming the instruments are valid and relevant, the lower IV estimates are
+consistent with education being endogenous and OLS overstating its effect on
+log wages. The three-instrument estimate is about $0.02870$ below OLS.
+However, these are sample estimates: differences alone do not establish
+endogeneity statistically. A formal endogeneity test would be needed for a
+test-based conclusion. The first-stage partial $F$ statistic for jointly
+excluding the three instruments is $99.94$ (three restrictions, with 419
+residual degrees of freedom), providing strong evidence of their relevance.
+This does not establish their exogeneity.
 
 \subsection{}
-% Write your answer here.
+The comparison suggests an upward direction of OLS bias: OLS attributes a
+larger increase in log wages to an additional year of schooling than 2SLS does.
+This direction is plausible if unobserved ability raises wages and is
+positively related to schooling after controlling for the included covariates.
+Omitting ability then places it in the structural error, making schooling
+positively correlated with that error, as discussed in Notes 6. The OLS
+coefficient consequently captures both the effect of schooling and some of the
+positive effect of ability. The comparison is compatible with this mechanism;
+it does not by itself identify ability as the source of endogeneity.
 
 \subsection{}
-% Write your answer here.
+I use asymptotic 95\% confidence intervals with the same normal critical value,
+$z_{0.975}=1.959964$, for both estimators. For the primary comparison I use
+conventional, homoscedastic standard errors, matching the conventional columns
+in Lab 7. The OLS interval is
+\[
+    0.10783194\ \pm\ 1.959964(0.01440208)
+    =\boxed{[0.07960,\ 0.13606]}.
+\]
+If schooling is endogenous, this conventional OLS interval need not provide
+95\% coverage of the structural schooling effect, even in a large sample.
 
 \subsection{}
-% Write your answer here.
+Using mother's, father's, and husband's education as excluded instruments,
+the 2SLS interval is
+\[
+    0.07913301\ \pm\ 1.959964(0.02240509)
+    =\boxed{[0.03522,\ 0.12305]}.
+\]
+This interval relies on instrument validity and relevance, the usual sampling
+and regularity conditions, and homoscedasticity for the conventional standard
+error. As a sensitivity check, HC1 heteroscedasticity-robust standard errors
+give intervals $[0.08113,\ 0.13453]$ for OLS and
+$[0.03547,\ 0.12279]$ for three-instrument 2SLS. The ordering of interval
+widths is unchanged. Robust standard errors address heteroscedasticity; they
+do not correct an inconsistent estimator or invalid instruments.
+
+\subsection{}
+The conventional OLS interval has width $0.05646$, compared with $0.08783$
+for 2SLS. Thus the 2SLS interval is about 56\% wider. IV uses the variation in
+education predicted by the instruments and controls, which can provide less
+precision than using all observed variation in education. Nevertheless, a
+narrower interval is not always preferable. If education is endogenous, OLS
+can estimate the wrong population quantity very precisely, so its narrower
+interval can be misleading about the structural effect. Under valid and
+relevant instruments, 2SLS addresses this endogeneity at a cost in precision.
+Instrument validity and appropriate coverage matter alongside interval width.
 
 \clearpage
 \section{}
 \label{sec:q4}
 \subsection{}
-% Write your answer here.
+I interpret ``the same data used in Q2'' as the Mroz data used in Q3,
+since Q2 contains no empirical dataset. Using the identical 428-observation
+sample, I run the supplied regressions with explicitly scoped data:
+\begin{lstlisting}[style=Rcode]
+first <- lm(
+  educ ~ exper + exper2 + age + kidslt6 + kidsge6 +
+    motheduc + fatheduc + huseduc,
+  data = d, na.action = na.fail
+)
+d$educ_hat <- fitted(first)
+second <- lm(
+  logwage ~ exper + exper2 + age + kidslt6 + kidsge6 +
+    educ_hat,
+  data = d, na.action = na.fail
+)
+\end{lstlisting}
+The complete reproducible implementation is in \code{R/q3\_q4\_iv.R}.
+It constructs the sample, estimates all models, and saves the comparisons
+in \code{Output/}. Here, \code{exper2} is squared experience and
+\code{logwage} is the natural logarithm of wage.
 
 \subsection{}
-% Write your answer here.
+The point estimates match the three-instrument 2SLS estimates from Q3.
+In particular, the coefficient on \code{educ\_hat} is $0.07913301$.
+The largest absolute coefficient difference across all seven coefficients
+is approximately $2.4\times10^{-15}$, reflecting floating-point precision.
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Regressor & Two-stage \code{lm()} & 2SLS\\
+\midrule
+Intercept & $-0.04432207$ & $-0.04432207$\\
+Experience & $0.04125802$ & $0.04125802$\\
+Experience squared & $-0.00083191$ & $-0.00083191$\\
+Age & $-0.00181008$ & $-0.00181008$\\
+Children under six & $-0.03989113$ & $-0.03989113$\\
+Children six to eighteen & $-0.02096058$ & $-0.02096058$\\
+Education / fitted education & $0.07913301$ & $0.07913301$\\
+\bottomrule
+\end{tabular}
+\end{center}
+To see why, write $X$ for the matrix of original regressors and $Z$ for
+the controls and excluded instruments. Let
+\[
+ P_Z=Z(Z'Z)^{-1}Z',\qquad \widehat X=P_ZX.
+\]
+The exogenous controls, including the intercept, are already in the column
+space of $Z$, so their projections equal their original values. Therefore,
+replacing only education with its first-stage fitted value produces exactly
+$\widehat X$. Since $P_Z$ is symmetric and idempotent,
+\[
+ \widehat\beta_{\mathrm{2SLS}}
+   =(X'P_ZX)^{-1}X'P_Zy
+   =(\widehat X'\widehat X)^{-1}\widehat X'y.
+\]
+The right-hand expression is the OLS coefficient vector from the second
+\code{lm()} call, proving equality when the sample, controls, and instruments
+are identical and the required matrices have full rank.
 
 \subsection{}
-% Write your answer here.
+The default standard errors do not match. For education, the second-stage
+\code{lm()} reports $0.02342310$, whereas the correct conventional 2SLS
+standard error is $0.02240509$ (the correct HC1 robust value is $0.02227623$).
+The discrepancy arises because \code{lm()} treats the second-stage equation
+as an ordinary regression and calculates residuals
+\[
+ e=y-\widehat X\widehat\beta.
+\]
+For conventional 2SLS inference, the error variance must instead be estimated
+using the structural residuals based on the original regressors:
+\[
+ \widehat u=y-X\widehat\beta,\qquad
+ \widehat\sigma^2=\frac{\widehat u'\widehat u}{N-K},\qquad
+ \widehat{\Var}(\widehat\beta_{\mathrm{2SLS}})
+ =\widehat\sigma^2(\widehat X'\widehat X)^{-1}.
+\]
+Here $N=428$ and $K=7$, including the intercept. The naive second-stage
+residual variance is $0.492629$, compared with the correct structural
+residual variance of $0.450738$. Consequently, the naive standard error is
+about 4.54\% larger in this application. This observed direction is specific
+to the data; the key issue is that the default second-stage variance formula
+uses the wrong residuals for the structural equation.
+For heteroscedasticity-robust inference, the covariance matrix must likewise
+use the structural residuals:
+\[
+ \widehat V_{\mathrm{HC1}}
+ =\frac{N}{N-K}(\widehat X'\widehat X)^{-1}
+ \left(\sum_{i=1}^N\widehat u_i^2\widehat x_i\widehat x_i'\right)
+ (\widehat X'\widehat X)^{-1},
+\]
+where $\widehat x_i$ denotes the transposed $i$th row of $\widehat X$.
+Merely applying an ordinary robust covariance calculation to the second-stage
+\code{lm()} would still use the wrong residuals. These calculations follow
+Notes 8, equations (25)--(28), and Lab 7's \code{twsls} function.
 
 \clearpage
 \section{}

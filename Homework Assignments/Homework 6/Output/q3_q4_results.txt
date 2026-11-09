@@ -1,0 +1,60 @@
+HW6 Q3-Q4: Mroz wage equation
+Source: https://www.stata.com/data/jwooldridge/eacsap/mroz.dta
+Input MD5: a295774fa676eb78e244eb1e7b38cdeb
+Raw observations: 753 ; analysis sample: 428
+Confidence intervals: normal critical value = 1.959964 ; conventional SEs, with HC1 sensitivity intervals.
+
+           model      estimate se_conventional        se_hc1       ci_lower
+             OLS 0.10783194459   0.01440208114 0.01362353678  0.07960438426
+      IV: mother 0.04652832059   0.03799813833 0.03880286217 -0.02794666202
+ 2SLS: three IVs 0.07913300825   0.02240508878 0.02227622759  0.03521984117
+     ci_upper      ci_width      hc1_lower    hc1_upper
+ 0.1360595049 0.05645512066  0.08113030316 0.1345335860
+ 0.1210033032 0.14894996521 -0.02952389177 0.1225805329
+ 0.1230461753 0.08782633415  0.03547240446 0.1227936120
+
+First-stage partial F (3 excluded IVs): 99.93753
+
+Q4 comparison:
+        term manual_lm_estimate correct_2sls_estimate     naive_lm_se
+ (Intercept)   -0.0443220694704      -0.0443220694704 0.4072636228926
+       exper    0.0412580245760       0.0412580245760 0.0140959201561
+      exper2   -0.0008319079309      -0.0008319079309 0.0004236469267
+         age   -0.0018100780035      -0.0018100780035 0.0055631335598
+     kidslt6   -0.0398911337104      -0.0398911337104 0.0941305572628
+     kidsge6   -0.0209605848926      -0.0209605848926 0.0295705200661
+        educ    0.0791330082456       0.0791330082456 0.0234231027454
+ correct_2sls_se correct_2sls_hc1_se
+ 0.3895631474004     0.3781779580243
+ 0.0134832838311     0.0153389785315
+ 0.0004052344007     0.0004144164759
+ 0.0053213488688     0.0059249568933
+ 0.0900394587010     0.1075240157488
+ 0.0282853272909     0.0295031668262
+ 0.0224050887791     0.0222762275891
+
+Maximum coefficient discrepancy: 2.414735e-15
+Naive second-stage residual variance: 0.4926287
+Correct structural residual variance: 0.450738
+
+All numerical validation checks passed.
+
+R version 4.6.1 (2026-06-24)
+Platform: aarch64-apple-darwin23
+Running under: macOS Golden Gate 27.2
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+
+locale:
+[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
+
+time zone: America/New_York
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base
+
+loaded via a namespace (and not attached):
+[1] compiler_4.6.1 tools_4.6.1
