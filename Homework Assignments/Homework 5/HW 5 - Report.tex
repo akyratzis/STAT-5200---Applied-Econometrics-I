@@ -114,7 +114,7 @@
 \label{sec:q1}
 \subsection{}
 My main mistake was in HW3-Q4. The question explicitly requested
-inference under OLS1 and OLS2 without assuming OLS3, but I used the
+inference under OLS1 and OLS2 without assuming OLS3, but I incorrectly used the
 conventional covariance estimator, which additionally relies on OLS3.
 For example, my code calculated the standard error as
 \begin{lstlisting}[style=Rcode]
@@ -125,15 +125,12 @@ Following the solution's use of HC0, the correct line would be
 se_b1 = sqrt(sandwich::vcovHC(fit, type = "HC0")[2,2]);
 \end{lstlisting}
 The same correction was needed in both Monte Carlo loops. My OLS
-coefficient estimates and data-generation process were correct, but
-my standard-error choice meant that the coverage rates evaluated a
-different interval procedure from the one requested.
+coefficient estimates and data-generation process were correct, but the confidence intervals used in the evaluation of the coverage rate used the different standard-errors than the ones requested.
 
 In particular, my heteroskedasticity discussion explained why
 conventional standard errors become invalid when OLS3 fails. The
 solution instead used HC0, which allows heteroskedasticity, and
-illustrated that its intervals can still undercover at $N=100$
-because of finite-sample limitations of the asymptotic approximation.
+illustrated that its intervals can still produce a coverage rate below the expected $95\%$ at $N=100$, because of finite-sample limitations of the asymptotic approximation.
 
 \subsection{}
 In future assignments, I should connect the stated assumptions more
