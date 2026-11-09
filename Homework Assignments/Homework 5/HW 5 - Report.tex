@@ -598,14 +598,10 @@ after controlling for experience, tenure, and marital status.
 \section{Q6}
 \label{sec:q6}
 \subsection{(1--2)}
-\emph{Do Customer Emotions Affect Agent Speed? An Empirical Study of
-Emotional Load in Online Customer Contact Centers}, by Daniel Altman, Galit
-B. Yom-Tov, Marcelo Olivares, Shelly Ashtar and Anat Rafaeli, in
-\emph{Manufacturing \& Service Operations Management}, one of the five
-journals listed in Homework 1. The paper contains the term
-``bootstrapping'', and its main results table (Table~3) reports standard
-errors for Models~(2) and~(3) and for the indirect effect that are computed
-by the bootstrap.
+I chose a paper published in \emph{Manufacturing \& Service Operations
+Management}, one of the five journals listed in Homework 1. The paper uses
+the bootstrap to compute the standard errors and confidence intervals
+reported in its main results table (Table~3).
 
 Altman, D., Yom-Tov, G. B., Olivares, M., Ashtar, S., and Rafaeli, A.
 (2021). Do customer emotions affect agent speed? An empirical study of
@@ -614,123 +610,113 @@ Service Operations Management} 23(4):854--875.
 \url{https://doi.org/10.1287/msom.2020.0897}.
 
 \subsection{(3)}
-Do the emotions that customers express slow service agents down?
-Operations research usually measures an agent's load by system-level
-quantities such as queue length or the number of customers served at
-once, and ignores the fact that customers also express emotions. The
-authors introduce \emph{emotional load}, ``the emotional demands that
-customer behaviors impose on service agents'' (abstract), and ask whether
-it affects agent behaviour over and above operational load. They also ask
-whether the effect works partly through agent effort, and whether agent
-behaviour feeds back into customer emotion. Their answer is that negative
-customer emotion increases agent response time, effort and the number of
-messages needed to resolve a case, and that the effect is comparable to
-adding another customer to the agent (Section~7). Emotional load should
-therefore be monitored and used in staffing and routing decisions
-(Section~6).
+The paper asks whether the emotions that customers express affect how
+fast service agents work. Operations research usually measures the load on
+an agent through quantities such as queue length or the number of
+customers the agent serves at the same time. The authors argue that
+customer emotions are an additional source of load, which they call
+\emph{emotional load}. Using chat data from an online customer contact
+center, they study whether customer emotions change the agent's response
+time, the effort the agent puts into each reply, and the number of
+messages needed to finish a conversation. They find that negative customer
+emotions make agents slower, and that this effect is comparable to giving
+the agent one more customer to serve at the same time. They conclude that
+contact centers should take customer emotions into account when deciding
+on staffing and on how to assign work to agents.
 
 \subsection{(4)}
-The bootstrap is applied to the mediation model of Section~4.1,
-Equations~(2) and~(3), estimated at the level of individual messages:
-\begin{align*}
+The main model of the paper is estimated at the message level, using
+variation across messages within the same conversation. The bootstrap is
+used for the model in Section~4.1, which consists of two equations:
+\begin{align}
 \log(RT_{it}) &= \delta_i+\beta_1 EMO_{i,t-1}
   +\beta_2\log(NumWords_{it})+\gamma W_{it}
-  +\tau\,ConvStage_{it}+u_{it}, \\
+  +\tau\,ConvStage_{it}+u_{it}, \tag{2}\\
 \log(NumWords_{it}) &= \delta_i+\beta_3 EMO_{i,t-1}+\gamma W_{it}
-  +\tau\,ConvStage_{it}+v_{it}.
-\end{align*}
-I take Equation~(2), Model~(2) in Table~3, as the main regression. It
-fits the form $y_{it}=x_{it}\beta+\delta_i+u_{it}$, where $i$ is a
-chat conversation and $t$ a turn within it.
+  +\tau\,ConvStage_{it}+v_{it}. \tag{3}
+\end{align}
+I focus on Equation~(2), which is of the form
+$y_{it}=x_{it}\beta+\delta_i+u_{it}$, where $i$ is a conversation and $t$
+is a message within that conversation.
 \begin{itemize}
-\item $y_{it}$: the log of the agent's response time to customer message
-$t$ in conversation $i$.
-\item $x_{it}$: the emotion of the customer's previous message
-$EMO_{i,t-1}$, the log of the number of words in the agent's reply (the
-proxy for effort), the number of chats the agent handles at the same time
-($Concurrent_{it}$), the number of customers in the queue
-($NumInQueue_{it}$), and the stage of the conversation ($ConvStage_{it}$).
-That is five variables, plus a fixed effect $\delta_i$ for each
-conversation.
-\item Observations: $650{,}856$ messages from $141{,}654$ conversations.
+\item $y_{it}$ is the log of the agent's response time to customer message
+$t$.
+\item $x_{it}$ contains five variables: the emotion of the customer's
+previous message ($EMO_{i,t-1}$), the log of the number of words in the
+agent's reply (used as a measure of effort), the number of chats the agent
+is handling at the same time, the number of customers waiting in the
+queue, and how far the conversation has progressed. The model also
+includes a fixed effect $\delta_i$ for each conversation.
+\item The sample has $650{,}856$ messages from $141{,}654$ conversations.
 \end{itemize}
-$EMO_{i,t-1}$ is instrumented with a second sentiment measure,
-$CustSent_{i,t-1}$, to correct for measurement error, so the equation is
-estimated by 2SLS rather than OLS. The key estimate is
-$\hat\beta_1=-0.197$: a one-point more positive customer message reduces
-response time by $19.7$ per cent. The quantity that needs the bootstrap is
-the indirect effect $\beta_3\times\beta_2$, emotion acting through the
-length of the agent's reply, estimated at $0.003$ (SE $0.0011$).
+The emotion variable is instrumented with a second emotion measure to
+correct for measurement error, so the equation is estimated by 2SLS
+instead of OLS. The main estimate is $\hat\beta_1=-0.197$: when the
+customer's message is one point more positive, the agent's response time
+falls by about $19.7\%$.
+
+Equation~(3) is needed because the authors also want the \emph{indirect}
+effect of emotion on response time through the length of the agent's
+reply. This indirect effect equals $\beta_3\times\beta_2$, and it is the
+reason they use the bootstrap.
 
 \subsection{(5)}
-The authors use a nonparametric \emph{pairs bootstrap at the conversation
-level}, following the mediation method of Hayes and Rockwood (2020).
-Footnote~2 describes it: the method draws ``conversations with
-replacements from the data in the re-sampling procedure. For each
-re-sample, Equations (2) and (3) are estimated separately using 2SLS
-\ldots{} Confidence intervals are calculated based on the empirical
-distribution of the estimates from each re-sample.''
-
-This is the pairs bootstrap from Notes~5, with one change: the unit drawn
-is a whole conversation, with all its messages, rather than a single
-message. In each bootstrap sample $b$, both equations are re-estimated and
-the indirect effect $\hat\beta_3^{*(b)}\hat\beta_2^{*(b)}$ is computed.
-The standard errors in Table~3 are taken from the spread of these
-estimates, and the confidence intervals from their percentiles. The paper
-does not report the number of bootstrap samples.
+The authors use the pairs bootstrap, with whole conversations as the unit
+that is resampled. Footnote~2 explains the procedure: they draw
+conversations with replacement from the data, estimate Equations~(2)
+and~(3) separately by 2SLS on each new sample, and compute confidence
+intervals from the distribution of the resulting estimates. This is the
+pairs bootstrap from Notes~5, with one difference: instead of drawing
+single observations, it draws entire conversations, keeping all the
+messages of a conversation together. The paper does not report how many
+bootstrap samples were used.
 
 \subsection{(6)}
-Yes. The evidence is spread across the paper:
-\begin{itemize}
-\item \emph{Main reason} (end of Section~4.1): ``calculating confidence
-intervals for the indirect effect $\beta_3\times\beta_2$ is complicated
-because the two estimators are correlated due to sampling error. We use a
-bootstrapping approach to estimate the models and compute confidence
-intervals, using the methods developed by Hayes and Rockwood (2020).''
-\item \emph{Procedure} (Section~5.1 and footnote~2): Models~(2) and~(3)
-``are estimated using a mediation model based on Hayes and Rockwood
-(2020), using bootstrapping to compute the standard errors'', with
-conversations drawn with replacement.
-\item \emph{Second reason} (Section~5.3): the residuals of Model~(1) show
-serial correlation within a conversation, and ``the estimates of Models
-(2) and (3) use bootstrapped standard errors which account for correlation
-between the error terms within cluster.''
-\item \emph{Results} (Table~3): the bootstrapped standard errors for
-Models~(2) and~(3), and the indirect effect in the bottom panel. The table
-note names the Hayes and Rockwood (2020) macro used.
-\end{itemize}
+Yes, the authors give two reasons:
+\begin{enumerate}
+\item \textbf{The indirect effect is hard to handle analytically.} At the
+end of Section~4.1 they write that ``calculating confidence intervals for
+the indirect effect $\beta_3\times\beta_2$ is complicated because the two
+estimators are correlated due to sampling error.'' They therefore use the
+bootstrap, following Hayes and Rockwood (2020). Section~5.1 and Table~3
+confirm that the standard errors of Models~(2) and~(3) and of the indirect
+effect are bootstrapped.
+\item \textbf{Messages within a conversation are correlated.} In
+Section~5.3 they report that the residuals of their basic model show
+serial correlation within conversations, and they note that the
+bootstrapped standard errors in Table~3 ``account for correlation between
+the error terms within cluster.''
+\end{enumerate}
 
-The reasoning makes sense to me, and it is the same comparison as Q3. The
-indirect effect is a nonlinear function of two coefficients from two
-different equations. A delta-method standard error would need
-$\operatorname{Cov}(\hat\beta_2,\hat\beta_3)$, which separate estimation
-does not deliver. Re-estimating both equations on the same bootstrap
-sample keeps that covariance automatically. A product of two estimates
-also tends to have a skewed sampling distribution, so percentile intervals
-are more suitable than a symmetric normal interval. Resampling whole
-conversations deals with the serial correlation the authors found. With
-$141{,}654$ conversations, the large-sample justification for the bootstrap
-is comfortably met. My one criticism is that the number of bootstrap
-samples is not reported.
+Both reasons make sense to me. The first is the same comparison we made in
+Q3. The indirect effect is a product of two estimates, so the delta method
+would need the covariance between $\hat\beta_2$ and $\hat\beta_3$. This is
+not directly available, because the two equations are estimated
+separately. The bootstrap avoids this problem, since both equations are
+re-estimated on the same bootstrap sample each time. In addition, a
+product of two estimates does not need to be normally distributed, and
+confidence intervals taken from the bootstrap distribution do not need to
+be symmetric. The second reason is also valid, since resampling whole
+conversations keeps the correlation between messages of the same
+conversation. With $141{,}654$ conversations, the sample is also large
+enough for the bootstrap to work well. The only weakness I see is that the
+number of bootstrap samples is not reported.
 
 \subsection{(7)}
-Yes, the method is robust to heteroskedasticity. The pairs bootstrap
-resamples the outcome and the regressors together, so each resampled
-observation keeps its own error variance. It makes no assumption that the
-error variance is constant across observations. The residual bootstrap
-does make that assumption, because it attaches residuals to regressor
-values they did not come from. Because the resampling unit is a whole
-conversation, the method is also robust to correlation between messages
-within the same conversation.
+Yes. Like the pairs bootstrap in Notes~5, it resamples each observation
+together with its own error, so the error variance is allowed to differ
+across observations. This is different from the residual bootstrap, which
+assumes homoskedasticity because it attaches residuals to observations
+they did not come from (as we saw in Q4(g)). Since the authors resample
+whole conversations, the method is also robust to correlation between
+messages in the same conversation.
 
-My assessment is that this robustness matters here. The variance of
-response times is likely to differ across conditions, for example when an
-agent handles three chats rather than one, or late in a long conversation.
-One contrast is worth noting. The paper's Model~(1) standard errors are
-computed ``assuming i.i.d.\ random errors'' (Section~5.3), which are not
-robust to heteroskedasticity. The authors check that model with
-conversation-clustered standard errors in their online appendix. The
-bootstrapped Models~(2) and~(3) are robust without that extra check.
+This robustness is useful in this setting. The variance of response times
+is likely to differ across situations, for example when an agent is
+handling three chats instead of one. By contrast, the standard errors of
+the paper's basic Model~(1) are computed assuming i.i.d.\ errors, which is
+not robust to heteroskedasticity. The authors check that model separately
+with standard errors clustered by conversation, in their online appendix.
 
 \clearpage
 \appendix
