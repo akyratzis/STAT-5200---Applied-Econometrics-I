@@ -1,0 +1,31 @@
+[1] "Part (a). First five observations of the data set ..."
+           y       x
+[1,]  0.1124 -0.2529
+[2,]  1.8155  1.3673
+[3,] -0.0682 -0.6713
+[4,]  9.3248  4.1906
+[5,]  3.4995  1.6590
+[1] "Summary of the data set ..."
+mean_y   sd_y mean_x   sd_x
+3.3313 2.7883 1.2178 1.7964
+[1] "Part (b). OLS estimates against the true values ..."
+            estimate truth
+(Intercept)   1.3587   1.0
+x             0.9487   1.0
+x2            0.1747   0.2
+[1] "Part (c). 95% confidence interval for beta1 ..."
+       se     lower     upper indicator
+   0.0855    0.7812    1.1163    1.0000
+[1] "Part (d). Empirical coverage rate over M data sets ..."
+    M     N
+10000   100
+[1] 0.9494
+[1] "Part (e). Empirical coverage rate, heteroskedastic model ..."
+[1] 0.8397
+[1] "Part (f). Coverage on the same heteroskedastic data sets ..."
+        Method Coverage
+1 Conventional   0.8397
+2          HC0   0.8982
+3          HC1   0.9034
+4          HC2   0.9177
+5          HC3   0.9347

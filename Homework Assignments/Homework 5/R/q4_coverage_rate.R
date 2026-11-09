@@ -1,7 +1,9 @@
-# HW5 Q4(a)-(e): adapted from HW3/R/q4_coverage_rate.R.
-# Uses t(10) errors and conventional standard errors throughout.
+# HW5 Q4(a)-(f): adapted from HW3/R/q4_coverage_rate.R and Lab 3.
+# Requires the sandwich package: install.packages("sandwich").
+# Uses t(10) errors; adds HC0-HC3 intervals in the existing loop for (e).
 # In (e), the population violates OLS3; we retain the same interval formula.
 rm(list = ls()); # refresh memory
+library("sandwich");
 set.seed(1);
 
 beta0 = 1;
@@ -79,6 +81,9 @@ print(round(mean(I_all), 4));
 #   y = beta0 + beta1*x + beta2*x^2 + (|x|/2)*u
 # Continue the random sequence from (d); do not reset the seed.
 I_all_het = rep(NA, M);
+# Part (f): compare HC methods on exactly the same data sets as (e).
+I_all_hc = matrix(NA, M, 4);
+colnames(I_all_hc) = c("HC0", "HC1", "HC2", "HC3");
 
 for (m in 1:M){
   x = rnorm(N, mean = 1, sd = sqrt(4));
@@ -91,7 +96,27 @@ for (m in 1:M){
   # Deliberately retain the conventional covariance estimate from (c).
   ci = b[2] + c(-1, 1)*1.96*sqrt(vcov(fit)[2,2]);
   I_all_het[m] = as.numeric(ci[1] <= beta1 & beta1 <= ci[2]);
+
+  # Lab 3: construct each vector of heteroskedasticity-consistent SEs.
+  se_HC0 = sqrt(diag(vcovHC(fit, type = "HC0")));
+  se_HC1 = sqrt(diag(vcovHC(fit, type = "HC1")));
+  se_HC2 = sqrt(diag(vcovHC(fit, type = "HC2")));
+  se_HC3 = sqrt(diag(vcovHC(fit, type = "HC3")));
+
+  # The second coefficient is beta1, the coefficient on x.
+  se_hc = c(se_HC0[2], se_HC1[2], se_HC2[2], se_HC3[2]);
+  lower_hc = b[2] - 1.96*se_hc;
+  upper_hc = b[2] + 1.96*se_hc;
+  I_all_hc[m, ] = as.numeric(lower_hc <= beta1 & beta1 <= upper_hc);
 }
 
 print("Part (e). Empirical coverage rate, heteroskedastic model ...");
 print(round(mean(I_all_het), 4));
+
+print("Part (f). Coverage on the same heteroskedastic data sets ...");
+tab_coverage = data.frame(
+  Method = c("Conventional", colnames(I_all_hc)),
+  Coverage = round(c(mean(I_all_het), colMeans(I_all_hc)), 4),
+  row.names = NULL
+);
+print(tab_coverage);

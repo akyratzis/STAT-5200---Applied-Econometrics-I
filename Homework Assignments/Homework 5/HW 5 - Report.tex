@@ -357,7 +357,55 @@ intended $95\%$ in this experiment. This illustrates why conventional
 standard errors can give misleading inference under heteroskedasticity;
 justifying the use of heteroskedasticity-consistent alternatives we consider in (f).
 \subsection{(f)}
-\todo{Report and discuss coverage for HC0, HC1, HC2, and HC3.}
+We repeat (e) using HC0, HC1, HC2, and HC3 standard errors. For a direct
+comparison, all methods use the same $M=10{,}000$ heteroskedastic data
+sets as in (e), each of size $N=100$. The OLS coefficients do not
+change across methods; only the covariance estimator used to construct
+the interval changes.
+
+Following Lab 3, we add the following calculations inside the existing
+simulation loop, after fitting the OLS regression:
+\begin{lstlisting}[style=Rcode]
+se_HC0 = sqrt(diag(vcovHC(fit, type = "HC0")));
+se_HC1 = sqrt(diag(vcovHC(fit, type = "HC1")));
+se_HC2 = sqrt(diag(vcovHC(fit, type = "HC2")));
+se_HC3 = sqrt(diag(vcovHC(fit, type = "HC3")));
+\end{lstlisting}
+The code uses the \code{sandwich} package. For each method, the second
+entry gives the standard error of $\hat\beta_1$. We construct
+$\hat\beta_1\pm1.96\,\widehat{\text{se}}(\hat\beta_1)$ and record
+whether the interval contains the true coefficient, $\beta_1=1$.
+Averaging these indicators gives the coverage rates below.
+
+\begin{table}[htbp]
+\centering
+\caption{Coverage of nominal $95\%$ intervals under heteroskedasticity,
+$N=100$ and $M=10{,}000$. All methods use the same simulated data sets.}
+\label{tab:q4-hc-coverage}
+\begin{tabular}{lr}
+\toprule
+Covariance estimator & Empirical coverage \\
+\midrule
+Conventional, from (e) & $83.97\%$ \\
+HC0 & $89.82\%$ \\
+HC1 & $90.34\%$ \\
+HC2 & $91.77\%$ \\
+HC3 & $93.47\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All four HC methods improve coverage relative to the conventional
+interval in this experiment. HC3 is closest to the intended $95\%$,
+although all four still have coverage below that level. As discussed
+in Notes 4, HC1 applies a degrees-of-freedom adjustment, while HC2 and
+HC3 adjust for leverage; these modifications are intended to improve
+small-sample performance. Robust inference does not require OLS3,
+but it still relies on an asymptotic approximation. As the HW3-Q4
+solution illustrates for HC0, coverage need not be $95\%$ at $N=100$.
+The ordering in this table describes this simulation, not a claim
+that HC3 is always the best choice.
+
 \subsection{(g)}
 \todo{Report and discuss coverage for pairs, residual, and wild bootstrap,
 and for the jackknife.}
@@ -390,8 +438,8 @@ and for the jackknife.}
 
 \clearpage
 \appendix
-\section{R code for Q4(a)--(e)}
+\section{R code for Q4(a)--(f)}
 \lstinputlisting[style=Rcode,caption={Monte Carlo simulation using conventional
-standard errors in both population models.},label={lst:q4-code}]{R/q4_coverage_rate.R}
+standard errors and HC0--HC3 comparisons under heteroskedasticity.},label={lst:q4-code}]{R/q4_coverage_rate.R}
 
 \end{document}
