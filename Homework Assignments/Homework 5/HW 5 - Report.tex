@@ -326,7 +326,7 @@ this model at $N=100$.
 The full script is included in the appendix.
 
 \subsection{(e)}
-Repeat the simulation with the modified population model
+We repeat the simulation with the modified population model
 \[
 y_i=1+x_i+0.2x_i^2+\frac{|x_i|}{2}u_i,
 \qquad x_i\sim N(1,4),\quad u_i\sim t_{10},
@@ -336,13 +336,13 @@ constructed as
 \begin{lstlisting}[style=Rcode]
 y = beta0 + beta1*x + beta2*x^2 + (abs(x)/2)*u;
 \end{lstlisting}
-Keep $N=100$, $M=10{,}000$, the OLS regression, and the conventional
+We keep $N=100$, $M=10{,}000$, the OLS regression, and the conventional
 confidence-interval formula from (c) unchanged. The empirical coverage
 rate is
 \[
 \frac{1}{M}\sum_{m=1}^{M}I^{(m)}=0.8397=83.97\%,
 \]
-compared with $94.94\%$ in (d), a decrease of $10.97$ percentage points.
+compared with $94.94\%$ in (d).
 
 Writing the new error as $\tilde u_i=(|x_i|/2)u_i$, its conditional
 mean is still zero, but its conditional variance is
@@ -350,12 +350,12 @@ mean is still zero, but its conditional variance is
 \Var(\tilde u_i\mid x_i)=\frac{x_i^2}{4}\Var(u_i),
 \]
 which changes with $x_i$. Thus, OLS1 and OLS2 still hold, but OLS3
-fails. We deliberately retain the conventional standard errors used
+fails. We retained the conventional standard errors used
 in (c), even though their justification under OLS3 no longer applies.
-The intervals contain the true coefficient much less often than the
+Therefore, the intervals contain the true coefficient much less often than the
 intended $95\%$ in this experiment. This illustrates why conventional
 standard errors can give misleading inference under heteroskedasticity;
-the next part compares heteroskedasticity-consistent alternatives.
+justifying the use of heteroskedasticity-consistent alternatives we consider in (f).
 \subsection{(f)}
 \todo{Report and discuss coverage for HC0, HC1, HC2, and HC3.}
 \subsection{(g)}
