@@ -539,19 +539,34 @@ established by the regressions. In particular, Notes 6 cautions that
 the second condition will seldom hold exactly in applications.
 
 \subsection{(c)}
-Let $w=\log(\text{wage})$, $q=\text{ability}$, and
-$Z=(\text{exper},\text{tenure},\text{married})'$ collect the other
-controls. The wage equation and the ability projection in the question
-can be written as
+The wage equation is
 \[
-w=\beta_0+Z'\beta_Z+\beta_4\text{educ}+\gamma q+v,
-\qquad
-q=\delta_0+Z'\delta_Z+\delta_4\text{educ}+r.
+\begin{aligned}
+\text{logwage}
+&=\beta_0+\beta_1\text{exper}+\beta_2\text{tenure}
+  +\beta_3\text{married}\\
+&\quad+\beta_4\text{educ}+\gamma\,\text{ability}+v.
+\end{aligned}
 \]
-Substituting the second equation into the first gives
+The ability projection given in the question is
 \[
-w=(\beta_0+\gamma\delta_0)+Z'(\beta_Z+\gamma\delta_Z)
- +(\beta_4+\gamma\delta_4)\text{educ}+\gamma r+v.
+\begin{aligned}
+\text{ability}
+&=\delta_0+\delta_1\text{exper}+\delta_2\text{tenure}
+  +\delta_3\text{married}\\
+&\quad+\delta_4\text{educ}+r.
+\end{aligned}
+\]
+Substituting the ability equation into the wage equation gives
+\[
+\begin{aligned}
+\text{logwage}
+&=(\beta_0+\gamma\delta_0)
+  +(\beta_1+\gamma\delta_1)\text{exper}\\
+&\quad+(\beta_2+\gamma\delta_2)\text{tenure}
+  +(\beta_3+\gamma\delta_3)\text{married}\\
+&\quad+(\beta_4+\gamma\delta_4)\text{educ}+\gamma r+v.
+\end{aligned}
 \]
 The projection residual $r$ is uncorrelated with education and the other
 regressors. Under the wage model's exogeneity assumption, so is
