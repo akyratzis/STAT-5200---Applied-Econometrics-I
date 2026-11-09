@@ -396,16 +396,9 @@ HC3 & $93.47\%$ \\
 \end{table}
 
 All four HC methods improve coverage relative to the conventional
-interval in this experiment. The improvement from HC0 to HC2 and HC3
-is consistent with their leverage adjustments, which Notes 4 explains
-are intended to improve small-sample performance. HC2 divides each
-squared residual by $1-h_i$, while HC3 divides it by $(1-h_i)^2$,
-where $h_i$ is the observation's leverage. These adjustments increase
-standard errors relative to HC0 and widen the intervals. In this
-experiment, where HC0 undercovers, the wider intervals improve coverage.
-HC1 applies a degrees-of-freedom adjustment and also improves coverage
-relative to HC0 here. HC3 makes the larger leverage adjustment and
-achieves coverage closest to the intended $95\%$.
+interval in this experiment. HC2 and HC3 include adjustments intended
+to improve small-sample performance. In our simulation with $N=100$,
+they achieve coverage closer to $95\%$ than HC0, with HC3 coming closest.
 
 All four HC methods still have coverage below $95\%$. They accommodate
 heteroskedasticity, but their inference relies on an asymptotic
