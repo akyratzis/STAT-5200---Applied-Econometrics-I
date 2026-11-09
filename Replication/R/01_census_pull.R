@@ -5,7 +5,7 @@ rm(list = ls()); # refresh memory
 # monthly at HS10 by partner country, from the Census API.
 #
 # One file is written per flow, heading and month under
-# data/raw/census. A month already on disk is not requested again, so
+# Data/Raw/Census. A month already on disk is not requested again, so
 # the script can be stopped and restarted, and a failed run costs only
 # the months it had not yet reached.
 # ------------------------------------------------------------------

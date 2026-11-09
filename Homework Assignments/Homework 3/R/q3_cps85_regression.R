@@ -25,7 +25,7 @@ print(round(-b[3]/(2*b[4]), 2));
 # ------------------------------------------------------------------
 uhat = resid(model1);
 
-fig_dir = file.path("..", "figures");
+fig_dir = file.path("..", "Figures");
 if (!dir.exists(fig_dir)) dir.create(fig_dir, recursive = TRUE);
 
 pdf(file.path(fig_dir, "q3_qqplot.pdf"), width = 5.5, height = 4.4);

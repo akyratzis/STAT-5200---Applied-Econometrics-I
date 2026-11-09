@@ -37,11 +37,11 @@ is the pre-trend against which the post-period (2017–2019) is read.
 
 ```
 R/                 analysis scripts, run in numbered order
-data/raw/          downloaded source files (not tracked — see Data below)
-data/processed/    analysis-ready files built by the scripts
-figures/           generated figures
-output/            captured console output
-paper/             the paper being replicated
+Data/Raw/          downloaded source files (not tracked — see Data below)
+Data/Processed/    analysis-ready files built by the scripts
+Figures/           generated figures
+Output/            captured console output
+Paper/             the paper being replicated
 ```
 
 ## Data
@@ -81,7 +81,7 @@ errors): `install.packages("sandwich")`.
 Then run in order from inside `R/`:
 
 ```r
-source("01_census_pull.R")      # Census API -> data/raw/census, data/processed
+source("01_census_pull.R")      # Census API -> Data/Raw/Census, Data/Processed
 ```
 
 `01_census_pull.R` caches one CSV per flow, heading and month, so a month

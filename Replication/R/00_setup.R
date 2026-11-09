@@ -5,11 +5,11 @@ rm(list = ls()); # refresh memory
 # Sourced by the other scripts; not run on its own.
 # ------------------------------------------------------------------
 
-DIR_RAW       = file.path("..", "data", "raw");
-DIR_CENSUS    = file.path(DIR_RAW, "census");
-DIR_PROCESSED = file.path("..", "data", "processed");
-DIR_FIGURES   = file.path("..", "figures");
-DIR_OUTPUT    = file.path("..", "output");
+DIR_RAW       = file.path("..", "Data", "Raw");
+DIR_CENSUS    = file.path(DIR_RAW, "Census");
+DIR_PROCESSED = file.path("..", "Data", "Processed");
+DIR_FIGURES   = file.path("..", "Figures");
+DIR_OUTPUT    = file.path("..", "Output");
 
 for (d in c(DIR_CENSUS, DIR_PROCESSED, DIR_FIGURES, DIR_OUTPUT)){
   if (!dir.exists(d)) dir.create(d, recursive = TRUE);

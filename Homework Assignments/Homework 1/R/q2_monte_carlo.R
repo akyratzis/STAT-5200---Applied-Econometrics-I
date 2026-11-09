@@ -153,7 +153,7 @@ print(c("N=20"  = var(sqrt(20) *mat_theta_hat_x_squared_error[,1]),
 # ------------------------------------------------------------------
 # Histograms of sqrt(N)*theta_hat when N = 500
 # ------------------------------------------------------------------
-fig_dir = file.path("..", "figures");
+fig_dir = file.path("..", "Figures");
 if (!dir.exists(fig_dir)) dir.create(fig_dir, recursive = TRUE);
 
 sqrtN_theta_hat_t = sqrt(500) * mat_theta_hat_t_error[,"N=500"];
