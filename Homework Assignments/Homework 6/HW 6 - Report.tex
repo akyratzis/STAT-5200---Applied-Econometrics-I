@@ -107,16 +107,16 @@
 \maketitle
 
 \clearpage
-\section{}
+\section{Q1}
 \label{sec:q1}
-\subsection{}
-% Write your answer here.
+\subsection{(1)}
+\todo{Compare your HW5 answers with the solutions and list any missed questions.}
 
-\subsection{}
-% Write your answer here.
+\subsection{(2)}
+\todo{Discuss what you could have done better.}
 
 \clearpage
-\section{}
+\section{Q2}
 \label{sec:q2}
 Starting from the population wage equation
 \[
@@ -140,7 +140,7 @@ uncorrelated with that error. This argument assumes the relevant second moments
 exist and follows Notes 8.
 
 \clearpage
-\section{}
+\section{Q3}
 \label{sec:q3}
 All estimates below use the same 428 working women with positive wages and
 complete observations on the model variables in the Mroz data. The dependent
@@ -152,7 +152,7 @@ come from Stata's Wooldridge textbook data archive.\footnote{Data source:
 \url{https://www.stata.com/data/jwooldridge/eacsap/mroz.dta}. The local
 Lab 7 \code{mroz.txt} contains variable descriptions rather than observations.}
 
-\subsection{}
+\subsection{(1)}
 The estimated coefficient on education is $0.10783$ under OLS, $0.04653$
 using mother's education as the sole excluded instrument, and $0.07913$
 using mother's, father's, and husband's education as three excluded instruments.
@@ -178,7 +178,7 @@ excluding the three instruments is $99.94$ (three restrictions, with 419
 residual degrees of freedom), providing strong evidence of their relevance.
 This does not establish their exogeneity.
 
-\subsection{}
+\subsection{(2)}
 The comparison suggests an upward direction of OLS bias: OLS attributes a
 larger increase in log wages to an additional year of schooling than 2SLS does.
 This direction is plausible if unobserved ability raises wages and is
@@ -189,7 +189,7 @@ coefficient consequently captures both the effect of schooling and some of the
 positive effect of ability. The comparison is compatible with this mechanism;
 it does not by itself identify ability as the source of endogeneity.
 
-\subsection{}
+\subsection{(3)}
 I use asymptotic 95\% confidence intervals with the same normal critical value,
 $z_{0.975}=1.959964$, for both estimators. For the primary comparison I use
 conventional, homoscedastic standard errors, matching the conventional columns
@@ -201,7 +201,7 @@ in Lab 7. The OLS interval is
 If schooling is endogenous, this conventional OLS interval need not provide
 95\% coverage of the structural schooling effect, even in a large sample.
 
-\subsection{}
+\subsection{(4)}
 Using mother's, father's, and husband's education as excluded instruments,
 the 2SLS interval is
 \[
@@ -216,7 +216,7 @@ $[0.03547,\ 0.12279]$ for three-instrument 2SLS. The ordering of interval
 widths is unchanged. Robust standard errors address heteroscedasticity; they
 do not correct an inconsistent estimator or invalid instruments.
 
-\subsection{}
+\subsection{(5)}
 The conventional OLS interval has width $0.05646$, compared with $0.08783$
 for 2SLS. Thus the 2SLS interval is about 56\% wider. IV uses the variation in
 education predicted by the instruments and controls, which can provide less
@@ -228,9 +228,9 @@ relevant instruments, 2SLS addresses this endogeneity at a cost in precision.
 Instrument validity and appropriate coverage matter alongside interval width.
 
 \clearpage
-\section{}
+\section{Q4}
 \label{sec:q4}
-\subsection{}
+\subsection{(1)}
 I interpret ``the same data used in Q2'' as the Mroz data used in Q3,
 since Q2 contains no empirical dataset. Using the identical 428-observation
 sample, I run the supplied regressions with explicitly scoped data:
@@ -247,12 +247,13 @@ second <- lm(
   data = d, na.action = na.fail
 )
 \end{lstlisting}
-The complete reproducible implementation is in \code{R/q3\_q4\_iv.R}.
+The complete reproducible implementation is included in
+Appendix~\ref{app:iv-code}.
 It constructs the sample, estimates all models, and saves the comparisons
 in \code{Output/}. Here, \code{exper2} is squared experience and
 \code{logwage} is the natural logarithm of wage.
 
-\subsection{}
+\subsection{(2)}
 The point estimates match the three-instrument 2SLS estimates from Q3.
 In particular, the coefficient on \code{educ\_hat} is $0.07913301$.
 The largest absolute coefficient difference across all seven coefficients
@@ -290,7 +291,7 @@ The right-hand expression is the OLS coefficient vector from the second
 \code{lm()} call, proving equality when the sample, controls, and instruments
 are identical and the required matrices have full rank.
 
-\subsection{}
+\subsection{(3)}
 The default standard errors do not match. For education, the second-stage
 \code{lm()} reports $0.02342310$, whereas the correct conventional 2SLS
 standard error is $0.02240509$ (the correct HC1 robust value is $0.02227623$).
@@ -327,36 +328,48 @@ Merely applying an ordinary robust covariance calculation to the second-stage
 Notes 8, equations (25)--(28), and Lab 7's \code{twsls} function.
 
 \clearpage
-\section{}
+\section{Q5}
 \label{sec:q5}
-\subsection{}
-% Write your answer here.
+\subsection{(1)}
+\todo{Find a qualifying published empirical paper using IV or 2SLS.}
 
-\subsection{}
-% Write your answer here.
+\subsection{(2)}
+\todo{Give the full citation of the paper.}
 
-\subsection{}
-% Write your answer here.
+\subsection{(3)}
+\todo{Summarize the main research question in one paragraph.}
 
-\subsection{}
-% Write your answer here.
+\subsection{(4)}
+\todo{Describe the model, outcome, regressors, number of variables, and sample size.}
 
-\subsection{}
-% Write your answer here.
+\subsection{(5)}
+\todo{Identify the endogenous variable in the main empirical model.}
 
-\subsection{}
-% Write your answer here.
+\subsection{(6)}
+\todo{Explain how endogeneity arises in the main empirical model.}
 
-\subsection{}
-% Write your answer here.
+\subsection{(7)}
+\todo{Identify the instrumental variables.}
 
-\subsection{}
-% Write your answer here.
+\subsection{(8)}
+\todo{Discuss the first-stage evidence for instrument relevance.}
 
-\subsection{}
-% Write your answer here.
+\subsection{(9)}
+\todo{Compare OLS and IV or 2SLS results and the implied direction of OLS bias.}
 
-\subsection{}
-% Write your answer here.
+\subsection{(10)}
+\todo{Give a plausible argument against the validity of the instruments.}
+
+\clearpage
+\appendix
+\section{R code for Q3--Q4}
+\label{app:iv-code}
+\lstinputlisting[style=Rcode,caption={Reproducing the Lab 7 wage regressions,
+confidence intervals, and manual two-stage estimation.},label={lst:q3-q4-code}]{R/q3_q4_iv.R}
+
+\section*{AI usage disclosure}
+OpenAI Codex was used to help generate and adapt the R code included
+in this report, using the course lab notes as references. The reported
+numerical results were obtained by running the code.
 
 \end{document}
