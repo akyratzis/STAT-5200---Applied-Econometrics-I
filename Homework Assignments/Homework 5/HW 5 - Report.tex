@@ -409,8 +409,67 @@ a universal ranking of the HC estimators in terms of performance:
 wider intervals need not always bring coverage closer to $95\%$.
 
 \subsection{(g)}
-\todo{Report and discuss coverage for pairs, residual, and wild bootstrap,
-and for the jackknife.}
+For each of the same $M=10{,}000$ heteroskedastic data sets used in
+(e)--(f), with $N=100$ observations, we estimate the standard error of
+$\hat\beta_1$ using the four methods in Lab 4:
+\begin{enumerate}
+\item \textbf{Pairs bootstrap.} Draw $N$ observation indices with
+replacement, select the corresponding rows of both $y$ and $X$, and
+re-estimate OLS. Repeat $B=1{,}000$ times.
+\item \textbf{Residual bootstrap.} Keep $X$ fixed, resample the original
+OLS residuals with replacement, and add them to the original fitted
+values to generate new outcomes. Re-estimate OLS on each of
+$B=1{,}000$ such samples.
+\item \textbf{Wild bootstrap.} Keep $X$ fixed and multiply each original
+residual independently by $+1$ or $-1$, each with probability $1/2$.
+Add these errors to the original fitted values and re-estimate OLS.
+Repeat $B=1{,}000$ times.
+\item \textbf{Jackknife.} Leave out one observation at a time and
+re-estimate OLS, giving $N=100$ leave-one-out estimates. Calculate the
+standard error using Lab 4's jackknife variance adjustment.
+\end{enumerate}
+
+For each bootstrap method, the standard error is the sample standard
+deviation of the $B$ bootstrap slope estimates. For the jackknife, it is
+\[
+\widehat{\text{se}}_{\mathrm{JK}}(\hat\beta_1)
+=\left[\frac{N-1}{N}\sum_{i=1}^{N}
+ \left(\hat\beta_{1,(-i)}-\bar\beta_{1,(-\cdot)}\right)^2\right]^{1/2},
+\]
+where $\bar\beta_{1,(-\cdot)}$ is the average leave-one-out slope estimate.
+For each method, construct the approximate $95\%$ interval
+\[
+\hat\beta_1\ \pm\ 1.96\,\widehat{\text{se}}_{\mathrm{method}}(\hat\beta_1),
+\]
+centered on the OLS estimate from the original data set, and record
+whether it contains $\beta_1=1$. Averaging these indicators over the
+$M$ data sets gives the following empirical coverage rates.
+
+\begin{table}[htbp]
+\centering
+\caption{Coverage of nominal $95\%$ resampling-based intervals under
+heteroskedasticity. $N=100$, $M=10{,}000$, and $B=1{,}000$ for the three
+bootstrap methods; the jackknife uses $N$ leave-one-out fits.}
+\label{tab:q4-bootstrap-coverage}
+\input{Output/q4_bootstrap_table_M10000.tex}
+\end{table}
+
+The residual bootstrap has the lowest coverage, $83.13\%$. As explained
+in Notes 5 and Lab 4, this method assumes homoskedasticity: it draws
+residuals from a common pool, so it does not preserve their relationship
+with $x$. That assumption fails in our simulated population.
+
+The pairs bootstrap resamples complete observations, while the wild
+bootstrap keeps each residual attached to its observation and randomly
+changes its sign. These procedures accommodate heteroskedasticity under
+the conditions discussed in the course. In this experiment, pairs,
+wild, and jackknife intervals all have higher coverage than the
+residual-bootstrap intervals. Jackknife is closest to $95\%$ among
+these four methods. All four still have coverage below $95\%$; using
+resampling does not guarantee nominal coverage in a finite sample.
+These results describe this simulation, rather than a universal ranking
+of the methods.
+
 
 \clearpage
 \section{Q5}
@@ -443,5 +502,12 @@ and for the jackknife.}
 \section{R code for Q4(a)--(f)}
 \lstinputlisting[style=Rcode,caption={Monte Carlo simulation using conventional
 standard errors and HC0--HC3 comparisons under heteroskedasticity.},label={lst:q4-code}]{R/q4_coverage_rate.R}
+
+\clearpage
+\section{R code for Q4(g)}
+\lstinputlisting[style=Rcode,caption={Resampling standard errors following
+Lab 4.},label={lst:q4-bootstrap-methods}]{R/q4_bootstrap_methods.R}
+\lstinputlisting[style=Rcode,caption={Coverage experiment on the saved
+heteroskedastic data sets.},label={lst:q4-bootstrap-driver}]{R/q4_bootstrap_coverage.R}
 
 \end{document}

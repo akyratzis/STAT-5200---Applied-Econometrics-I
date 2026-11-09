@@ -1,0 +1,11 @@
+N = 100; M = 500; B = 1000; bootstrap seed = 2
+       Method Covered   M Coverage_percent Monte_Carlo_SE_pp
+ Conventional     418 500             83.6              1.66
+          HC0     449 500             89.8              1.35
+          HC1     451 500             90.2              1.33
+          HC2     455 500             91.0              1.28
+          HC3     465 500             93.0              1.14
+        Pairs     457 500             91.4              1.25
+     Residual     410 500             82.0              1.72
+         Wild     450 500             90.0              1.34
+    Jackknife     464 500             92.8              1.16

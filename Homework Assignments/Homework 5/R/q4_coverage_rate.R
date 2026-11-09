@@ -84,12 +84,15 @@ I_all_het = rep(NA, M);
 # Part (f): compare HC methods on exactly the same data sets as (e).
 I_all_hc = matrix(NA, M, 4);
 colnames(I_all_hc) = c("HC0", "HC1", "HC2", "HC3");
+# Store the generated observations without making any additional random draws.
+heteroskedastic_samples = vector("list", M);
 
 for (m in 1:M){
   x = rnorm(N, mean = 1, sd = sqrt(4));
   u = rt(N, df = 10);
   y = beta0 + beta1*x + beta2*x^2 + (abs(x)/2)*u;
   x2 = x^2;
+  heteroskedastic_samples[[m]] = cbind(y = y, x = x);
 
   fit = lm(y ~ x + x2);
   b = coef(fit);
@@ -120,3 +123,11 @@ tab_coverage = data.frame(
   row.names = NULL
 );
 print(tab_coverage);
+
+# Run this script from the Homework 5 directory. Part (g) reads this cache.
+dir.create("Output", showWarnings = FALSE);
+saveRDS(list(
+  N = N, M = M, seed = 1, beta = c(beta0, beta1, beta2),
+  error_df = 10, samples = heteroskedastic_samples,
+  conventional_hits = I_all_het, hc_hits = I_all_hc
+), file.path("Output", "q4_heteroskedastic_samples.rds"));
