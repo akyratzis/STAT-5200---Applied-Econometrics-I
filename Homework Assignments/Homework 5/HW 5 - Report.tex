@@ -454,22 +454,9 @@ bootstrap methods; the jackknife uses $N$ leave-one-out fits.}
 \input{Output/q4_bootstrap_table_M10000.tex}
 \end{table}
 
-The residual bootstrap has the lowest coverage, $83.13\%$. As explained
-in Notes 5 and Lab 4, this method assumes homoskedasticity: it draws
-residuals from a common pool, so it does not preserve their relationship
-with $x$. That assumption fails in our simulated population.
-
-The pairs bootstrap resamples complete observations, while the wild
-bootstrap keeps each residual attached to its observation and randomly
-changes its sign. These procedures accommodate heteroskedasticity under
-the conditions discussed in the course. In this experiment, pairs,
-wild, and jackknife intervals all have higher coverage than the
-residual-bootstrap intervals. Jackknife is closest to $95\%$ among
-these four methods. All four still have coverage below $95\%$; using
-resampling does not guarantee nominal coverage in a finite sample.
-These results describe this simulation, rather than a universal ranking
-of the methods.
-
+The residual bootstrap assumes homoskedasticity, which is violated in
+this model. This explains its poor coverage of $83.13\%$. The pairs
+bootstrap, wild bootstrap, and jackknife accommodate heteroskedasticity.
 
 \clearpage
 \section{Q5}
