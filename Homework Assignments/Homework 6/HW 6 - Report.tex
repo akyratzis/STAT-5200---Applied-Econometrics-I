@@ -1,0 +1,186 @@
+%==============================================================================
+%  STAT 5200 - Applied Econometrics I
+%  Homework 6
+%
+%  Compile with:  pdflatex "HW 6 - Report.tex"  (run twice for refs)
+%
+%  Directory layout assumed by this file:
+%     HW 6 - Report.tex
+%     R/        (R scripts)
+%     Figures/  (generated figures)
+%     Output/   (captured console output)
+%==============================================================================
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[hidelinks]{hyperref}
+
+%------------------------------------------------------------------------------
+%  Code presentation
+%
+%  Code is set as selectable text on a fixed character grid, source and console
+%  output are given visually distinct styles, and source lines are kept to 76
+%  characters so that nothing wraps.
+%------------------------------------------------------------------------------
+\definecolor{codekeyword}{RGB}{0,86,148}
+\definecolor{codestring} {RGB}{163,21,21}
+\definecolor{codecomment}{RGB}{106,115,125}
+\definecolor{codebg}     {RGB}{248,248,250}
+\definecolor{coderule}   {RGB}{220,220,226}
+
+\lstdefinestyle{Rcode}{
+  language        = R,
+  basicstyle      = \ttfamily\footnotesize,
+  keywordstyle    = \color{codekeyword}\bfseries,
+  stringstyle     = \color{codestring},
+  commentstyle    = \color{codecomment}\itshape,
+  numbers         = left,
+  numberstyle     = \ttfamily\scriptsize\color{codecomment},
+  numbersep       = 9pt,
+  backgroundcolor = \color{codebg},
+  frame           = single,
+  rulecolor       = \color{coderule},
+  framesep        = 4pt,
+  xleftmargin     = 15pt,
+  xrightmargin    = 0pt,
+  columns         = fixed,
+  basewidth       = 0.5em,
+  keepspaces      = true,
+  tabsize         = 2,
+  showstringspaces = false,
+  breaklines      = true,
+  breakatwhitespace = true,
+  postbreak       = \mbox{\textcolor{codekeyword}{$\hookrightarrow$}\space},
+  captionpos      = b,
+  abovecaptionskip = 6pt,
+}
+
+\lstdefinestyle{Routput}{
+  language        = {},
+  basicstyle      = \ttfamily\footnotesize,
+  keywordstyle    = \ttfamily,
+  commentstyle    = \ttfamily,
+  stringstyle     = \ttfamily,
+  numbers         = none,
+  backgroundcolor = \color{white},
+  frame           = leftline,
+  rulecolor       = \color{coderule},
+  framesep        = 6pt,
+  xleftmargin     = 20pt,
+  breaklines      = true,
+  captionpos      = b,
+  abovecaptionskip = 6pt,
+}
+
+\lstset{style=Rcode}
+\renewcommand{\lstlistingname}{Listing}
+
+% Short inline code fragments.
+\newcommand{\code}[1]{\texttt{#1}}
+
+% Operators used throughout.
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Avar}{Avar}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator*{\plim}{plim}
+
+% Placeholder marker. Every occurrence should be gone before submission;
+% search the source for "\todo" to find what is still outstanding.
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO:} #1\textbf{]}}}
+
+%------------------------------------------------------------------------------
+\title{\vspace{-2em}Homework 6\\[0.3em]
+       \large STAT 5200 --- Applied Econometrics I --- Fall 2026}
+\author{Apostolos Kyratzis - 13130833}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\clearpage
+\section{}
+\label{sec:q1}
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\clearpage
+\section{}
+\label{sec:q2}
+% Write your answer here.
+
+\clearpage
+\section{}
+\label{sec:q3}
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\clearpage
+\section{}
+\label{sec:q4}
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\clearpage
+\section{}
+\label{sec:q5}
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\subsection{}
+% Write your answer here.
+
+\end{document}
