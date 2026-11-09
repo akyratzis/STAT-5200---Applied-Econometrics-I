@@ -401,10 +401,13 @@ although all four still have coverage below that level. As discussed
 in Notes 4, HC1 applies a degrees-of-freedom adjustment, while HC2 and
 HC3 adjust for leverage; these modifications are intended to improve
 small-sample performance. Robust inference does not require OLS3,
-but it still relies on an asymptotic approximation. As the HW3-Q4
-solution illustrates for HC0, coverage need not be $95\%$ at $N=100$.
-The ordering in this table describes this simulation, not a claim
-that HC3 is always the best choice.
+but it still relies on an asymptotic approximation. The shortfall
+from $95\%$ is consistent with finite-sample limitations at $N=100$,
+as illustrated for HC0 in the HW3-Q4 solution. Our simulation alone
+does not establish this explanation; repeating it with larger $N$
+would help investigate it. The reported rates also contain Monte Carlo
+sampling variation. These results do not establish a universal ranking
+of the HC estimators.
 
 \subsection{(g)}
 \todo{Report and discuss coverage for pairs, residual, and wild bootstrap,
