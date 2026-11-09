@@ -113,9 +113,42 @@
 \section{Q1}
 \label{sec:q1}
 \subsection{}
-\todo{Compare your HW3 answers with the solutions and list any missed questions.}
+My main mistake was in HW3-Q4. The question explicitly requested
+inference under OLS1 and OLS2 without assuming OLS3, but I used the
+conventional covariance estimator, which additionally relies on OLS3.
+For example, my code calculated the standard error as
+\begin{lstlisting}[style=Rcode]
+se_b1 = sqrt(vcov(fit)[2,2]);
+\end{lstlisting}
+Following the solution's use of HC0, the correct line would be
+\begin{lstlisting}[style=Rcode]
+se_b1 = sqrt(sandwich::vcovHC(fit, type = "HC0")[2,2]);
+\end{lstlisting}
+The same correction was needed in both Monte Carlo loops. My OLS
+coefficient estimates and data-generation process were correct, but
+my standard-error choice meant that the coverage rates evaluated a
+different interval procedure from the one requested.
+
+In particular, my heteroskedasticity discussion explained why
+conventional standard errors become invalid when OLS3 fails. The
+solution instead used HC0, which allows heteroskedasticity, and
+illustrated that its intervals can still undercover at $N=100$
+because of finite-sample limitations of the asymptotic approximation.
+
 \subsection{}
-\todo{Discuss what you could have done better.}
+In future assignments, I should connect the stated assumptions more
+carefully to the code. In this case, I had correctly derived the
+sandwich covariance formula under OLS1 and OLS2 in Q2, but did not
+carry that formula into the simulation in Q4. Before running the code,
+I should check that the covariance estimator used for inference matches
+the assumptions permitted by the question.
+
+I could also interpret the Q--Q plot more carefully. A plot that is
+close to its reference line is broadly consistent with normality,
+but does not prove that the errors are normal or that the regressors
+are exogenous. Normal errors are not required for the asymptotic OLS
+inference used here; the validity of the exogeneity assumption is a
+separate and more important concern.
 
 \clearpage
 % Q2 requires no written answer; preserve the assignment numbering.
