@@ -454,9 +454,11 @@ bootstrap methods; the jackknife uses $N$ leave-one-out fits.}
 \input{Output/q4_bootstrap_table_M10000.tex}
 \end{table}
 
-The residual bootstrap assumes homoskedasticity, which is violated in
-this model. This explains its poor coverage of $83.13\%$. The pairs
-bootstrap, wild bootstrap, and jackknife accommodate heteroskedasticity.
+The residual bootstrap performs poorly in this simulation, with a
+coverage rate of only $83.13\%$. This is consistent with its assumption
+of homoskedasticity, which does not hold in the modified model. The
+pairs bootstrap, wild bootstrap, and jackknife accommodate
+heteroskedasticity and all achieve higher coverage in this experiment.
 
 \clearpage
 \section{Q5}
