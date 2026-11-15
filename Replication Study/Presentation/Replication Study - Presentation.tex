@@ -24,7 +24,7 @@
 %%% Presenter notes
 %%% ------------------------------------------------------------------
 % Each frame ends with a \note{} holding a word-for-word script to read
-% while recording (about 10 minutes in total, at 125 words a minute).
+% while recording (about 11 minutes including transitions, at 125 words a minute).
 % The heading of each note gives the slide, how long to spend on it and
 % the clock time at which it should end.
 %
@@ -219,14 +219,14 @@
 {\setbeamercolor{background canvas}{bg=PennNavy}
 \begin{frame}[plain]
 \titlepage
-\note{\notehead{1. Title}{0:15}{0:15}
-  Hello, I'm Apostolos Kyratzis. Today I'm presenting my replication of ``The US--China Trade War and Global Reallocations'', by Fajgelbaum, Goldberg, Kennedy, Khandelwal and Taglioni, published in the \emph{American Economic Review: Insights} in 2024.}
+\note{\notehead{1. Title}{0:20}{0:20}
+  Hello, I'm Apostolos Kyratzis. This presentation replicates the average export responses in ``The US--China Trade War and Global Reallocations,'' published by Fajgelbaum and coauthors in AER: Insights in 2024.}
 \end{frame}}
 
 \begin{frame}[c]{Outline}
 \tableofcontents
-\note{\notehead{2. Outline}{0:15}{0:30}
-  I'll first set up the question, then spend most of the time on the graphs I replicated, then briefly go through the rest of the paper, and finish with the takeaways.}
+\note{\notehead{2. Outline}{0:15}{0:35}
+  I'll introduce the research question and empirical setup, explain the replication and its results, and then discuss the paper's findings on differences across countries.}
 \end{frame}
 
 %%% ==================================================================
@@ -237,26 +237,26 @@
 \begin{itemize}
   \item 2018--19: the US and China tax each other's goods, about \$450bn
         of trade
-  \item What happened to the \textbf{bystanders}, the countries in between?
+  \item What happened to the \textbf{bystanders}, the other exporters?
   \begin{itemize}
     \item \emph{Reallocation}: exports diverted to the US and China, away
           from RW
-    \item \emph{Net creation}: exports of taxed products rise everywhere
+    \item \emph{Expansion}: tariff-exposed exports rise across markets
   \end{itemize}
-  \item Paper: exports of taxed products rose to the US and RW, flat to
-        China
+  \item Paper: stronger relative export growth to the US and RW;
+        no detectable average response into China
 \end{itemize}
 \framefill
 \begin{block}{This replication}
 Section III, the average export responses: Figure 1, Table A.2 and
 Figures A.3--A.4, rebuilt from raw data in Python
 \end{block}
-\note{\notehead{3. Did the trade war only reshuffle trade?}{0:50}{1:20}
-  In 2018 and 2019, the United States and China raised tariffs on each other, on about 450 billion dollars of trade. The paper asks what happened to everyone else, the ``bystander'' countries.
+\note{\notehead{3. Did the trade war only reshuffle trade?}{0:55}{1:30}
+  In 2018 and 2019, the United States and China raised tariffs on each other's goods, covering roughly 450 billion dollars of trade. The paper asks how other exporting countries---the bystanders---responded.
 \\[0.6em]
-  Did they just redirect their exports into the US and China, taking them away from the rest of the world? Or did they sell more of the taxed products everywhere? The paper finds the second: the trade war created new export opportunities.
+  Did they redirect existing exports toward the US and China, or expand sales across markets? The authors find that tariff-exposed products experienced stronger export growth to the US and the rest of the world, with little average response into China.
 \\[0.6em]
-  \cue{point at the blue box} I replicated this first part of the paper, its main figure and the appendix figures and table behind it, rebuilding everything from the raw data in Python.}
+  My replication focuses on these average responses: Figure 1, Table A.2, and the two related appendix figures. I translate the authors' code into Python and rebuild the required datasets from raw inputs.}
 \end{frame}
 
 \begin{frame}{Data}
@@ -269,7 +269,7 @@ Figures A.3--A.4, rebuilt from raw data in Python
       \item Totals over customs procedures and transport modes; US\$
             millions
       \item Exports measured from the importers' records
-      \item Top 50 exporters by total exports, minus 14 oil exporters
+      \item Top 50 exporters selected after excluding oil exporters
     \end{itemize}
   \end{column}
   \begin{column}{0.47\textwidth}
@@ -284,8 +284,8 @@ Figures A.3--A.4, rebuilt from raw data in Python
     \end{itemize}
   \end{column}
 \end{columns}
-\note{\notehead{4. Data}{0:15}{1:35}
-  Very briefly, the data: product-level trade flows from UN Comtrade for the top 50 exporting countries, and the US and Chinese tariffs from the trade war, product by product.}
+\note{\notehead{4. Data}{0:25}{1:55}
+  The analysis combines detailed product-level trade flows from UN Comtrade with US and Chinese tariff changes. The sample focuses on major exporters, excluding oil exporters, and measures exports using importers' records. Trade is aggregated into three two-year periods: 2014--15, 2016--17, and 2018--19.}
 \end{frame}
 
 \begin{frame}{Specification}
@@ -299,18 +299,20 @@ Figures A.3--A.4, rebuilt from raw data in Python
   \item Outcome: log change in $i$'s exports of $\omega$ to
         $n \in \{\text{US}, \text{CH}, \text{RW}\}$
         (\texttt{dlv\_us}, \texttt{dlv\_ch}, \texttt{dlv\_rw})
-  \item Tariff: change in $\log(1+T)$, US on CH (\texttt{dlz\_usch}) or
-        CH on US (\texttt{dlz\_chus})
+  \item Tariff: change in $\log T$, where $T=1+t$ and $t$ is the tariff
+        rate; US on CH (\texttt{dlz\_usch}) or CH on US (\texttt{dlz\_chus})
   \item Periods 2014/15, 2016/17, 2018/19: \textbf{post} 2017$\to$19,
         \textbf{pre} 2015$\to$17 with the war-period tariff change
         (a placebo)
   \item OLS, clustered by HS6; robustness with exporter $\times$ sector
         fixed effects
 \end{itemize}
-\note{\notehead{5. Specification}{0:30}{2:05}
-  The idea behind every graph is the same. For each product, we compare how much bystanders' exports grew with how much that product's tariff went up. If taxed products grew faster, the relationship slopes up.
+\note{\notehead{5. Specification}{0:45}{2:40}
+  Each regression relates a bystander's export-value growth to the tariff increase imposed on its competitor. A positive slope means exports grew faster in products facing larger tariff increases.
 \\[0.6em]
-  This is done for the war period, 2017 to 2019, and, as a placebo, for 2015 to 2017, before any tariffs. Before the war, we would expect no relationship.}
+  I estimate the relationship separately for exports to the US, China, and the rest of the world, with standard errors clustered by product.
+\\[0.6em]
+  The prewar regressions relate earlier export growth to the subsequent trade-war tariff changes. They check whether products later exposed to higher tariffs were already following different trends.}
 \end{frame}
 
 
@@ -335,8 +337,8 @@ Analysis   & \texttt{didplots.py}           & 20 regressions; Figures 1, A.3, A.
 Steps 2--7 port do-files: \texttt{reghdfe} becomes OLS with clustered
 errors (FE: singletons dropped, same small-sample correction).
 \end{block}
-\note{\notehead{6. The replication pipeline}{0:20}{2:25}
-  \emph{(can shorten)} This table shows the replication from start to finish: downloading the trade data, building the tariffs and the dataset, and finally the regressions and graphs. Each step translates one of the authors' Stata programs into Python.}
+\note{\notehead{6. The replication pipeline}{0:20}{3:00}
+  The pipeline downloads the trade data, constructs the tariff measures, builds the estimation panel, and produces the regressions and figures. The processing and analysis scripts translate the authors' Stata programs into Python.}
 \end{frame}
 
 %%% ==================================================================
@@ -365,14 +367,14 @@ errors (FE: singletons dropped, same small-sample correction).
     {\footnotesize\raggedright Panel A identical; B--D within 0.05\par}
   \end{column}
 \end{columns}
-\note{\notehead{7. Figure 1: paper vs.\ replication}{1:25}{3:50}
-  This is the main graph of the paper: the paper's version on the left, mine in the middle.
+\note{\notehead{7. Figure 1: paper vs.\ replication}{1:05}{4:05}
+  This is the main figure in my replication, with the authors' version on the left and mine in the middle.
 \\[0.6em]
-  How to read it: on the horizontal axis is the tariff increase on a product; on the vertical axis is how much bystanders' exports of that product grew. Products are grouped into 20 bins, so each dot is an average. Grey dots and lines are before the war; dark blue is during the war.
+  The horizontal axis measures the change in the tariff factor, and the vertical axis measures export-value growth. Each point averages observations within a tariff bin. Blue shows the trade-war period; grey shows earlier export growth against the same subsequent tariff changes.
 \\[0.6em]
-  \cue{point at panel A, top left} Panel A is exports to the US: during the war, the blue line slopes up. Bystanders sold more of the products the US taxed on China. \cue{panel B, top right} Panel B is exports to China: the blue line is flat, so no real change. \cue{panels C and D, bottom} Panels C and D are exports to the rest of the world, and here the blue lines slope up too. That is the key result: bystanders sold more of the taxed products not only to the US but to everyone else as well.
+  In Panel A, bystanders' exports to the US grew faster in products facing larger US tariffs on China. Panel B shows no statistically detectable average response into China. Panels C and D show positive responses into the rest of the world.
 \\[0.6em]
-  The two versions look practically identical. \cue{point at the table on the right} The table gives the slopes: panel A matches exactly at 0.31, and the others are within 0.05 of the paper.}
+  These patterns suggest expansion across markets. Panel A matches the paper at the reported precision, and the other postwar coefficients differ by less than 0.05.}
 \end{frame}
 
 \begin{frame}{Table A.2: coefficients}
@@ -400,8 +402,8 @@ $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$;
 \textcolor{PennRed}{red}: differs from the paper.\\
 Post-period $N$, paper: 102{,}903; 90{,}128; 223{,}556; 223{,}556.
 Replication: 102{,}903; 90{,}100; 223{,}903; 223{,}903.\par}
-\note{\notehead{8. Table A.2: coefficients}{0:20}{4:10}
-  This table is the numbers behind those lines. \cue{US row} For exports to the US, everything matches exactly. \cue{red numbers} The numbers in red differ slightly from the paper, by at most 0.05, and the conclusions are the same: what is significant in the paper is significant here too.}
+\note{\notehead{8. Table A.2: coefficients}{0:25}{4:30}
+  The table reports the estimates behind Figure 1. The postwar conclusions are unchanged: positive responses into the US and the rest of the world, and an imprecisely estimated response into China. Some prewar estimates become more statistically significant, which I discuss shortly.}
 \end{frame}
 
 \begin{frame}{Robustness: exporter $\times$ sector FE (Fig.\ A.4)}
@@ -426,10 +428,10 @@ Replication: 102{,}903; 90{,}100; 223{,}903; 223{,}903.\par}
     {\footnotesize\raggedright Same conclusions as Figure 1\par}
   \end{column}
 \end{columns}
-\note{\notehead{9. Robustness: exporter $\times$ sector fixed effects}{0:35}{4:45}
-  This is the same graph, but now comparing products only within the same country and sector, to rule out that some sectors were simply growing faster.
+\note{\notehead{9. Robustness: exporter $\times$ sector fixed effects}{0:35}{5:05}
+  This specification compares products within the same exporter and sector, absorbing growth differences common to each group.
 \\[0.6em]
-  Again, paper on the left and mine in the middle. The picture doesn't change: during the war, exports to the US and to the rest of the world still rise with the tariffs, and exports to China still don't. My replication matches the paper closely here too.}
+  The qualitative pattern remains: positive responses into the US and the rest of the world, with no statistically detectable average response into China. The US response and the rest-of-world response to US tariffs are less precisely estimated, reaching significance at the ten percent level.}
 \end{frame}
 
 \begin{frame}{US--China bilateral trade (Fig.\ A.3)}
@@ -452,8 +454,10 @@ Replication: 102{,}903; 90{,}100; 223{,}903; 223{,}903.\par}
         \textcolor{PennRed}{$-3.00$} (0.42) here
   \item The tariffs cut US--China trade directly
 \end{itemize}
-\note{\notehead{10. US--China bilateral trade}{0:30}{5:15}
-  This graph looks at trade between the US and China themselves, as a sanity check. \cue{point at the blue lines} During the war, the blue lines slope down: the more a product was taxed, the more its trade between the two countries fell, exactly as you would expect. Before the war, in grey, there was no such drop. The paper's version and mine are essentially the same.}
+\note{\notehead{10. US--China bilateral trade}{0:35}{5:40}
+  This figure examines trade between the two countries directly. During the war, products facing larger tariff increases experienced weaker bilateral export growth in both directions.
+\\[0.6em]
+  The prewar relationships differ: China's exports to the US show little association with future tariffs, while US exports to China show a positive association. The replication closely reproduces both the prewar and trade-war patterns.}
 \end{frame}
 
 \begin{frame}{How the replication was checked}
@@ -482,11 +486,13 @@ Full     & All scripts, fresh Comtrade data
 \raggedright
 \begin{block}{Why the full rebuild differs}
 Comtrade republished about a fifth of the files after 2022, and some
-countries reported late. RW sums about 150 importers, so revisions add up;
-the US import data are unrevised.
+countries reported late. RW aggregates about 150 importers; data-vintage
+changes can affect these totals. US results match.
 \end{block}
-\note{\notehead{11. How the replication was checked}{0:30}{5:45}
-  Why are some numbers slightly different? I first ran my code on the authors' own data files, and it reproduced every one of their numbers exactly. So the code is right. The small differences come from the data: the UN has revised part of its trade data since the authors downloaded it. The US data were not revised, which is why the US results match exactly.}
+\note{\notehead{11. How the replication was checked}{0:40}{6:20}
+  I checked the replication in stages. Using the authors' processed estimation data, my Python code reproduces all twenty regression coefficients, standard errors, and sample sizes at the reported precision. Separate checks also reproduce the tariff measures and estimation panel.
+\\[0.6em]
+  Rebuilding the analysis with a fresh Comtrade download produces small differences for China and the rest of the world. These are consistent with changes in the underlying data vintage; the US results match.}
 \end{frame}
 
 
@@ -503,28 +509,28 @@ the US import data are unrevised.
   \item \textbf{Values only}: \texttt{build.do} keeps trade values and
         discards quantities
 \end{itemize}
-\note{\notehead{12. Notes on the authors' package}{0:20}{6:05}
-  \emph{(can shorten)} Along the way I also found a few small issues in the authors' replication package, listed here. The main one is that the raw trade data are not included, so I had to download them again.}
+\note{\notehead{12. Notes on the authors' package}{0:25}{6:45}
+  Rebuilding the analysis required several practical adjustments. The package does not include the raw Comtrade files, so I downloaded them separately. I also corrected an input path and documented inconsistencies in unused weighted tariff-change variables. The authors' aggregation retains trade values but discards quantities.}
 \end{frame}
 
 \begin{frame}{What the replicated results say}
 \begin{itemize}
-  \item Bystanders sold \textbf{more} taxed products to the US
-        ($\beta = 0.31$) and to RW (0.22 and 0.25)
-  \item No response of exports to China ($\beta = 0.05$, s.e.\ 0.19)
-  \item Exports to RW \emph{rose}: net creation, not only diversion. The
-        paper's conclusion holds
+  \item Stronger relative export growth to the US ($\beta = 0.31$)
+        and RW (0.22 and 0.25) in tariff-exposed products
+  \item No detectable average response into China ($\beta = 0.05$, s.e.\ 0.19)
+  \item Positive RW responses support expanded export opportunities
+        across markets
 \end{itemize}
 \framefill
 \begin{alertblock}{Pre-trends are somewhat stronger with today's data}
-Pre-period slopes should be near zero. For RW they grow: $-0.16^{**}$ on US
-tariffs (paper $-0.14^{*}$) and $0.13^{*}$ on Chinese tariffs (paper 0.11),
-so part of the RW response to Chinese tariffs may be a trend.
+RW prewar slopes: $-0.16^{**}$ on US tariffs (paper $-0.14^{*}$) and
+$0.13^{*}$ on Chinese tariffs (paper 0.11). The positive Chinese-tariff
+pretrend qualifies the interpretation of the postwar response.
 \end{alertblock}
-\note{\notehead{13. What the replicated results say}{0:40}{6:45}
-  So, in short: bystanders sold more of the taxed products to the US and to the rest of the world, and no more to China. The trade war created new export opportunities rather than just shifting trade around, and that conclusion holds in my replication.
+\note{\notehead{13. What the replicated results say}{0:40}{7:25}
+  The replication preserves the main pattern: stronger export growth to the US and the rest of the world in tariff-exposed products, with no statistically detectable average response into China.
 \\[0.6em]
-  \cue{red box} One caveat: in the period before the war, the lines are a bit steeper in my data than in the paper, so part of the effect on the rest of the world may reflect a trend that was already there.}
+  Prewar trends qualify the interpretation. The positive prewar relationship between rest-of-world exports and Chinese tariffs becomes significant at ten percent, suggesting some continuation of an earlier trend. The prewar relationship with US tariffs is negative, so it does not provide the same explanation for the positive trade-war response.}
 \end{frame}
 
 %%% ==================================================================
@@ -541,16 +547,18 @@ so part of the RW response to Chinese tariffs may be a trend.
     \small
     \begin{itemize}
       \item Elasticities vary by exporter, sector and flow size
-      \item Targeted-product growth: mean 6.4\%, s.d.\ 6.2\%
+      \item Predicted relative growth: mean 6.4\%, s.d.\ 6.2 percentage points
       \item Common elasticity: s.d.\ only 1.4\%
       \item Thailand $+14.6\%$, Mexico $+9.1\%$, Ukraine $-11.3\%$
     \end{itemize}
   \end{column}
 \end{columns}
-\note{\notehead{14. Heterogeneous export responses (Fig.\ 2)}{0:35}{7:20}
-  The rest of the paper, which I did not replicate, looks at differences between countries.
+\note{\notehead{14. Heterogeneous export responses (Fig.\ 2)}{0:45}{8:10}
+  The remaining figures come from the paper and are outside my replication.
 \\[0.6em]
-  This graph shows each country's growth in exports of the taxed products, with countries sorted from lowest to highest. Each dot is one country, and the vertical lines show the uncertainty around it. Most countries are above zero, so most gained, but the spread is large: on average exports grew by about 6 percent. \cue{point at the right end} Thailand and Mexico gained the most, \cue{left end} while Ukraine lost.}
+  Figure 2 ranks countries by predicted export growth in targeted products relative to other products, aggregated using prewar export shares. The vertical bars are ninety percent confidence intervals.
+\\[0.6em]
+  The average predicted gain is 6.4 percent, with substantial variation. Thailand's estimate is 14.6 percent, Mexico's is 9.1 percent, and Ukraine's is negative. Romania, Turkey, and Vietnam have the highest point estimates. Wide intervals make precise country rankings uncertain.}
 \end{frame}
 
 \begin{frame}{What drives the differences? (Fig.\ 3)}
@@ -565,15 +573,16 @@ so part of the RW response to Chinese tariffs may be a trend.
       \item Re-predict growth one component at a time
       \item \textbf{Country}: 75.8\% of the cross-country variation
       \item Sector: 24.3\%; size: about 0
-      \item Elasticities are country-specific, not driven by
-            specialization
+      \item Country-specific responses explain most of the variation
     \end{itemize}
   \end{column}
 \end{columns}
-\note{\notehead{15. What drives the differences? (Fig.\ 3)}{0:45}{8:05}
-  This graph asks why countries differ. Each colour recomputes the countries' export growth using only one possible explanation, and compares it with the full result on the black diagonal line.
+\note{\notehead{15. What drives the differences? (Fig.\ 3)}{0:45}{8:55}
+  Figure 3 compares the full model's predictions on the horizontal axis with restricted predictions on the vertical axis. The black diagonal marks perfect agreement.
 \\[0.6em]
-  \cue{point at the series closest to the diagonal} The series that follows the diagonal is the one using country-specific responses: it explains about three quarters of the differences. \cue{flat grey series} The grey series, which gives every country the same response, is almost flat: on its own, it explains almost nothing. Sector or product mix explains much less. So what matters is how each country responds, not what it produces.}
+  The grey specification imposes common tariff responses, leaving differences in prewar export exposure. It produces little variation across countries. The blue specification retains country-specific responses and comes closest to reproducing the full pattern.
+\\[0.6em]
+  A separate decomposition attributes about seventy-six percent of the cross-country variation to the country component. Sector and specialization differences also contribute, but country-specific responses explain the largest share.}
 \end{frame}
 
 \begin{frame}{Supply and demand forces (Fig.\ 4)}
@@ -587,7 +596,7 @@ so part of the RW response to Chinese tariffs may be a trend.
     \begin{itemize}
       \item Sign of $\beta^{US}$: substitute ($+$) or complement ($-$) to
             China
-      \item Same sign to US and RW: downward-sloping supply (scale)
+      \item Same sign to US and RW: consistent with downward-sloping supply
       \item \textbf{Winners}: Thailand, Taiwan, UK substitute China and
             the US
       \item \textbf{Losers}: Ukraine, Colombia complement both
@@ -595,10 +604,14 @@ so part of the RW response to Chinese tariffs may be a trend.
     \end{itemize}
   \end{column}
 \end{columns}
-\note{\notehead{16. Supply and demand forces (Fig.\ 4)}{0:45}{8:50}
-  The last graph places each country by how its exports responded to the tariffs: to the US or China on one axis, and to the rest of the world on the other.
+\note{\notehead{16. Supply and demand forces (Fig.\ 4)}{0:55}{9:50}
+  Figure 4 interprets the responses through the model. Each panel compares exports to the tariff-imposing country with exports to the rest of the world.
 \\[0.6em]
-  \cue{top-right quadrants} Countries in the top-right in both panels, like Thailand and Taiwan, replaced Chinese and American goods and grew their exports everywhere: these are the winners. \cue{bottom-left quadrants} Countries in the bottom-left, like Ukraine and Colombia, lost exports everywhere: these are the losers. Countries like Mexico and Malaysia sit in different quadrants in the two panels: they gained in the US market, but not in China.}
+  Thailand and Taiwan show positive responses in both markets, consistent with substitution for US and Chinese goods and downward-sloping supply: expansion can lower costs and support sales elsewhere.
+\\[0.6em]
+  Ukraine and Colombia show the reverse pattern. Complementary demand relationships reduce sales, while lost scale can raise costs and deepen the decline.
+\\[0.6em]
+  Mexico and Malaysia substitute for Chinese goods but complement US goods. Their overall outcomes depend on exposure to the two shocks. Some countries' patterns require mechanisms beyond the model's supply structure.}
 \end{frame}
 
 %%% ==================================================================
@@ -607,22 +620,24 @@ so part of the RW response to Chinese tariffs may be a trend.
 
 \begin{frame}{Takeaways}
 \begin{itemize}
-  \item \textbf{Replication:} from the authors' data every number matches;
-        from raw data, US results match exactly, the rest within 0.05
-  \item \textbf{Result:} bystanders' exports of taxed products rose to the
-        US and RW
+  \item \textbf{Replication:} all 20 regressions match on the authors' data;
+        rebuilt-data coefficients differ by less than 0.05
+  \item \textbf{Result:} stronger relative export growth to the US and RW
+        in tariff-exposed products
   \item \textbf{Rest of the paper:} large cross-country differences, from
         country-specific elasticities
 \end{itemize}
 \framefill
 \begin{alertblock}{Limitations}
-The authors' Comtrade vintage cannot be recovered; US Census flows come
-from their package; the main model (Figures 2--4) is not replicated.
+The rebuild uses a newer Comtrade vintage; US Census inputs come from
+the authors' package; the main model (Figures 2--4) is not replicated.
 \end{alertblock}
-\note{\notehead{17. Takeaways}{0:45}{9:35}
-  To sum up: I rebuilt the paper's main graphs from the raw data, and they match the paper closely, with the US results exactly the same. The main finding holds: the trade war raised bystanders' exports of taxed products, to the US and to the rest of the world. And the gains differed a lot from country to country.
+\note{\notehead{17. Takeaways}{0:50}{10:40}
+  The Python analysis reproduces the selected results using the authors' processed data. Rebuilding from raw inputs preserves the main postwar pattern, with small differences under the updated Comtrade vintage.
 \\[0.6em]
-  \cue{red box} The main limitation is that the authors' exact version of the trade data can no longer be recovered, and I did not replicate the model behind the last three graphs.}
+  The evidence supports expanded export opportunities for bystanders in tariff-exposed products, although prewar trends qualify the causal interpretation.
+\\[0.6em]
+  The paper's broader analysis finds large country differences, mainly associated with country-specific tariff responses. My replication does not cover that model. It also relies on Census inputs supplied in the authors' package and does not use their original raw Comtrade vintage.}
 \end{frame}
 
 \begin{frame}[c]{Thank you!}
@@ -633,11 +648,11 @@ A replication\par
 \vspace{1.2em}
 Apostolos Kyratzis\par
 \vspace{0.3em}
-{\footnotesize Code and data:\par
+{\footnotesize Code, selected data, and download instructions:\par
 \href{https://github.com/akyratzis/STAT-5200---Applied-Econometrics-I/tree/main/Replication\%20Study}%
   {\texttt{github.com/akyratzis/STAT-5200-{}-{}-Applied-Econometrics-I/tree/main/Replication~Study}}\par}
-\note{\notehead{18. Thank you}{0:10}{9:45}
-  Thank you for watching. The code and data are on GitHub, at the link on the slide.}
+\note{\notehead{18. Thank you}{0:15}{10:55}
+  Thank you. The repository contains the code, documentation, selected data files, and instructions for obtaining the remaining inputs.}
 \end{frame}
 
 \end{document}
