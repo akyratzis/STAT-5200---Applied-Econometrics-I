@@ -227,8 +227,10 @@ dataset to `Data/Processed/` (Parquet format). Run them in this order:
 period); it is not run on its own.
 
 The yearly trade files (about 270 MB each) exceed GitHub's file limit and are
-not in the repository; `comtrade.py` rebuilds them. All other processed files
-are included.
+not in the repository; `comtrade.py` rebuilds them. `data5.parquet` (about
+70 MB) is not included either: it exceeds Overleaf's 50 MB limit, which would
+block the repository's Overleaf sync, and `build.py` rebuilds it. All other
+processed files are included.
 
 **Periods.** Years are grouped into two-year periods: t = −1 (2014–15),
 t = 0 (2016–17) and t = 1 (2018–19). Tariff changes `dlz` and export changes

@@ -60,6 +60,10 @@ Replication Study/Data/Raw/Comtrade/**/*.part
 # Trade flows built by Data Processing/comtrade.py: about 270 MB per year,
 # over GitHub's 100 MB file limit. Rebuilt from the Comtrade download.
 Replication Study/Data/Processed/global_trade_hs6_ct_consistent_hs12_*.parquet
+# The estimation file built by Data Processing/build.py (about 70 MB): over
+# Overleaf's 50 MB file limit, which blocks the repository's Overleaf sync.
+# Rebuilt in about 20 seconds.
+Replication Study/Data/Processed/data5.parquet
 Replication Study/Paper - Replication Package/
 
 # Secrets. API keys live in ~/.Renviron, outside the repository; these
