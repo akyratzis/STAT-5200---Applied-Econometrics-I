@@ -134,13 +134,21 @@ def binscatter(d, y, x, fe=None):
     within each period; this reproduces the points in the authors' figures
     exactly (bins cut separately by period do not). The line is the OLS fit
     within each period, drawn across the range of its bin means.
+
+    Many products share exactly the same tariff change, and the bin cut
+    points depend on these ties. Our rebuilt tariffs equal the authors' only
+    to about 3e-8 (4-byte float precision), which is enough to split a tie
+    and change the bins. The tariff is therefore rounded to 6 decimals when
+    assigning bins (only then; bin means and lines use the exact values).
+    This leaves the authors' own figures unchanged and does not affect any
+    regression.
     """
     s = d[[y, x, "t"] + ([fe] if fe else [])].dropna()
     s = s[s["t"].isin(PERIODS)].copy()
     if fe:      # absorb(): residuals on the fixed effects plus the mean
         for v in (y, x):
             s[v] = s[v] - s.groupby(fe)[v].transform("mean") + s[v].mean()
-    s["bin"] = xtile_bins(s[x].to_numpy())
+    s["bin"] = xtile_bins(s[x].astype("float64").round(6).to_numpy())
     out = {}
     for t in PERIODS:
         g = s[s["t"] == t]
