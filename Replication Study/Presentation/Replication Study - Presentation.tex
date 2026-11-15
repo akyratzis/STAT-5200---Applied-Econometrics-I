@@ -1,13 +1,122 @@
 % Replication presentation: Fajgelbaum et al. (2024), AER: Insights 6(2)
 % STAT 5200 - Applied Econometrics I, Fall 2026
-% Theme: unofficial Wharton Beamer template (Jiding Zhang), files beamer*wharton.sty
+% Look: recreates the unofficial Wharton Beamer template (Jiding Zhang)
+% in this file alone. The only other file it needs is graphics/WhartonLogo.png.
 
 \documentclass[usenames,dvipsnames]{beamer}
 \usepackage[utf8]{inputenc}
-\usepackage{booktabs,graphicx,amsmath}
-\usetheme{wharton}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs,graphicx,amsmath,tikz}
+\usepackage[absolute,overlay]{textpos}
 
-\usepackage{silence}
+%%% ------------------------------------------------------------------
+%%% Wharton look
+%%% ------------------------------------------------------------------
+% Colours
+\definecolor{UniRed}{RGB}{169,5,51}
+\definecolor{UniBlue}{RGB}{0,71,133}
+\definecolor{BayBlue}{RGB}{127,163,194}
+\definecolor{HeritageRed}{RGB}{212,130,153}
+\definecolor{MarineGray}{RGB}{127,127,127}
+
+\setbeamercolor{normal text}{fg=black}
+\setbeamercolor{structure}{fg=black}
+\setbeamercolor{titlelike}{fg=black}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{date}{fg=black}
+\setbeamercolor{frametitle}{fg=white}
+\setbeamercolor{framesubtitle}{fg=white}
+\setbeamercolor{title in head/foot}{fg=black}
+\setbeamercolor{author in head/foot}{fg=black}
+\setbeamercolor{item}{fg=UniRed}
+\setbeamercolor{block title}{bg=BayBlue!30,fg=black}
+\setbeamercolor{block body}{bg=BayBlue!5,fg=black}
+\setbeamercolor{block title alerted}{bg=HeritageRed!30,fg=black}
+\setbeamercolor{block body alerted}{bg=HeritageRed!5,fg=black}
+\setbeamercolor{block title example}{bg=MarineGray!30,fg=black}
+\setbeamercolor{block body example}{bg=MarineGray!5,fg=black}
+
+% Fonts: Palatino text, serif maths
+\usefonttheme{serif}
+\renewcommand*\rmdefault{ppl}
+\renewcommand*\ttdefault{lmvtt}
+\setbeamerfont{title}{size=\large}
+\setbeamerfont{frametitle}{size=\Large}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{title in head/foot}{size=\footnotesize}
+\setbeamerfont{author in head/foot}{size=\footnotesize}
+
+% Bullets, blocks, outline, no navigation icons
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{items}[circle]
+\setbeamertemplate{blocks}[default]
+\setbeamertemplate{section in toc}[ball numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+
+% Title page: title, author, institute and date on the left
+\setbeamertemplate{title page}{%
+  \begin{textblock*}{10cm}(2cm,2.1cm)
+    {\usebeamercolor[fg]{title}\usebeamerfont{title}\inserttitle}
+  \end{textblock*}
+  \begin{textblock*}{10cm}(2cm,5.1cm)
+    {\usebeamerfont{author}\insertauthor}
+  \end{textblock*}
+  \begin{textblock*}{10cm}(2cm,7.1cm)
+    {\usebeamerfont{author}\insertinstitute}
+  \end{textblock*}
+  \begin{textblock*}{10cm}(2cm,8.1cm)
+    {\usebeamerfont{author}\insertdate}
+  \end{textblock*}
+}
+
+% Frame title: red logo square, then a blue bar with the title in white
+\makeatletter
+\setbeamertemplate{frametitle}{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,-0.05) rectangle (\the\paperwidth,0.95);
+    \fill[UniRed]  (0,0) rectangle (1,1);
+    \fill[UniBlue] (1,0) rectangle (\the\paperwidth,1);
+    \node[inner sep=0pt] at (-0.5,0.5)
+      {\includegraphics[width=0.85cm]{graphics/WhartonLogo}};
+  \end{tikzpicture}%
+  \ifx\insertframesubtitle\@empty
+    \begin{textblock*}{10cm}(2.2cm,0.3cm)
+      {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle}
+    \end{textblock*}
+  \else
+    \begin{textblock*}{10cm}(2.2cm,0.1cm)
+      {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle}
+    \end{textblock*}
+    \begin{textblock*}{10cm}(2.2cm,0.6cm)
+      {\usebeamercolor[fg]{framesubtitle}\usebeamerfont{framesubtitle}\insertframesubtitle}
+    \end{textblock*}
+  \fi
+}
+\makeatother
+
+% Footer (not on the title page): black-red-blue line, then
+% slide number, short author and short title
+\setbeamertemplate{footline}{%
+  \ifnum\thepage>1
+    \begin{tikzpicture}
+      \useasboundingbox (0,0) rectangle (\the\paperwidth,1);
+      \fill[black]   (0,1.25) rectangle (1,1.3);
+      \fill[UniRed]  (1,1.25) rectangle (2,1.3);
+      \fill[UniBlue] (2,1.25) rectangle (\the\paperwidth,1.3);
+    \end{tikzpicture}%
+    \begin{textblock*}{0.9cm}(0.1cm,9.25cm)
+      \raggedleft\usebeamerfont{title in head/foot}%
+      \insertframenumber/\inserttotalframenumber
+    \end{textblock*}
+    \begin{textblock*}{3cm}(2cm,9.25cm)
+      \usebeamerfont{author in head/foot}\insertshortauthor
+    \end{textblock*}
+    \begin{textblock*}{7cm}(\dimexpr\paperwidth-7.8cm\relax,9.25cm)
+      \raggedleft\usebeamerfont{title in head/foot}\insertshorttitle
+    \end{textblock*}
+  \fi
+}
 
 \newcommand{\framefill}{\vskip0pt plus 1filll}
 
