@@ -29,11 +29,13 @@
 % the clock time at which it should end.
 %
 % To get the notes, change \shownotesfalse to \shownotestrue and compile:
-% the PDF then holds one notes page per slide instead of the slides.
-% Change it back to compile the slides.
+% each page of the PDF is then twice as wide, with the slide on the left
+% and its notes on the right. A presenter app such as pympress splits these
+% pages into a slide window (to share in Zoom) and a notes window.
+% Change it back to compile the slides on their own.
 \newif\ifshownotes
 \shownotesfalse
-\ifshownotes\setbeameroption{show only notes}\fi
+\ifshownotes\setbeameroption{show notes on second screen=right}\fi
 
 %%% ------------------------------------------------------------------
 %%% Wharton look
