@@ -97,11 +97,12 @@
   \end{beamercolorbox}%
 }
 
-% Slide title: red text on white, top left, below the navigation bar
+% Slide title: red text on white, top left, below the navigation bar.
+% Beamer already places the title inside the 1.1 cm text margin, so no
+% extra indent here: the title lines up with the text below it.
 \setbeamertemplate{frametitle}{%
   \vspace*{0.15cm}%
-  \hspace*{1.1cm}%
-  \parbox[t]{\dimexpr\paperwidth-2.2cm\relax}{\raggedright
+  \parbox[t]{\textwidth}{\raggedright
     \usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}%
     \strut\insertframetitle\strut}\par
   \vspace*{0.1cm}%
