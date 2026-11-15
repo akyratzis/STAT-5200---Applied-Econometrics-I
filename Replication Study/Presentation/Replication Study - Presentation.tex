@@ -44,7 +44,8 @@
 
 % Fonts: Beamer's default LaTeX font throughout
 \setbeamerfont{frametitle}{size=\fontsize{14}{16}}
-\setbeamerfont{block title}{series=\bfseries}
+\setbeamerfont{block title}{series=\bfseries,size=\small}
+\setbeamerfont{block body}{size=\small}
 
 % Margins as in the template (title and body start 1.1 cm from the left)
 \setbeamersize{text margin left=1.1cm,text margin right=1.1cm}
@@ -57,10 +58,13 @@
 \setbeamertemplate{itemize item}{\color{PennRed}\raisebox{0.1ex}{\small$\bullet$}}
 \setbeamertemplate{itemize subitem}{\color{PennBlue}\raisebox{0.1ex}{\footnotesize\textendash}}
 
-% Spacing: air between first-level points, tighter second level
-\addtobeamertemplate{itemize/enumerate body begin}{}{\setlength{\itemsep}{0.6em}}
+% Spacing: some air between first-level points, tighter second level.
+% A 16:9 Beamer slide is only 9 cm tall, and the navigation bar, slide
+% title and footer take about 2.3 cm of it, leaving about 6.7 cm (190pt)
+% for content. Every slide below is budgeted to stay under about 170pt.
+\addtobeamertemplate{itemize/enumerate body begin}{}{\setlength{\itemsep}{0.35em}}
 \addtobeamertemplate{itemize/enumerate subbody begin}{}{%
-  \setlength{\itemsep}{0.15em}\vspace{0.2em}}
+  \setlength{\itemsep}{0.05em}\vspace{0.05em}}
 
 % Navigation bar: navy band across the top, matching the footer. Each
 % section's (short) name with one circle per slide below it; the current
@@ -78,12 +82,12 @@
 
 % Slide title: red text on white, top left, below the navigation bar
 \setbeamertemplate{frametitle}{%
-  \vspace*{0.25cm}%
+  \vspace*{0.15cm}%
   \hspace*{1.1cm}%
   \parbox[t]{\dimexpr\paperwidth-2.2cm\relax}{\raggedright
     \usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}%
     \strut\insertframetitle\strut}\par
-  \vspace*{0.2cm}%
+  \vspace*{0.1cm}%
 }
 
 % Footer: navy band across the bottom; white logo on the left;
@@ -144,13 +148,18 @@
 % \df{0}{22^{***}} prints 0.22***, \df{-3}{00} prints -3.00.
 \newcommand{\df}[2]{\textcolor{PennRed}{#1}.\textcolor{PennRed}{#2}}
 
-% Post-period slopes beside a figure: \slopes{title}{table rows}
+% Post-period slopes beside a figure: \slopes{title}{table rows}. The
+% column is only 3.9 cm wide, so each value is a number (right-aligned)
+% followed by its stars: \pv{0.31}{***} for a value, \pr{0.22}{***} for
+% one that differs from the paper (red).
+\newcommand{\pv}[2]{#1 & $^{#2}$}
+\newcommand{\pr}[2]{\textcolor{PennRed}{#1} & \textcolor{PennRed}{$^{#2}$}}
 \newcommand{\slopes}[2]{%
-  {\footnotesize\bfseries #1\par}\vspace{4pt}%
-  {\footnotesize
-  \begin{tabular}{@{}l dd@{}}
+  {\footnotesize\bfseries #1\par}\vspace{3pt}%
+  {\footnotesize\setlength{\tabcolsep}{3pt}%
+  \begin{tabular}{@{}l r@{}l r@{}l@{}}
   \toprule
-  Panel & \hd{Paper} & \hd{Repl.} \\
+  Panel & \multicolumn{2}{c}{Paper} & \multicolumn{2}{c}{Repl.} \\
   \midrule
   #2
   \bottomrule
@@ -162,7 +171,7 @@
 % on its own; copy them again after re-running didplots.py). Named by the
 % paper's numbering: A.3 is US-China bilateral trade, A.4 adds exporter x
 % sector fixed effects.
-\newcommand{\figh}{5.75cm}   % height of the portrait figures
+\newcommand{\figh}{5.2cm}    % height of the portrait figures
 
 %%% ------------------------------------------------------------------
 
@@ -190,23 +199,21 @@
 
 \begin{frame}{Did the trade war only reshuffle trade?}
 \begin{itemize}
-  \item 2018--19: the US and China raise tariffs on each other, covering
-        about \$450bn of trade
-  \item What happened to the \textbf{bystanders}, the exporters caught in
-        between?
+  \item 2018--19: the US and China tax each other's goods, about \$450bn
+        of trade
+  \item What happened to the \textbf{bystanders}, the countries in between?
   \begin{itemize}
     \item \emph{Reallocation}: exports diverted to the US and China, away
-          from the rest of the world (RW)
+          from RW
     \item \emph{Net creation}: exports of taxed products rise everywhere
   \end{itemize}
-  \item Section III: bystander exports of taxed products rose to the US
-        \emph{and} to RW, and were flat to China
+  \item Paper: exports of taxed products rose to the US and RW, flat to
+        China
 \end{itemize}
 \framefill
 \begin{block}{This replication}
-Section III, the average export responses: Figure 1, Appendix Table A.2 and
-Appendix Figures A.3 (US--China bilateral) and A.4 (exporter $\times$ sector
-fixed effects), rebuilt from raw data in Python
+Section III, the average export responses: Figure 1, Table A.2 and
+Figures A.3--A.4, rebuilt from raw data in Python
 \end{block}
 \end{frame}
 
@@ -214,52 +221,51 @@ fixed effects), rebuilt from raw data in Python
 \begin{columns}[T,onlytextwidth]
   \begin{column}{0.47\textwidth}
     \colhead{Trade flows}
+    \small
     \begin{itemize}
-      \item UN Comtrade bilateral trade by HS6 product
-      \item Two-year periods: 2014/15, 2016/17, 2018/19
-      \item Top 50 exporters, excluding oil exporters
-      \item Destinations: US, China (CH), rest of the world (RW)
+      \item UN Comtrade, by HS6 product
+      \item Periods 2014/15, 2016/17, 2018/19
+      \item Top 50 exporters, minus oil exporters
+      \item To the US, China (CH), rest of world (RW)
     \end{itemize}
   \end{column}
   \begin{column}{0.47\textwidth}
     \colhead{Tariffs}
+    \small
     \begin{itemize}
       \item US on China and China on US
-      \item Built from the raw tariff schedules and retaliation lists
-      \item Trade-weighted to HS6, scaled by time in force within each
-            period
+      \item Rebuilt from the raw tariff lists
+      \item Trade-weighted to HS6, by time in force
     \end{itemize}
   \end{column}
 \end{columns}
 \framefill
 \begin{block}{Rebuilt from raw data}
-The authors' package does not include the raw Comtrade files, so they were
-downloaded again (HS 2012, 2014--19: 957 files, 14.6\,GB). Tariffs and the
-estimation file were rebuilt with Python ports of the authors' do-files.
+The authors' package lacks the raw Comtrade files, so they were downloaded
+again (957 files, 14.6\,GB). Tariffs and the panel were rebuilt with Python
+ports of the authors' do-files.
 \end{block}
 \end{frame}
 
 \begin{frame}{Specification}
-\vspace{-0.3em}
+\vspace{-0.6em}
 \[
   \Delta \ln X^{n}_{i\omega} \;=\; \alpha \;+\; \beta\, \Delta \ln T_{\omega}
   \;+\; \varepsilon_{i\omega}
 \]
-\vspace{-0.6em}
+\vspace{-0.8em}
 \begin{itemize}
   \item $X^{n}_{i\omega}$: exports of bystander $i$, product $\omega$, to
-        destination $n \in \{\text{US}, \text{CH}, \text{RW}\}$
-  \item Four regressions: US exports on US tariffs, CH exports on Chinese
-        tariffs, RW exports on each
-  \item \textbf{Post} 2017$\to$2019 vs.\ \textbf{pre} 2015$\to$2017, a
-        placebo with the same tariff changes
+        $n \in \{\text{US}, \text{CH}, \text{RW}\}$
+  \item Four regressions: US on US tariffs, CH on CH tariffs, RW on each
+  \item \textbf{Post} 2017$\to$19 vs.\ \textbf{pre} 2015$\to$17: a placebo
+        test
   \item OLS, standard errors clustered by HS6 product
 \end{itemize}
 \framefill
 \begin{block}{Implementation}
-The authors' Stata code (\texttt{didplots.do}) ported to Python.
-\texttt{reghdfe y x, noab cluster(hs6)} is plain OLS with
-product-clustered standard errors; binscatters use 20 quantile bins.
+The authors' Stata code (\texttt{didplots.do}) ported to Python: OLS with
+product-clustered standard errors; binscatters with 20 quantile bins.
 \end{block}
 \end{frame}
 
@@ -281,14 +287,14 @@ product-clustered standard errors; binscatters use 20 quantile bins.
   \end{column}
   \begin{column}{0.28\textwidth}
     \slopes{Post-period slope, 2017--19}{%
-      A\enspace to US & 0.31^{***} & 0.31^{***} \\
-      B\enspace to CH & 0.01       & \df{0}{05} \\
-      C\enspace to RW & 0.20^{***} & \df{0}{22^{***}} \\
-      D\enspace to RW & 0.29^{***} & \df{0}{25^{***}} \\}
-    \vspace{0.8em}
+      A\enspace US & \pv{0.31}{***} & \pv{0.31}{***} \\
+      B\enspace CH & \pv{0.01}{} & \pr{0.05}{} \\
+      C\enspace RW & \pv{0.20}{***} & \pr{0.22}{***} \\
+      D\enspace RW & \pv{0.29}{***} & \pr{0.25}{***} \\}
+    \vspace{0.6em}
     \footnotesize
     \begin{itemize}
-      \item Same picture in every panel: up to the US and RW, flat to China
+      \item Same picture: up to the US and RW, flat to China
       \item Panel A identical; B--D within 0.05
     \end{itemize}
   \end{column}
@@ -304,18 +310,18 @@ product-clustered standard errors; binscatters use 20 quantile bins.
 Exports to & Tariff & \hd{Paper} & \hd{Replication} & \hd{Paper} & \hd{Replication} \\
 \midrule
 US & US on CH & 0.31^{***} & 0.31^{***}       & -0.19^{*} & -0.19^{*} \\
-   &          & (0.10)     & (0.10)           & (0.10)    & (0.10) \\[3pt]
+   &          & (0.10)     & (0.10)           & (0.10)    & (0.10) \\[1pt]
 CH & CH on US & 0.01       & \df{0}{05}       & 0.07      & 0.07 \\
-   &          & (0.19)     & (0.19)           & (0.18)    & (0.18) \\[3pt]
+   &          & (0.19)     & (0.19)           & (0.18)    & (0.18) \\[1pt]
 RW & US on CH & 0.20^{***} & \df{0}{22^{***}} & -0.14^{*} & \df{-0}{16^{**}} \\
-   &          & (0.08)     & (0.08)           & (0.08)    & (0.08) \\[3pt]
+   &          & (0.08)     & (0.08)           & (0.08)    & (0.08) \\[1pt]
 RW & CH on US & 0.29^{***} & \df{0}{25^{***}} & 0.11      & \df{0}{13^{*}} \\
    &          & (0.08)     & (0.08)           & (0.08)    & (0.08) \\
 \bottomrule
 \end{tabular}
 
-\vspace{4pt}
-{\scriptsize Standard errors clustered by HS6 in parentheses.
+\vspace{3pt}
+{\scriptsize Standard errors clustered by HS6 in parentheses;
 $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
 \textcolor{PennRed}{Red}: differs from the paper.\\
 Post-period $N$, paper: 102{,}903; 90{,}128; 223{,}556; 223{,}556.
@@ -336,15 +342,15 @@ Replication: 102{,}903; 90{,}100; 223{,}903; 223{,}903.\par}
   \end{column}
   \begin{column}{0.28\textwidth}
     \slopes{Post-period slope, with FE}{%
-      A\enspace to US & 0.20^{*}   & 0.20^{*} \\
-      B\enspace to CH & -0.06      & \df{-0}{01} \\
-      C\enspace to RW & 0.15^{*}   & \df{0}{17^{*}} \\
-      D\enspace to RW & 0.30^{***} & \df{0}{26^{***}} \\}
-    \vspace{0.8em}
+      A\enspace US & \pv{0.20}{*} & \pv{0.20}{*} \\
+      B\enspace CH & \pv{$-$0.06}{} & \pr{$-$0.01}{} \\
+      C\enspace RW & \pv{0.15}{*} & \pr{0.17}{*} \\
+      D\enspace RW & \pv{0.30}{***} & \pr{0.26}{***} \\}
+    \vspace{0.6em}
     \footnotesize
     \begin{itemize}
-      \item Compares products within the same exporter and sector
-      \item Same conclusions as Figure 1; standard errors match the paper
+      \item Compares products within an exporter and sector
+      \item Same conclusions as Figure 1
     \end{itemize}
   \end{column}
 \end{columns}
@@ -355,67 +361,57 @@ Replication: 102{,}903; 90{,}100; 223{,}903; 223{,}903.\par}
   \begin{column}{0.485\textwidth}
     \centering
     \figlabel{Paper}
-    \includegraphics[width=\linewidth,height=4.0cm,keepaspectratio]{figures/paper/fig_a3_bilateral.pdf}
+    \includegraphics[width=\linewidth,height=3.5cm,keepaspectratio]{figures/paper/fig_a3_bilateral.pdf}
   \end{column}
   \begin{column}{0.485\textwidth}
     \centering
     \figlabel{Replication}
-    \includegraphics[width=\linewidth,height=4.0cm,keepaspectratio]{figures/replication/fig_a3_bilateral.pdf}
+    \includegraphics[width=\linewidth,height=3.5cm,keepaspectratio]{figures/replication/fig_a3_bilateral.pdf}
   \end{column}
 \end{columns}
 \framefill
 \begin{itemize}\small
   \item Post-period slopes: China$\to$US $-1.34$ (0.27) in both;
-        US$\to$China $-2.98$ (0.42) in the paper, \textcolor{PennRed}{$-3.00$}
-        (0.42) in the replication
-  \item The tariffs cut US--China trade directly: the first-order effect
-        the bystander results build on
+        US$\to$China $-2.98$ (0.42) in the paper,
+        \textcolor{PennRed}{$-3.00$} (0.42) here
+  \item The tariffs cut US--China trade directly
 \end{itemize}
 \end{frame}
 
 \begin{frame}{How the replication was checked}
 \centering\small
-\begin{tabular}{@{}l p{5.2cm} p{4.4cm}@{}}
+\begin{tabular}{@{}lll@{}}
 \toprule
 Step & Check & Result \\
 \midrule
-Tariffs         & Rebuilt from raw schedules vs.\ the authors' files
-                & Match to Stata's float precision \\
-Estimation file & \texttt{build.py} on the authors' trade file vs.\ their
-                  \texttt{data5}
-                & Identical: 765{,}835 rows \\
-Regressions     & \texttt{didplots.py} on the authors' \texttt{data5} vs.\
-                  their Stata log and Table A.2
-                & All 20 coefficients, s.e.\ and $N$ identical \\
-Full rebuild    & Everything from raw data, with a fresh Comtrade download
-                & US exact; CH and RW within 0.05 \\
+Tariffs         & Rebuilt vs.\ the authors' tariff files       & Within float precision \\
+Estimation file & \texttt{build.py} on the authors' trade data & Identical, 765{,}835 rows \\
+Regressions     & \texttt{didplots.py} on their \texttt{data5} & All 20 $\beta$, s.e., $N$ match \\
+Full rebuild    & Everything from raw data                     & US exact; CH, RW $\pm 0.05$ \\
 \bottomrule
 \end{tabular}
 \framefill
 \raggedright
 \begin{block}{Why the full rebuild differs}
-Comtrade has revised its data since the authors' download: about a fifth of
-the files were republished after 2022. Exports to RW add up about 150
-importers' records, so small revisions accumulate. The US import data are
-unrevised, so results for exports to the US match exactly.
+Comtrade has revised its data since the authors' download (about a fifth of
+the files were republished after 2022). RW adds up about 150 importers, so
+small revisions accumulate. The US import data are unrevised: exact match.
 \end{block}
 \end{frame}
 
 \begin{frame}{What the replicated results say}
 \begin{itemize}
   \item Bystanders sold \textbf{more} taxed products to the US
-        ($\beta = 0.31$) and to RW ($\beta = 0.22$ and $0.25$)
+        ($\beta = 0.31$) and to RW (0.22 and 0.25)
   \item No response of exports to China ($\beta = 0.05$, s.e.\ 0.19)
-  \item Exports to RW \emph{rose}: the trade war created net export
-        opportunities rather than only diverting trade. The paper's
-        conclusion holds with today's data
+  \item Exports to RW \emph{rose}: net creation, not only diversion. The
+        paper's conclusion holds
 \end{itemize}
 \framefill
 \begin{alertblock}{Pre-trends are somewhat stronger with today's data}
-The design needs pre-period slopes near zero. For exports to RW they grow in
-absolute value: $-0.16^{**}$ against US tariffs (paper $-0.14^{*}$) and
-$0.13^{*}$ against Chinese tariffs (paper $0.11$), so part of the RW response
-to Chinese tariffs may be a continuing trend.
+Pre-period slopes should be near zero. For RW they grow: $-0.16^{**}$ on US
+tariffs (paper $-0.14^{*}$) and $0.13^{*}$ on Chinese tariffs (paper 0.11),
+so part of the RW response to Chinese tariffs may be a trend.
 \end{alertblock}
 \end{frame}
 
@@ -424,18 +420,17 @@ to Chinese tariffs may be a continuing trend.
 %%% ==================================================================
 
 \begin{frame}{Heterogeneous export responses (Fig.\ 2)}
-\begin{columns}[c,onlytextwidth]
+\begin{columns}[T,onlytextwidth]
   \begin{column}{0.60\textwidth}
     \centering
-    \includegraphics[width=\linewidth,height=5.4cm,keepaspectratio]{figures/paper/fig_2.pdf}
+    \includegraphics[width=\linewidth,height=5.2cm,keepaspectratio]{figures/paper/fig_2.pdf}
   \end{column}
   \begin{column}{0.36\textwidth}
     \small
     \begin{itemize}
-      \item Elasticities vary by exporter, sector and size of the flow,
-            aggregated with pre-war export shares
-      \item Growth in targeted products: mean 6.4\%, s.d.\ 6.2\%
-      \item With a common elasticity, s.d.\ only 1.4\%
+      \item Elasticities vary by exporter, sector and flow size
+      \item Targeted-product growth: mean 6.4\%, s.d.\ 6.2\%
+      \item Common elasticity: s.d.\ only 1.4\%
       \item Thailand $+14.6\%$, Mexico $+9.1\%$, Ukraine $-11.3\%$
     \end{itemize}
   \end{column}
@@ -443,41 +438,39 @@ to Chinese tariffs may be a continuing trend.
 \end{frame}
 
 \begin{frame}{What drives the differences? (Fig.\ 3)}
-\begin{columns}[c,onlytextwidth]
+\begin{columns}[T,onlytextwidth]
   \begin{column}{0.60\textwidth}
     \centering
-    \includegraphics[width=\linewidth,height=5.4cm,keepaspectratio]{figures/paper/fig_3.pdf}
+    \includegraphics[width=\linewidth,height=5.2cm,keepaspectratio]{figures/paper/fig_3.pdf}
   \end{column}
   \begin{column}{0.36\textwidth}
     \small
     \begin{itemize}
-      \item Re-predict growth keeping one component at a time
-      \item \textbf{Country component}: 75.8\% of the cross-country
-            variation
+      \item Re-predict growth one component at a time
+      \item \textbf{Country}: 75.8\% of the cross-country variation
       \item Sector: 24.3\%; size: about 0
-      \item Not specialization: elasticities are country-specific
+      \item Elasticities are country-specific, not driven by
+            specialization
     \end{itemize}
   \end{column}
 \end{columns}
 \end{frame}
 
 \begin{frame}{Supply and demand forces (Fig.\ 4)}
-\begin{columns}[c,onlytextwidth]
+\begin{columns}[T,onlytextwidth]
   \begin{column}{0.40\textwidth}
     \centering
-    \includegraphics[width=\linewidth,height=5.4cm,keepaspectratio]{figures/paper/fig_4.pdf}
+    \includegraphics[width=\linewidth,height=5.2cm,keepaspectratio]{figures/paper/fig_4.pdf}
   \end{column}
   \begin{column}{0.56\textwidth}
     \small
     \begin{itemize}
       \item Sign of $\beta^{US}$: substitute ($+$) or complement ($-$) to
             China
-      \item Same sign to US and RW $\Rightarrow$ downward-sloping supply
-            (scale)
+      \item Same sign to US and RW: downward-sloping supply (scale)
       \item \textbf{Winners}: Thailand, Taiwan, UK substitute China and
-            the US, with downward supply
-      \item \textbf{Losers}: Ukraine, Colombia complement both, with
-            downward supply
+            the US
+      \item \textbf{Losers}: Ukraine, Colombia complement both
       \item Mexico, Malaysia: substitute China, complement the US
     \end{itemize}
   \end{column}
@@ -490,23 +483,17 @@ to Chinese tariffs may be a continuing trend.
 
 \begin{frame}{Takeaways}
 \begin{itemize}
-  \item \textbf{Replication:} Figure 1, Table A.2 and Figures A.3--A.4
-        rebuilt from raw data in Python. From the authors' processed data,
-        every number matches; from raw data, US results match exactly and
-        the rest within 0.05
-  \item \textbf{Result:} the trade war raised bystanders' exports of taxed
-        products to the US and to the rest of the world
-  \item \textbf{Rest of the paper:} large cross-country differences,
-        driven by country-specific elasticities
+  \item \textbf{Replication:} from the authors' data every number matches;
+        from raw data, US results match exactly, the rest within 0.05
+  \item \textbf{Result:} bystanders' exports of taxed products rose to the
+        US and RW
+  \item \textbf{Rest of the paper:} large cross-country differences, from
+        country-specific elasticities
 \end{itemize}
 \framefill
 \begin{alertblock}{Limitations}
-\begin{itemize}\small
-  \item The authors' Comtrade vintage cannot be recovered: their raw files
-        are not shared
-  \item US Census flows and small raw inputs taken from the authors' package
-  \item The main model (Figures 2--4) is not replicated
-\end{itemize}
+The authors' Comtrade vintage cannot be recovered; US Census flows come
+from their package; the main model (Figures 2--4) is not replicated.
 \end{alertblock}
 \end{frame}
 
