@@ -268,12 +268,12 @@ Figures A.3--A.4, rebuilt from raw data in Python
 
 \begin{frame}{The replication pipeline}
 \centering\footnotesize
-\begin{tabular}{@{}l l p{7.4cm}@{}}
+\begin{tabular}{@{}l l p{8.1cm}@{}}
 \toprule
 Step & Script & Output \\
 \midrule
-Download   & \texttt{comtrade\_download.py} & 957 Comtrade files (14.6\,GB), with SHA-256 checksums \\
-Weights    & \texttt{china\_weight.py}      & HS10 shares of 2015--17 US--China trade within each HS6 \\
+Download   & \texttt{comtrade\_download.py} & 957 Comtrade files (14.6\,GB), logged with SHA-256 \\
+Weights    & \texttt{china\_weight.py}      & HS10 shares of 2015--17 US--China trade in each HS6 \\
 US tariffs & \texttt{z\_usch.py}            & US tariffs on China, by HS6 and period \\
 CH tariffs & \texttt{z\_chus.py}            & China's tariffs on the US, by HS6 and period \\
 Trade      & \texttt{comtrade.py}           & Bilateral trade by HS6, one file per year \\
@@ -284,9 +284,8 @@ Analysis   & \texttt{didplots.py}           & 20 regressions; Figures 1, A.3, A.
 \framefill
 \raggedright
 \begin{block}{Stata $\to$ Python}
-Scripts port the authors' do-files: \texttt{reghdfe} becomes OLS with
-clustered errors (with FE: singletons dropped, same small-sample
-correction); binscatter bins are cut as Stata's \texttt{xtile} does.
+Steps 2--7 port do-files: \texttt{reghdfe} becomes OLS with clustered
+errors (FE: singletons dropped, same small-sample correction).
 \end{block}
 \end{frame}
 
