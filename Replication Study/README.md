@@ -158,10 +158,13 @@ extract: the authors merged the US tariff schedules into it.
 The HS 2012 version of the data for 2017–2019 is published only through the
 **premium Bulk API** (most countries reported in HS 2017 from 2017, and
 Comtrade's conversion to HS 2012 is available only in bulk "Plus" files).
-Premium access is available through Penn.
+Premium access is available through Penn: the Penn Libraries page
+<https://pwp-library-upenn-edu.proxy.library.upenn.edu/loggedin/pwp/pw-comtrade.html>
+(PennKey sign-in) explains how to get premium access and an API key.
 
-1. **Get an API key.** Sign in to UN Comtrade (<https://comtradeplus.un.org>)
-   through your institution's premium access, open the API portal
+1. **Get an API key.** Following the Penn Libraries instructions above, sign
+   in to UN Comtrade (<https://comtradeplus.un.org>) through your
+   institution's premium access, open the API portal
    (<https://comtradedeveloper.un.org>), and copy the subscription key of the
    premium subscription from your profile.
 2. **Store the key outside the repository**, never in a script. On a Mac,
