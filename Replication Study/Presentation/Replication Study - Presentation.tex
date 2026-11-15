@@ -21,6 +21,21 @@
 \usepackage[absolute,overlay]{textpos}
 
 %%% ------------------------------------------------------------------
+%%% Presenter notes
+%%% ------------------------------------------------------------------
+% Each frame ends with a \note{} holding a word-for-word script to read
+% while recording (about 10 minutes in total, at 125 words a minute).
+% The heading of each note gives the slide, how long to spend on it and
+% the clock time at which it should end.
+%
+% To get the notes, change \shownotesfalse to \shownotestrue and compile:
+% the PDF then holds one notes page per slide instead of the slides.
+% Change it back to compile the slides.
+\newif\ifshownotes
+\shownotesfalse
+\ifshownotes\setbeameroption{show only notes}\fi
+
+%%% ------------------------------------------------------------------
 %%% Wharton look
 %%% ------------------------------------------------------------------
 % Template colour scheme
@@ -124,6 +139,21 @@
   \end{textblock*}
 }
 
+% Notes page: slide heading and timing in red, then the script, large
+% enough to read from the screen. Text in grey brackets is a cue only.
+\setbeamertemplate{note page}{%
+  \vspace*{0.35cm}\hspace*{0.8cm}%
+  \begin{minipage}[t]{\dimexpr\paperwidth-1.6cm\relax}
+    \usebeamercolor[fg]{normal text}\small\raggedright
+    \insertnote
+  \end{minipage}}
+% \notehead{slide}{time on slide}{ends at}
+\newcommand{\notehead}[3]{%
+  {\color{PennRed}\bfseries #1\hfill #2\enspace\textbar\enspace ends at #3}%
+  \\[-0.2em]{\color{PennRed}\rule{\linewidth}{0.5pt}}\\[0.3em]}
+% A stage direction in the notes, not read out
+\newcommand{\cue}[1]{{\color{gray}\itshape [#1]}}
+
 %%% ------------------------------------------------------------------
 %%% Layout helpers
 %%% ------------------------------------------------------------------
@@ -187,10 +217,14 @@
 {\setbeamercolor{background canvas}{bg=PennNavy}
 \begin{frame}[plain]
 \titlepage
+\note{\notehead{1. Title}{0:15}{0:15}
+  Hello, I'm Apostolos Kyratzis. Today I'm presenting my replication of ``The US--China Trade War and Global Reallocations'', by Fajgelbaum, Goldberg, Kennedy, Khandelwal and Taglioni, published in the \emph{American Economic Review: Insights} in 2024.}
 \end{frame}}
 
 \begin{frame}[c]{Outline}
 \tableofcontents
+\note{\notehead{2. Outline}{0:15}{0:30}
+  I'll first set up the question, then spend most of the time on the graphs I replicated, then briefly go through the rest of the paper, and finish with the takeaways.}
 \end{frame}
 
 %%% ==================================================================
@@ -215,6 +249,12 @@
 Section III, the average export responses: Figure 1, Table A.2 and
 Figures A.3--A.4, rebuilt from raw data in Python
 \end{block}
+\note{\notehead{3. Did the trade war only reshuffle trade?}{0:50}{1:20}
+  In 2018 and 2019, the United States and China raised tariffs on each other, on about 450 billion dollars of trade. The paper asks what happened to everyone else, the ``bystander'' countries.
+\\[0.6em]
+  Did they just redirect their exports into the US and China, taking them away from the rest of the world? Or did they sell more of the taxed products everywhere? The paper finds the second: the trade war created new export opportunities.
+\\[0.6em]
+  \cue{point at the blue box} I replicated this first part of the paper, its main figure and the appendix figures and table behind it, rebuilding everything from the raw data in Python.}
 \end{frame}
 
 \begin{frame}{Data}
@@ -242,6 +282,8 @@ Figures A.3--A.4, rebuilt from raw data in Python
     \end{itemize}
   \end{column}
 \end{columns}
+\note{\notehead{4. Data}{0:15}{1:35}
+  Very briefly, the data: product-level trade flows from UN Comtrade for the top 50 exporting countries, and the US and Chinese tariffs from the trade war, product by product.}
 \end{frame}
 
 \begin{frame}{Specification}
@@ -263,6 +305,10 @@ Figures A.3--A.4, rebuilt from raw data in Python
   \item OLS, clustered by HS6; robustness with exporter $\times$ sector
         fixed effects
 \end{itemize}
+\note{\notehead{5. Specification}{0:30}{2:05}
+  The idea behind every graph is the same. For each product, we compare how much bystanders' exports grew with how much that product's tariff went up. If taxed products grew faster, the relationship slopes up.
+\\[0.6em]
+  This is done for the war period, 2017 to 2019, and, as a placebo, for 2015 to 2017, before any tariffs. Before the war, we would expect no relationship.}
 \end{frame}
 
 
@@ -287,6 +333,8 @@ Analysis   & \texttt{didplots.py}           & 20 regressions; Figures 1, A.3, A.
 Steps 2--7 port do-files: \texttt{reghdfe} becomes OLS with clustered
 errors (FE: singletons dropped, same small-sample correction).
 \end{block}
+\note{\notehead{6. The replication pipeline}{0:20}{2:25}
+  \emph{(can shorten)} This table shows the replication from start to finish: downloading the trade data, building the tariffs and the dataset, and finally the regressions and graphs. Each step translates one of the authors' Stata programs into Python.}
 \end{frame}
 
 %%% ==================================================================
@@ -315,6 +363,14 @@ errors (FE: singletons dropped, same small-sample correction).
     {\footnotesize\raggedright Panel A identical; B--D within 0.05\par}
   \end{column}
 \end{columns}
+\note{\notehead{7. Figure 1: paper vs.\ replication}{1:25}{3:50}
+  This is the main graph of the paper: the paper's version on the left, mine in the middle.
+\\[0.6em]
+  How to read it: on the horizontal axis is the tariff increase on a product; on the vertical axis is how much bystanders' exports of that product grew. Products are grouped into 20 bins, so each dot is an average. Grey dots and lines are before the war; dark blue is during the war.
+\\[0.6em]
+  \cue{point at panel A, top left} Panel A is exports to the US: during the war, the blue line slopes up. Bystanders sold more of the products the US taxed on China. \cue{panel B, top right} Panel B is exports to China: the blue line is flat, so no real change. \cue{panels C and D, bottom} Panels C and D are exports to the rest of the world, and here the blue lines slope up too. That is the key result: bystanders sold more of the taxed products not only to the US but to everyone else as well.
+\\[0.6em]
+  The two versions look practically identical. \cue{point at the table on the right} The table gives the slopes: panel A matches exactly at 0.31, and the others are within 0.05 of the paper.}
 \end{frame}
 
 \begin{frame}{Table A.2: coefficients}
@@ -342,6 +398,8 @@ $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$;
 \textcolor{PennRed}{red}: differs from the paper.\\
 Post-period $N$, paper: 102{,}903; 90{,}128; 223{,}556; 223{,}556.
 Replication: 102{,}903; 90{,}100; 223{,}903; 223{,}903.\par}
+\note{\notehead{8. Table A.2: coefficients}{0:20}{4:10}
+  This table is the numbers behind those lines. \cue{US row} For exports to the US, everything matches exactly. \cue{red numbers} The numbers in red differ slightly from the paper, by at most 0.05, and the conclusions are the same: what is significant in the paper is significant here too.}
 \end{frame}
 
 \begin{frame}{Robustness: exporter $\times$ sector FE (Fig.\ A.4)}
@@ -366,6 +424,10 @@ Replication: 102{,}903; 90{,}100; 223{,}903; 223{,}903.\par}
     {\footnotesize\raggedright Same conclusions as Figure 1\par}
   \end{column}
 \end{columns}
+\note{\notehead{9. Robustness: exporter $\times$ sector fixed effects}{0:35}{4:45}
+  This is the same graph, but now comparing products only within the same country and sector, to rule out that some sectors were simply growing faster.
+\\[0.6em]
+  Again, paper on the left and mine in the middle. The picture doesn't change: during the war, exports to the US and to the rest of the world still rise with the tariffs, and exports to China still don't. My replication matches the paper closely here too.}
 \end{frame}
 
 \begin{frame}{US--China bilateral trade (Fig.\ A.3)}
@@ -388,6 +450,8 @@ Replication: 102{,}903; 90{,}100; 223{,}903; 223{,}903.\par}
         \textcolor{PennRed}{$-3.00$} (0.42) here
   \item The tariffs cut US--China trade directly
 \end{itemize}
+\note{\notehead{10. US--China bilateral trade}{0:30}{5:15}
+  This graph looks at trade between the US and China themselves, as a sanity check. \cue{point at the blue lines} During the war, the blue lines slope down: the more a product was taxed, the more its trade between the two countries fell, exactly as you would expect. Before the war, in grey, there was no such drop. The paper's version and mine are essentially the same.}
 \end{frame}
 
 \begin{frame}{How the replication was checked}
@@ -419,6 +483,8 @@ Comtrade republished about a fifth of the files after 2022, and some
 countries reported late. RW sums about 150 importers, so revisions add up;
 the US import data are unrevised.
 \end{block}
+\note{\notehead{11. How the replication was checked}{0:30}{5:45}
+  Why are some numbers slightly different? I first ran my code on the authors' own data files, and it reproduced every one of their numbers exactly. So the code is right. The small differences come from the data: the UN has revised part of its trade data since the authors downloaded it. The US data were not revised, which is why the US results match exactly.}
 \end{frame}
 
 
@@ -435,6 +501,8 @@ the US import data are unrevised.
   \item \textbf{Values only}: \texttt{build.do} keeps trade values and
         discards quantities
 \end{itemize}
+\note{\notehead{12. Notes on the authors' package}{0:20}{6:05}
+  \emph{(can shorten)} Along the way I also found a few small issues in the authors' replication package, listed here. The main one is that the raw trade data are not included, so I had to download them again.}
 \end{frame}
 
 \begin{frame}{What the replicated results say}
@@ -451,6 +519,10 @@ Pre-period slopes should be near zero. For RW they grow: $-0.16^{**}$ on US
 tariffs (paper $-0.14^{*}$) and $0.13^{*}$ on Chinese tariffs (paper 0.11),
 so part of the RW response to Chinese tariffs may be a trend.
 \end{alertblock}
+\note{\notehead{13. What the replicated results say}{0:40}{6:45}
+  So, in short: bystanders sold more of the taxed products to the US and to the rest of the world, and no more to China. The trade war created new export opportunities rather than just shifting trade around, and that conclusion holds in my replication.
+\\[0.6em]
+  \cue{red box} One caveat: in the period before the war, the lines are a bit steeper in my data than in the paper, so part of the effect on the rest of the world may reflect a trend that was already there.}
 \end{frame}
 
 %%% ==================================================================
@@ -473,6 +545,10 @@ so part of the RW response to Chinese tariffs may be a trend.
     \end{itemize}
   \end{column}
 \end{columns}
+\note{\notehead{14. Heterogeneous export responses (Fig.\ 2)}{0:35}{7:20}
+  The rest of the paper, which I did not replicate, looks at differences between countries.
+\\[0.6em]
+  This graph shows each country's growth in exports of the taxed products, with countries sorted from lowest to highest. Each dot is one country, and the vertical lines show the uncertainty around it. Most countries are above zero, so most gained, but the spread is large: on average exports grew by about 6 percent. \cue{point at the right end} Thailand and Mexico gained the most, \cue{left end} while Ukraine lost.}
 \end{frame}
 
 \begin{frame}{What drives the differences? (Fig.\ 3)}
@@ -492,6 +568,10 @@ so part of the RW response to Chinese tariffs may be a trend.
     \end{itemize}
   \end{column}
 \end{columns}
+\note{\notehead{15. What drives the differences? (Fig.\ 3)}{0:45}{8:05}
+  This graph asks why countries differ. Each colour recomputes the countries' export growth using only one possible explanation, and compares it with the full result on the black diagonal line.
+\\[0.6em]
+  \cue{point at the series closest to the diagonal} The series that follows the diagonal is the one using country-specific responses: it explains about three quarters of the differences. \cue{flat grey series} The grey series, which gives every country the same response, is almost flat: on its own, it explains almost nothing. Sector or product mix explains much less. So what matters is how each country responds, not what it produces.}
 \end{frame}
 
 \begin{frame}{Supply and demand forces (Fig.\ 4)}
@@ -513,6 +593,10 @@ so part of the RW response to Chinese tariffs may be a trend.
     \end{itemize}
   \end{column}
 \end{columns}
+\note{\notehead{16. Supply and demand forces (Fig.\ 4)}{0:45}{8:50}
+  The last graph places each country by how its exports responded to the tariffs: to the US or China on one axis, and to the rest of the world on the other.
+\\[0.6em]
+  \cue{top-right quadrants} Countries in the top-right in both panels, like Thailand and Taiwan, replaced Chinese and American goods and grew their exports everywhere: these are the winners. \cue{bottom-left quadrants} Countries in the bottom-left, like Ukraine and Colombia, lost exports everywhere: these are the losers. Countries like Mexico and Malaysia sit in different quadrants in the two panels: they gained in the US market, but not in China.}
 \end{frame}
 
 %%% ==================================================================
@@ -533,6 +617,10 @@ so part of the RW response to Chinese tariffs may be a trend.
 The authors' Comtrade vintage cannot be recovered; US Census flows come
 from their package; the main model (Figures 2--4) is not replicated.
 \end{alertblock}
+\note{\notehead{17. Takeaways}{0:45}{9:35}
+  To sum up: I rebuilt the paper's main graphs from the raw data, and they match the paper closely, with the US results exactly the same. The main finding holds: the trade war raised bystanders' exports of taxed products, to the US and to the rest of the world. And the gains differed a lot from country to country.
+\\[0.6em]
+  \cue{red box} The main limitation is that the authors' exact version of the trade data can no longer be recovered, and I did not replicate the model behind the last three graphs.}
 \end{frame}
 
 \begin{frame}[c]{Thank you!}
@@ -545,6 +633,8 @@ Apostolos Kyratzis\par
 \vspace{0.3em}
 {\footnotesize Code and data:
 \url{https://github.com/akyratzis/STAT-5200---Applied-Econometrics-I}\par}
+\note{\notehead{18. Thank you}{0:10}{9:45}
+  Thank you for watching. The code and data are on GitHub, at the link on the slide.}
 \end{frame}
 
 \end{document}
