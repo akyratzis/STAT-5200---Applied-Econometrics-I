@@ -1,0 +1,357 @@
+% Replication presentation: Fajgelbaum et al. (2024), AER: Insights 6(2)
+% STAT 5200 - Applied Econometrics I, Fall 2026
+% Theme: unofficial Wharton Beamer template (Jiding Zhang), files beamer*wharton.sty
+
+\documentclass[usenames,dvipsnames]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs,graphicx,amsmath}
+\usetheme{wharton}
+
+\usepackage{silence}
+
+\newcommand{\framefill}{\vskip0pt plus 1filll}
+
+%%% ------------------------------------------------------------------
+%%% Placeholders: delete once the replication outputs exist
+%%% ------------------------------------------------------------------
+% A number still to be filled in from the replication output
+\newcommand{\tbd}{\textcolor{UniRed}{\textbf{--.--}}}
+
+% \figorbox{width}{height}{file}: shows the figure if the file exists,
+% otherwise a red box naming the missing file. Upload the replication
+% figures to figures/replication/ in Overleaf and the boxes disappear.
+\newcommand{\figorbox}[3]{%
+  \IfFileExists{#3}{%
+    \includegraphics[width=#1,height=#2,keepaspectratio]{#3}%
+  }{%
+    {\setlength{\fboxsep}{0pt}%
+     \fcolorbox{UniRed}{UniRed!5}{%
+       \parbox[c][#2][c]{#1}{\centering\scriptsize
+         \textcolor{UniRed}{\textbf{Replication figure}}\\[2pt]
+         \texttt{\detokenize\expandafter{#3}}}}}%
+  }%
+}
+
+% Paths of the replication figures (written by Python/fig1_did.py)
+\newcommand{\repFigOne}{figures/replication/fig1_python_statastyle.pdf}
+\newcommand{\repFigOneFE}{figures/replication/fig1_fe_python_statastyle.pdf}
+\newcommand{\repFigBilateral}{figures/replication/fig_bilateral_python_statastyle.pdf}
+
+%%% ------------------------------------------------------------------
+
+\title[Replication: Fajgelbaum et al.\ (2024)]{Replicating \\[4pt]
+  \textbf{The US--China Trade War and Global Reallocations}\\[4pt]
+  {\normalsize Fajgelbaum, Goldberg, Kennedy, Khandelwal \& Taglioni,
+  \textit{AER: Insights} (2024)}}
+\date{STAT 5200 -- Applied Econometrics I, Fall 2026}
+\author[Apostolos Kyratzis]{Apostolos Kyratzis - 13130833}
+\institute[Wharton]{The Wharton School}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+\tableofcontents
+\end{frame}
+
+%%% ==================================================================
+\section{The question and the data}
+%%% ==================================================================
+
+\begin{frame}{Did the trade war only reshuffle trade?}
+\begin{itemize}
+  \item 2018--19: the US and China raise tariffs on each other, covering about
+        \$450bn of trade
+  \item \textbf{Bystanders}: every other exporter. Two possibilities:
+  \begin{itemize}
+    \item \emph{Reallocation}: they divert exports to the US and China, away
+          from the rest of the world (RW)
+    \item \emph{Net creation}: exports of taxed products rise everywhere
+  \end{itemize}
+  \item Paper's first result (Section III): bystander exports of taxed
+        products rose to the US \emph{and} to RW, and were flat to China
+\end{itemize}
+\framefill
+\begin{block}{This replication}
+Section III, the average export responses: Figure 1 and Appendix
+Table A.2, plus Appendix Figures A.3 (US--China bilateral) and A.4
+(exporter $\times$ sector fixed effects)
+\end{block}
+\end{frame}
+
+\begin{frame}{Data}
+\begin{itemize}
+  \item \textbf{Trade:} UN Comtrade bilateral exports, 5{,}203 HS6 products
+  \begin{itemize}
+    \item 24-month periods: 2014/15, 2016/17, 2018/19
+    \item Top exporters excluding oil exporters: 95.9\% of world trade
+    \item Three destinations: US, China (CH), rest of the world (RW)
+  \end{itemize}
+  \item \textbf{Tariffs:} US on China and China on US
+        (Fajgelbaum et al.\ 2020, extended to end-2019)
+  \begin{itemize}
+    \item Dollar-weighted to HS6, scaled by time in force within each period
+  \end{itemize}
+  \item \textbf{Replication input:} \texttt{data5.dta} from the authors'
+        package (openICPSR E194689V1)
+  \begin{itemize}
+    \item Raw Comtrade files are not distributed; the built panel is
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Specification}
+\[
+  \Delta \ln X^{n}_{i\omega} \;=\; \alpha \;+\; \beta\, \Delta \ln T_{\omega} \;+\; \varepsilon_{i\omega}
+\]
+\begin{itemize}
+  \item $X^{n}_{i\omega}$: exports of bystander $i$, product $\omega$, to
+        destination $n \in \{\text{US}, \text{CH}, \text{RW}\}$
+  \item Four regressions: US exports on US tariffs, CH exports on Chinese
+        tariffs, RW exports on each
+  \item \textbf{Post-period} 2017$\to$2019 vs.\ \textbf{pre-period}
+        2015$\to$2017 (placebo with the same tariff changes)
+  \item OLS, standard errors clustered by HS6 product
+\end{itemize}
+\framefill
+\begin{block}{Implementation}
+Authors' code: Stata 18, \texttt{didplots.do}. Ported to Python:
+\texttt{reghdfe y x, noab cluster(hs6)} is plain OLS with
+product-clustered standard errors.
+\end{block}
+\end{frame}
+
+%%% ==================================================================
+\section{Replication: average export responses}
+%%% ==================================================================
+
+\begin{frame}{Figure 1: paper vs.\ replication}
+\begin{columns}[T]
+  \begin{column}{0.49\textwidth}
+    \centering\footnotesize\textbf{Paper}\\[2pt]
+    \includegraphics[height=5.8cm,keepaspectratio]{figures/paper/fig_1.pdf}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \centering\footnotesize\textbf{Replication}\\[2pt]
+    \figorbox{4.4cm}{5.8cm}{\repFigOne}
+  \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table A.2: coefficients}
+\centering\small
+\begin{tabular}{@{}ll cc cc@{}}
+\toprule
+ & & \multicolumn{2}{c}{Post: 2017--19} & \multicolumn{2}{c}{Pre: 2015--17} \\
+\cmidrule(lr){3-4}\cmidrule(l){5-6}
+Exports to & Tariff & Paper & Replication & Paper & Replication \\
+\midrule
+US & US on CH & $0.31^{***}$ & \tbd & $-0.19^{*}$ & \tbd \\
+   &          & $(0.10)$     & \tbd & $(0.10)$    & \tbd \\[2pt]
+CH & CH on US & $0.01$       & \tbd & $0.07$      & \tbd \\
+   &          & $(0.19)$     & \tbd & $(0.18)$    & \tbd \\[2pt]
+RW & US on CH & $0.20^{***}$ & \tbd & $-0.14^{*}$ & \tbd \\
+   &          & $(0.08)$     & \tbd & $(0.08)$    & \tbd \\[2pt]
+RW & CH on US & $0.29^{***}$ & \tbd & $0.11$      & \tbd \\
+   &          & $(0.08)$     & \tbd & $(0.08)$    & \tbd \\
+\bottomrule
+\end{tabular}
+
+\vspace{4pt}
+{\scriptsize Standard errors clustered by HS6 in parentheses.
+$^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$.
+Post-period $N$: 102{,}903; 90{,}128; 223{,}556; 223{,}556.}
+\framefill
+\begin{block}{Match}
+Largest $|\hat\beta_{\text{repl}} - \hat\beta_{\text{paper}}|$: \tbd.
+Sample sizes identical: \tbd.
+\end{block}
+\end{frame}
+
+\begin{frame}{Robustness: exporter $\times$ sector FE (Fig.\ A.4)}
+\begin{columns}[T]
+  \begin{column}{0.44\textwidth}
+    \centering
+    \figorbox{4.4cm}{5.8cm}{\repFigOneFE}
+  \end{column}
+  \begin{column}{0.54\textwidth}
+    \centering\footnotesize
+    \begin{tabular}{@{}ll cc@{}}
+    \toprule
+     & & \multicolumn{2}{c}{Post, with FE} \\
+    \cmidrule(l){3-4}
+    To & Tariff & Paper & Repl. \\
+    \midrule
+    US & US on CH & $0.20^{*}$   & \tbd \\
+       &          & $(0.11)$     & \tbd \\
+    CH & CH on US & $-0.06$      & \tbd \\
+       &          & $(0.20)$     & \tbd \\
+    RW & US on CH & $0.15^{*}$   & \tbd \\
+       &          & $(0.09)$     & \tbd \\
+    RW & CH on US & $0.30^{***}$ & \tbd \\
+       &          & $(0.08)$     & \tbd \\
+    \bottomrule
+    \end{tabular}
+
+    \vspace{6pt}
+    \begin{itemize}
+      \item Absorbs exporter-sector shocks (\texttt{a(cs)})
+      \item RW response to Chinese tariffs unchanged
+    \end{itemize}
+  \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{US--China bilateral trade (Fig.\ A.3)}
+\begin{columns}[T]
+  \begin{column}{0.49\textwidth}
+    \centering\footnotesize\textbf{Paper}\\[2pt]
+    \includegraphics[width=\linewidth]{figures/paper/fig_a3.pdf}
+  \end{column}
+  \begin{column}{0.49\textwidth}
+    \centering\footnotesize\textbf{Replication}\\[2pt]
+    \figorbox{\linewidth}{3.9cm}{\repFigBilateral}
+  \end{column}
+\end{columns}
+\vspace{6pt}
+\begin{itemize}\small
+  \item Post-period: China$\to$US $\beta = -1.34$ (0.27); US$\to$China
+        $\beta = -2.98$ (0.42). Replication: \tbd, \tbd
+  \item Tariffs cut US--China trade: the bystander gains are not an artefact
+        of the data
+\end{itemize}
+\end{frame}
+
+\begin{frame}{How the replication was checked}
+\centering\small
+\begin{tabular}{@{}lp{5.2cm}c@{}}
+\toprule
+Check & Against & Max.\ abs.\ diff. \\
+\midrule
+Stata log      & All 20 regressions in \texttt{didplots.do}        & \tbd \\
+Authors' table & \texttt{results/appendix/tab\_a2.csv}             & \tbd \\
+Textbook slope & $\widehat{\mathrm{Cov}}(x,y)/\widehat{\mathrm{Var}}(x)$ & \tbd \\
+\texttt{pyfixest} & Independent estimator, incl.\ FE             & \tbd \\
+\bottomrule
+\end{tabular}
+\framefill
+\begin{itemize}\small
+  \item Binscatters: 20 quantile bins per period, cut as Stata's
+        \texttt{xtile} does
+  \item FE version: singletons dropped and \texttt{reghdfe}'s small-sample
+        correction applied
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What the replicated results say}
+\begin{itemize}
+  \item Bystanders sold \textbf{more} taxed products to the US
+        ($\beta \approx 0.3$) and to RW ($\beta \approx 0.2$--$0.3$)
+  \item No average reallocation towards China
+  \item Exports to RW \emph{rose}: the trade war created net export
+        opportunities rather than only diverting trade
+\end{itemize}
+\framefill
+\begin{alertblock}{Pre-trends}
+Pre-period slopes are small or negative: products later hit by tariffs
+were not already growing faster. Two of them (US, and RW on US tariffs)
+are negative and significant at 10\%, so the post-period effect is a
+reversal, not a continuing trend.
+\end{alertblock}
+\end{frame}
+
+%%% ==================================================================
+\section{The rest of the paper}
+%%% ==================================================================
+
+\begin{frame}{Heterogeneous export responses (Fig.\ 2)}
+\centering
+\includegraphics[height=4.3cm,keepaspectratio]{figures/paper/fig_2.pdf}
+\begin{itemize}\small
+  \item Tariff elasticities vary by exporter, sector and size of the trade
+        flow; aggregated with pre-war export shares
+  \item Average growth in targeted products: 6.4\%, s.d.\ 6.2\%
+        (1.4\% with a common elasticity)
+  \item Thailand $+14.6\%$, Mexico $+9.1\%$, Ukraine $-11.3\%$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What drives the differences? (Fig.\ 3)}
+\begin{columns}[c]
+  \begin{column}{0.55\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/paper/fig_3.pdf}
+  \end{column}
+  \begin{column}{0.43\textwidth}
+    \begin{itemize}\small
+      \item Re-predict growth keeping one component at a time
+      \item \textbf{Country component} explains 75.8\% of the
+            cross-country variation
+      \item Sector: 24.3\%; size: about 0
+      \item Not specialization: elasticities are country-specific
+    \end{itemize}
+  \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Supply and demand forces (Fig.\ 4)}
+\begin{columns}[c]
+  \begin{column}{0.42\textwidth}
+    \centering
+    \includegraphics[height=6.2cm,keepaspectratio]{figures/paper/fig_4.pdf}
+  \end{column}
+  \begin{column}{0.56\textwidth}
+    \begin{itemize}\small
+      \item Sign of $\beta^{US}$: substitute ($+$) or complement ($-$)
+            to China
+      \item Same sign to US and RW $\Rightarrow$ downward-sloping supply
+            (scale)
+      \item \textbf{Winners}: Thailand, Taiwan, UK substitute China and
+            US, with downward supply
+      \item \textbf{Losers}: Ukraine, Colombia complement both, with
+            downward supply
+      \item Mexico, Malaysia: substitute China, complement the US
+    \end{itemize}
+  \end{column}
+\end{columns}
+\end{frame}
+
+%%% ==================================================================
+\section{Takeaways}
+%%% ==================================================================
+
+\begin{frame}{Takeaways}
+\begin{itemize}
+  \item \textbf{Replication:} Figure 1, Table A.2 and Figures A.3--A.4
+        reproduced in Python; largest difference \tbd
+  \item \textbf{Result:} the trade war raised bystanders' exports of taxed
+        products to the US and to the rest of the world
+  \item \textbf{Rest of the paper:} large cross-country differences,
+        driven by country-specific elasticities
+\end{itemize}
+\framefill
+\begin{alertblock}{Limitations}
+\begin{itemize}\small
+  \item Starts from the authors' built panel; raw Comtrade files not
+        included in the package
+  \item Tariff measures and sample taken as given
+  \item Values only: quantities and prices are dropped when the panel is
+        built
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Thank you!}
+\centering
+\vfill
+Replicating \emph{The US--China Trade War and Global Reallocations}\\[6pt]
+Apostolos Kyratzis\\
+\bigskip
+Code: \texttt{\tbd}
+\vfill
+\end{frame}
+
+\end{document}
