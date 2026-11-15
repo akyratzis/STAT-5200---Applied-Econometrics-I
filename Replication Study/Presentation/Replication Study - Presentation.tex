@@ -223,28 +223,25 @@ Figures A.3--A.4, rebuilt from raw data in Python
     \colhead{Trade flows}
     \small
     \begin{itemize}
-      \item UN Comtrade, by HS6 product
-      \item Periods 2014/15, 2016/17, 2018/19
-      \item Top 50 exporters, minus oil exporters
-      \item To the US, China (CH), rest of world (RW)
+      \item UN Comtrade ``Plus'' bulk files, HS 2012, 2014--19
+      \item Totals over customs procedures and transport modes; US\$
+            millions
+      \item Exports measured from the importers' records
+      \item Top 50 exporters by total exports, minus 14 oil exporters
     \end{itemize}
   \end{column}
   \begin{column}{0.47\textwidth}
     \colhead{Tariffs}
     \small
     \begin{itemize}
-      \item US on China and China on US
-      \item Rebuilt from the raw tariff lists
-      \item Trade-weighted to HS6, by time in force
+      \item \textbf{US on China}: HS10 tariffs from the US Census imports,
+            weighted to HS6 by 2015--17 trade with China
+      \item \textbf{China on US}: HS8 retaliation lists, 2019 exemptions
+            (Bown et al.), weighted by China's 2017 imports from the US
+      \item Measured as the change in $\log(1+\text{tariff})$
     \end{itemize}
   \end{column}
 \end{columns}
-\framefill
-\begin{block}{Rebuilt from raw data}
-The authors' package lacks the raw Comtrade files, so they were downloaded
-again (957 files, 14.6\,GB). Tariffs and the panel were rebuilt with Python
-ports of the authors' do-files.
-\end{block}
 \end{frame}
 
 \begin{frame}{Specification}
@@ -255,17 +252,42 @@ ports of the authors' do-files.
 \]
 \vspace{-0.8em}
 \begin{itemize}
-  \item $X^{n}_{i\omega}$: exports of bystander $i$, product $\omega$, to
+  \item Outcome: log change in $i$'s exports of $\omega$ to
         $n \in \{\text{US}, \text{CH}, \text{RW}\}$
-  \item Four regressions: US on US tariffs, CH on CH tariffs, RW on each
-  \item \textbf{Post} 2017$\to$19 vs.\ \textbf{pre} 2015$\to$17: a placebo
-        test
-  \item OLS, standard errors clustered by HS6 product
+        (\texttt{dlv\_us}, \texttt{dlv\_ch}, \texttt{dlv\_rw})
+  \item Tariff: change in $\log(1+T)$, US on CH (\texttt{dlz\_usch}) or
+        CH on US (\texttt{dlz\_chus})
+  \item Periods 2014/15, 2016/17, 2018/19: \textbf{post} 2017$\to$19,
+        \textbf{pre} 2015$\to$17 with the war-period tariff change
+        (a placebo)
+  \item OLS, clustered by HS6; robustness with exporter $\times$ sector
+        fixed effects
 \end{itemize}
+\end{frame}
+
+
+\begin{frame}{The replication pipeline}
+\centering\footnotesize
+\begin{tabular}{@{}l l p{7.4cm}@{}}
+\toprule
+Step & Script & Output \\
+\midrule
+Download   & \texttt{comtrade\_download.py} & 957 Comtrade files (14.6\,GB), logged with SHA-256 checksums \\
+Weights    & \texttt{china\_weight.py}      & Each HS10 product's 2015--17 share of US--China trade in its HS6 \\
+US tariffs & \texttt{z\_usch.py}            & US tariffs on China, by HS6 and period \\
+CH tariffs & \texttt{z\_chus.py}            & China's tariffs on the US, by HS6 and period \\
+Trade      & \texttt{comtrade.py}           & Bilateral trade by HS6, one file per year \\
+Panel      & \texttt{build.py}              & \texttt{data5}: exporter $\times$ HS6 $\times$ period, top 50 exporters \\
+Analysis   & \texttt{didplots.py}           & 20 regressions; Figures 1, A.3, A.4; Table A.2 \\
+\bottomrule
+\end{tabular}
 \framefill
-\begin{block}{Implementation}
-The authors' Stata code (\texttt{didplots.do}) ported to Python: OLS with
-product-clustered standard errors; binscatters with 20 quantile bins.
+\raggedright
+\begin{block}{Stata $\to$ Python}
+The processing and analysis scripts port the authors' do-files. \texttt{reghdfe y x, noab
+cluster(hs6)} becomes OLS with clustered errors; with \texttt{a(cs)},
+singletons are dropped and \texttt{reghdfe}'s small-sample correction is
+applied; binscatter bins are cut as Stata's \texttt{xtile} does.
 \end{block}
 \end{frame}
 
@@ -371,24 +393,48 @@ Replication: 102{,}903; 90{,}100; 223{,}903; 223{,}903.\par}
 \end{frame}
 
 \begin{frame}{How the replication was checked}
-\centering\small
-\begin{tabular}{@{}lll@{}}
+\centering\footnotesize
+\begin{tabular}{@{}l p{3.4cm} p{3.3cm} p{3.4cm}@{}}
 \toprule
-Step & Check & Result \\
+Step & Our code, run on & Compared with & Result \\
 \midrule
-Tariffs         & Rebuilt vs.\ the authors' tariff files       & Within float precision \\
-Estimation file & \texttt{build.py} on the authors' trade data & Identical, 765{,}835 rows \\
-Regressions     & \texttt{didplots.py} on their \texttt{data5} & All 20 $\beta$, s.e., $N$ match \\
-Full rebuild    & Everything from raw data                     & US exact; CH, RW $\pm 0.05$ \\
+Tariffs   & \texttt{z\_usch.py}, \texttt{z\_chus.py} on the raw inputs
+          & Authors' \texttt{z\_usch\_w}, \texttt{z\_chus\_w}
+          & Equal to Stata's 4-byte float precision \\[2pt]
+Panel     & \texttt{build.py} on the authors' trade file
+          & Authors' \texttt{data5}
+          & Identical, 765{,}835 rows \\[2pt]
+Analysis  & \texttt{didplots.py} on the authors' \texttt{data5}
+          & Authors' Stata log and Table A.2
+          & All 20 $\beta$, s.e.\ and $N$; every cell \\[2pt]
+Full      & Every script, fresh Comtrade download
+          & The paper
+          & US exact; CH, RW within 0.05 \\
 \bottomrule
 \end{tabular}
 \framefill
 \raggedright
 \begin{block}{Why the full rebuild differs}
-Comtrade has revised its data since the authors' download (about a fifth of
-the files were republished after 2022). RW adds up about 150 importers, so
-small revisions accumulate. The US import data are unrevised: exact match.
+Comtrade has republished about a fifth of the files since 2022, and some
+countries reported late. RW adds up about 150 importers, so small revisions
+accumulate. The US import data are unrevised: exact match.
 \end{block}
+\end{frame}
+
+
+\begin{frame}{Notes on the authors' package}
+\begin{itemize}
+  \item \textbf{Missing raw data}: \texttt{data/raw/comtrade/} is empty, so
+        the trade flows cannot be rebuilt from the package alone
+  \item \textbf{Path error}: \texttt{z\_chus.do} reads
+        \texttt{raw/china\_trade\_hs8/}, but the file ships in
+        \texttt{raw/AKW/}; the do-file does not run as delivered
+  \item \textbf{Weighted tariff changes}: in the authors' files,
+        \texttt{dlz\_usch\_w} and \texttt{dlz\_chus\_w} are copies of the
+        unweighted changes; no replicated result uses them
+  \item \textbf{Values only}: \texttt{build.do} keeps trade values and
+        discards quantities
+\end{itemize}
 \end{frame}
 
 \begin{frame}{What the replicated results say}
