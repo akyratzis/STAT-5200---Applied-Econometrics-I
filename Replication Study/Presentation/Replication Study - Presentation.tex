@@ -6,10 +6,10 @@
 % template's, scaled from its 33.87 x 19.05 cm slide to Beamer's 16 x 9 cm.
 % The only other file the styling needs is graphics/WhartonLogoWhite.png.
 
-\documentclass[aspectratio=169,11pt]{beamer}
+\documentclass[aspectratio=169,11pt,compress]{beamer}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[scaled=0.92]{helvet}   % Arial stand-in (template body font)
+\usepackage{lmodern}               % LaTeX's own font (Latin Modern)
 \usepackage{booktabs,graphicx,amsmath,tikz}
 \usepackage[absolute,overlay]{textpos}
 
@@ -36,9 +36,8 @@
 \setbeamercolor{block title alerted}{bg=PennDarkRed,fg=white}
 \setbeamercolor{block body alerted}{bg=PennLight,fg=PennNavy}
 
-% Fonts: sans body (Arial in the template); slide titles in a serif
-% (Georgia in the template, Charter here, which pdfLaTeX always has)
-\setbeamerfont{frametitle}{family=\fontfamily{bch}\selectfont,size=\fontsize{14}{16}}
+% Fonts: Beamer's default LaTeX font throughout
+\setbeamerfont{frametitle}{size=\fontsize{14}{16}}
 
 % Margins as in the template (title and body start 1.1 cm from the left)
 \setbeamersize{text margin left=1.1cm,text margin right=1.1cm}
@@ -48,9 +47,23 @@
 \setbeamertemplate{blocks}[default]
 \setbeamertemplate{section in toc}[ball numbered]
 
-% Slide title: red serif text on white, top left, no bar
+% Navigation bar: navy band across the top, matching the footer. Each
+% section's (short) name with one circle per slide below it; the current
+% slide's circle is filled and the other sections are dimmed. The circles
+% are links. Sections use their short names: \section[short]{long}.
+\setbeamercolor{section in head/foot}{fg=white,bg=PennNavy}
+\setbeamercolor{mini frame}{fg=white}
+\setbeamerfont{section in head/foot}{size=\fontsize{6}{7}}
+\setbeamertemplate{mini frames}[default]
+\setbeamertemplate{headline}{%
+  \begin{beamercolorbox}[wd=\paperwidth]{section in head/foot}
+    \vskip3pt\insertnavigation{\paperwidth}\vskip3pt
+  \end{beamercolorbox}%
+}
+
+% Slide title: red text on white, top left, below the navigation bar
 \setbeamertemplate{frametitle}{%
-  \vspace*{0.35cm}%
+  \vspace*{0.25cm}%
   \hspace*{1.1cm}%
   \parbox[t]{\dimexpr\paperwidth-2.2cm\relax}{\raggedright
     \usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}%
@@ -141,7 +154,7 @@
 \end{frame}
 
 %%% ==================================================================
-\section{The question and the data}
+\section[Question \& data]{The question and the data}
 %%% ==================================================================
 
 \begin{frame}{Did the trade war only reshuffle trade?}
@@ -208,18 +221,18 @@ product-clustered standard errors.
 \end{frame}
 
 %%% ==================================================================
-\section{Replication: average export responses}
+\section[Replication]{Replication: average export responses}
 %%% ==================================================================
 
 \begin{frame}{Figure 1: paper vs.\ replication}
 \begin{columns}[T]
   \begin{column}{0.49\textwidth}
     \centering\footnotesize\textbf{Paper}\\[2pt]
-    \includegraphics[height=5.6cm,keepaspectratio]{figures/paper/fig_1.pdf}
+    \includegraphics[height=5.2cm,keepaspectratio]{figures/paper/fig_1.pdf}
   \end{column}
   \begin{column}{0.49\textwidth}
     \centering\footnotesize\textbf{Replication}\\[2pt]
-    \figorbox{4.3cm}{5.6cm}{\repFigOne}
+    \figorbox{4.0cm}{5.2cm}{\repFigOne}
   \end{column}
 \end{columns}
 \end{frame}
@@ -258,7 +271,7 @@ Sample sizes identical: \tbd.
 \begin{columns}[T]
   \begin{column}{0.44\textwidth}
     \centering
-    \figorbox{4.3cm}{5.6cm}{\repFigOneFE}
+    \figorbox{4.0cm}{5.2cm}{\repFigOneFE}
   \end{column}
   \begin{column}{0.54\textwidth}
     \centering\footnotesize
@@ -292,11 +305,11 @@ Sample sizes identical: \tbd.
 \begin{columns}[T]
   \begin{column}{0.49\textwidth}
     \centering\footnotesize\textbf{Paper}\\[2pt]
-    \includegraphics[width=\linewidth]{figures/paper/fig_a3.pdf}
+    \includegraphics[width=\linewidth,height=3.9cm,keepaspectratio]{figures/paper/fig_a3.pdf}
   \end{column}
   \begin{column}{0.49\textwidth}
     \centering\footnotesize\textbf{Replication}\\[2pt]
-    \figorbox{\linewidth}{4.4cm}{\repFigBilateral}
+    \figorbox{\linewidth}{3.9cm}{\repFigBilateral}
   \end{column}
 \end{columns}
 \vspace{6pt}
@@ -347,12 +360,12 @@ reversal, not a continuing trend.
 \end{frame}
 
 %%% ==================================================================
-\section{The rest of the paper}
+\section[Rest of the paper]{The rest of the paper}
 %%% ==================================================================
 
 \begin{frame}{Heterogeneous export responses (Fig.\ 2)}
 \centering
-\includegraphics[height=4.3cm,keepaspectratio]{figures/paper/fig_2.pdf}
+\includegraphics[height=3.9cm,keepaspectratio]{figures/paper/fig_2.pdf}
 \begin{itemize}\small
   \item Tariff elasticities vary by exporter, sector and size of the trade
         flow; aggregated with pre-war export shares
@@ -384,7 +397,7 @@ reversal, not a continuing trend.
 \begin{columns}[c]
   \begin{column}{0.42\textwidth}
     \centering
-    \includegraphics[height=6.0cm,keepaspectratio]{figures/paper/fig_4.pdf}
+    \includegraphics[height=5.4cm,keepaspectratio]{figures/paper/fig_4.pdf}
   \end{column}
   \begin{column}{0.56\textwidth}
     \begin{itemize}\small
