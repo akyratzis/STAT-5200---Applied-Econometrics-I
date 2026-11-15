@@ -38,16 +38,30 @@ STAT 5200 - Syllabus.pdf
 .Rproj.user/
 *.Rproj
 
+# Python
+__pycache__/
+*.pyc
+.venv/
+
 # Rebuildable HW5 simulation datasets and bootstrap checkpoints.
 Homework Assignments/Homework 5/Output/q4_heteroskedastic_samples.rds
 Homework Assignments/Homework 5/Output/q4_bootstrap_checkpoint.rds
 
-# Replication data. Raw extracts are large and redistributable only from their
-# original sources; processed files are rebuilt by the scripts in Replication/R.
-Replication/Data/Raw/*
-!Replication/Data/Raw/.gitkeep
-Replication/Data/Processed/*
-!Replication/Data/Processed/.gitkeep
+# Replication data. Data/Raw and Data/Processed are tracked, except the UN
+# Comtrade bulk files: about 14 GB in total, 25 files exceed GitHub's 100 MB
+# limit, and UN Comtrade terms restrict redistribution. They are re-downloaded
+# with Python/comtrade_download.py; the catalogue and download log (with
+# checksums) are tracked so the exact files can be identified. The two large
+# US Census files are read from the authors' package, which is kept outside
+# the repository (~/Downloads/GTW_replication); the last pattern is a backstop
+# in case a copy is placed here again.
+Replication Study/Data/Raw/Comtrade/**/*.gz
+Replication Study/Data/Raw/Comtrade/**/*.part
+Replication Study/Paper - Replication Package/
+
+# Local checks of our rebuilt datasets against the authors' processed files.
+# They need the full authors' package, so they are kept out of the repository.
+Replication Study/Python/Checks/
 
 # Secrets. API keys live in ~/.Renviron, outside the repository; these
 # patterns are a backstop so a stray copy cannot be committed.
