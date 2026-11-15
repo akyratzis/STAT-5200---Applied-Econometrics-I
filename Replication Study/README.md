@@ -7,49 +7,74 @@
 STAT 5200 — Applied Econometrics I, Fall 2026
 Apostolos Kyratzis - 13130833
 
-The authors' code is in Stata. This replication rewrites it in Python and
-rebuilds the data from the raw sources, rather than starting from the
-authors' processed files.
-
-**Status (work in progress)**
-
-| Step | Status |
-|---|---|
-| 1. Data download | Script ready; full Comtrade download not yet run |
-| 2. Data processing: tariffs | **Done.** Identical to the authors' processed files |
-| 2. Data processing: trade flows and estimation file | To do |
-| 3. Data analysis: Figure 1, Figures A3–A4, Table A2 | To do |
+The authors' code is in Stata and their package ships processed data. This
+replication rewrites the code in Python and rebuilds every dataset the
+results depend on from raw data: the trade-war tariffs from the raw tariff
+schedules, and the trade flows from a fresh download of UN Comtrade.
 
 ## What is replicated
 
-The paper's average export responses (Section III): for countries other than
-the US and China ("bystanders"), the regression
+The paper's average export responses (Section III). For countries other than
+the US and China ("bystanders"), export growth of an HS6 product is regressed
+on the change in the trade-war tariff on that product:
 
 ```
 Δ ln X = α + β Δ ln T + ε
 ```
 
-of export growth on the change in the trade-war tariff, by HS6 product,
-estimated before the war (2015–2017, a pre-trend test) and during the war
-(2017–2019). Standard errors are clustered by product.
+separately before the war (2015–17, a test for pre-existing trends) and
+during the war (2017–19). Standard errors are clustered by product.
 
-| Output | Content |
-|---|---|
-| Figure 1 | Bystanders' exports to the US, China and the rest of the world against US and Chinese tariffs |
-| Figure A3 | Figure 1 with exporter × sector fixed effects |
-| Figure A4 | US–China bilateral responses |
-| Table A2 | The coefficients, standard errors and sample sizes behind these figures |
-
-Target estimates (paper, Section III):
-
-| Outcome | Tariff | Post-period β | SE | Pre-period β |
-|---|---|---|---|---|
-| Exports to US | US on China | 0.31 | 0.10 | −0.19 |
-| Exports to China | China on US | 0.01 | 0.19 | 0.07 |
-| Exports to RW | US on China | 0.20 | 0.08 | −0.14 |
-| Exports to RW | China on US | 0.29 | 0.08 | 0.11 |
+| Output | File | Content |
+|---|---|---|
+| Figure 1 | `Figures/fig_1.pdf` | Bystanders' exports to the US, China and the rest of the world (RW) against US and Chinese tariffs |
+| Figure A3 | `Figures/fig_a3.pdf` | Figure 1 with exporter × sector fixed effects |
+| Figure A4 | `Figures/fig_a4.pdf` | China's exports to the US and US exports to China |
+| Table A2 | `Tables/tab_a2.csv` | Coefficients, standard errors and sample sizes behind Figures 1 and A3 |
+| — | `Tables/did_regressions.csv` | All 20 regressions at full precision |
 
 The main model (Figures 2–4) is not part of this replication.
+
+## Results
+
+Table A2, bystander regressions without fixed effects (standard errors in
+parentheses; \* 10%, \*\* 5%, \*\*\* 1%):
+
+| Outcome | Tariff | Period | Paper | This replication |
+|---|---|---|---|---|
+| Exports to US | US on China | 2017–19 | 0.31\*\*\* (0.10) | 0.31\*\*\* (0.10) |
+| | | 2015–17 | −0.19\* (0.10) | −0.19\* (0.10) |
+| Exports to China | China on US | 2017–19 | 0.01 (0.19) | 0.05 (0.19) |
+| | | 2015–17 | 0.07 (0.18) | 0.07 (0.18) |
+| Exports to RW | US on China | 2017–19 | 0.20\*\*\* (0.08) | 0.22\*\*\* (0.08) |
+| | | 2015–17 | −0.14\* (0.08) | −0.16\*\* (0.08) |
+| Exports to RW | China on US | 2017–19 | 0.29\*\*\* (0.08) | 0.25\*\*\* (0.08) |
+| | | 2015–17 | 0.11 (0.08) | 0.13\* (0.08) |
+
+- **Exports to the US** are reproduced exactly, as is China's export
+  response to US tariffs (Figure A4, Panel A): the US import data has not
+  been revised since the authors' download. US exports to China (Figure A4,
+  Panel B) change slightly, from −2.98 to −3.00 (0.42).
+- **Exports to China and to the rest of the world** differ by up to 0.05.
+  Comtrade has revised part of its data since the authors downloaded it
+  (about a fifth of the files were republished after 2022, and some
+  countries reported their data later), and the rest-of-world outcome adds
+  up the imports of about 150 countries, so small revisions in any of them
+  move it.
+- **The war-period effects hold:** bystanders' exports to the US and to the
+  rest of the world rise significantly with the tariffs.
+- **The pre-trends are somewhat stronger with today's data:** for exports to
+  the rest of the world, the pre-war coefficients are larger in absolute
+  value, and against China's tariffs the coefficient becomes significant at
+  10% (0.13). The paper's design relies on these pre-war coefficients being
+  close to zero.
+
+Before the full rebuild, each step was checked against the authors'
+processed files: the rebuilt tariff files match theirs within the precision
+of Stata's 4-byte floats; `build.py` run on the authors' trade file
+reproduces their `data5` exactly (same 765,835 rows); and the analysis run
+on the authors' `data5` reproduces all 20 coefficients, standard errors and
+sample sizes in their Stata log and every cell of their Table A2.
 
 ## Folder layout
 
@@ -71,7 +96,8 @@ Replication Study/
 ```
 
 Folder names under `Data/Raw/` follow the authors' `data/raw/` folders, with
-a capital first letter.
+a capital first letter. Every Python script ports one of the authors'
+do-files and says which at the top.
 
 ## Setup (once)
 
@@ -88,22 +114,19 @@ a capital first letter.
    Any Python 3.12 works instead: `python3.12 -m venv ~/.venvs/stat5200`, then
    `~/.venvs/stat5200/bin/python -m pip install -r requirements.txt`.
 
-2. **The authors' replication package** (about 18 GB, needed for two large
-   files in step 1). Download it from openICPSR,
+2. **The authors' replication package** (about 18 GB; only two of its files
+   are used, in step 1b). Download it from openICPSR,
    <https://doi.org/10.3886/E194689V1> (free sign-in), and unzip it to
    `~/Downloads/GTW_replication`. To keep it elsewhere, set the environment
    variable `GTW_REPLICATION_DIR` to its folder.
 
-All commands below are run from the `Python/` folder with
-`~/.venvs/stat5200/bin/python`.
+All commands below are run from the `Python/` folder.
 
 ## 1. Data download
 
-Three sources. Only the small files are stored in this repository.
-
 | Data | Source | Where it is kept | In this repository? |
 |---|---|---|---|
-| UN Comtrade trade flows, HS 2012, 2014–2019 (957 files, ~14 GB) | **Downloaded fresh** with `comtrade_download.py` | `~/Downloads/Comtrade_raw/` | No (size, and Comtrade terms). The catalogue and download log are, in `Data/Raw/Comtrade/` |
+| UN Comtrade trade flows, HS 2012, 2014–2019 (957 files, 14.6 GB) | **Downloaded fresh** with `comtrade_download.py` | `~/Downloads/Comtrade_raw/` | No (size, and Comtrade terms). The catalogue and download log are, in `Data/Raw/Comtrade/` |
 | US Census monthly HS10 imports and exports, with US tariffs (2 files, 13 GB) | Authors' package, `data/raw/census_trade/` | Read in place from the package | No (size) |
 | Small raw files: China's tariff lists, crosswalks, country codes (7 files, 49 MB) | Authors' package, `data/raw/` | `Data/Raw/` | Yes |
 
@@ -112,7 +135,7 @@ The authors could not redistribute the raw Comtrade files (their
 
 ### 1a. Small raw files from the authors' package
 
-Already in `Data/Raw/`, copied unchanged (checked by SHA-256):
+Already in `Data/Raw/`, copied unchanged:
 
 | Folder | File | Content |
 |---|---|---|
@@ -123,14 +146,12 @@ Already in `Data/Raw/`, copied unchanged (checked by SHA-256):
 | `Crosswalk/` | `hs6_broad_sectors.dta` | HS6 product → broad sector |
 | `Wb_country_groups/` | `iso_codes.csv` | Comtrade country codes → ISO3 codes and names |
 
-Only the files the replication uses were copied.
-
 ### 1b. US Census files
 
-Nothing to do once the authors' package is unzipped (Setup, step 2). The
+Nothing to do once the authors' package is unzipped (Setup, step 2): the
 scripts read `m_flow_hs10_fm.dta` and `x_flow_hs10_fm.dta` from its
-`data/raw/census_trade/` folder. Note that the import file is not a pure
-Census extract: the authors merged the US tariff schedules into it.
+`data/raw/census_trade/` folder. The import file is not a pure Census
+extract: the authors merged the US tariff schedules into it.
 
 ### 1c. UN Comtrade data
 
@@ -163,8 +184,7 @@ Premium access is available through Penn.
    ~/.venvs/stat5200/bin/python comtrade_download.py --catalogue-only
    ```
 
-4. **Download everything** (about 14 GB; roughly 1–2 hours on a normal
-   connection):
+4. **Download everything** (14.6 GB; about 75 minutes on a fast connection):
 
    ```bash
    ~/.venvs/stat5200/bin/python comtrade_download.py
@@ -178,64 +198,88 @@ Premium access is available through Penn.
 The script writes `Data/Raw/Comtrade/catalogue.csv` (every file available,
 with publication dates) and `Data/Raw/Comtrade/download_log.csv` (when each
 file was downloaded, its publication date, size and SHA-256). Comtrade
-revises its data, so these records identify exactly which version was used.
-About a fifth of the files were republished after the authors' download in
-2022, so the rebuilt trade flows are expected to be very close to, but not
-identical with, the authors'.
+revises its data, so these records identify exactly which version was used:
+the files used here were downloaded on 15 November 2026 (UTC).
 
 ## 2. Data processing
 
-Python ports of the authors' data-processing do-files, one script per
-do-file, each saving one dataset to `Data/Processed/` (Parquet format). Run
-them in this order:
+Python ports of the authors' data-processing do-files. Each script saves its
+dataset to `Data/Processed/` (Parquet format). Run them in this order:
 
-| # | Script (`Python/Data Processing/`) | Ports | Inputs | Output (`Data/Processed/`) | Status |
+| # | Script (`Python/Data Processing/`) | Ports | Inputs | Output (`Data/Processed/`) | Time |
 |---|---|---|---|---|---|
-| 1 | `china_weight.py` | `china_weight.do` | Census imports and exports | `china_weight_hs6.parquet`: each HS10 product's 2015–17 share of US trade with China within its HS6 | Done |
-| 2 | `z_usch.py` | `z_usch.do` | Census imports, step 1, HS crosswalk | `z_usch_w.parquet`: US tariffs on China, by HS6 and period; regressor `dlz_usch` | Done |
-| 3 | `z_chus.py` | `z_chus.do` | Retaliation lists, Bown et al., AKW, HS crosswalk | `z_chus_w.parquet`: China's tariffs on the US, by HS6 and period; regressor `dlz_chus` | Done |
-| 4 | `comtrade.py` | `comtrade.do` | Comtrade download, country codes | Trade flows by reporter, partner, HS6 and year | To do |
-| 5 | `build.py` | `build.do` (up to `data5`) | Steps 2–4, sector crosswalk, country codes | `data5`: the estimation file | To do |
-
-`tariff_common.py` holds two steps shared by `z_usch.py` and `z_chus.py`:
-the HS 2017 → HS 2012 conversion and the tariff level and log change by
-period.
+| 1 | `china_weight.py` | `china_weight.do` | Census imports and exports | `china_weight_hs6.parquet`: each HS10 product's 2015–17 share of US trade with China within its HS6 | 25 s |
+| 2 | `z_usch.py` | `z_usch.do` | Census imports, step 1, HS crosswalk | `z_usch_w.parquet`: US tariffs on China by HS6 and period | 15 s |
+| 3 | `z_chus.py` | `z_chus.do` | Retaliation lists, Bown et al., AKW, HS crosswalk | `z_chus_w.parquet`: China's tariffs on the US by HS6 and period | 5 s |
+| 4 | `comtrade.py` | `comtrade.do` | Comtrade download, country codes | `global_trade_hs6_ct_consistent_hs12_<year>.parquet`: bilateral trade by HS6, one file per year | 6 min |
+| 5 | `build.py` | `build.do` (up to `data5`) | Steps 2–4, sector crosswalk, country codes | `data5.parquet`: the estimation file; `top50.parquet`: the 50 exporters in the sample | 20 s |
 
 ```bash
 ~/.venvs/stat5200/bin/python "Data Processing/china_weight.py"
 ~/.venvs/stat5200/bin/python "Data Processing/z_usch.py"
 ~/.venvs/stat5200/bin/python "Data Processing/z_chus.py"
+~/.venvs/stat5200/bin/python "Data Processing/comtrade.py"
+~/.venvs/stat5200/bin/python "Data Processing/build.py"
 ```
 
-Each takes about half a minute; steps 1 and 2 spend most of it reading the
-Census files.
+`tariff_common.py` holds two steps shared by `z_usch.py` and `z_chus.py`
+(the HS 2017 → HS 2012 conversion, and tariff levels and log changes by
+period); it is not run on its own.
+
+The yearly trade files (about 270 MB each) exceed GitHub's file limit and are
+not in the repository; `comtrade.py` rebuilds them. All other processed files
+are included.
 
 **Periods.** Years are grouped into two-year periods: t = −1 (2014–15),
-t = 0 (2016–17) and t = 1 (2018–19). The tariff change `dlz` is the change in
-log(1 + tariff) between periods; it is zero before the war.
+t = 0 (2016–17) and t = 1 (2018–19). Tariff changes `dlz` and export changes
+`dlv` are changes in logs between consecutive periods.
 
-**Verification.** Steps 1–3 were compared row by row with the authors'
-processed files (`china_weight_hs6.dta`, `z_usch_w.dta`, `z_chus_w.dta`):
-same rows, and every column equal within 3e-8 (the precision of Stata's
-4-byte floats). The one exception is described in the notes below; it does
-not affect any regression.
+**Trade flows (`comtrade.py`).** The Comtrade "Plus" files hold total trade
+and the same trade broken down by customs procedure and transport mode. The
+script keeps the totals (all procedures, all modes, imports and exports,
+6-digit products), drops the regional aggregates EU and ASEAN, and uses the
+authors' country codes (only Italy differs: 380 in the Plus files, 381 in
+the authors' data). Values are in millions of US dollars. As in the paper,
+exports are measured from the importers' records.
+
+**Estimation file (`build.py`).** For each exporter, HS6 product and period:
+exports to the US, to China and to the rest of the world, their log changes,
+and the two tariffs; restricted to the top 50 exporters by total exports,
+excluding 14 oil exporters. Columns of the authors' `data5` that no
+replicated result uses are not built: China's tariffs on other countries
+(`z_chrw`), US tariffs by country (`z_usi`), export-share weights (`sw_*`)
+and four extra destinations (India, Hong Kong and two combinations).
 
 ## 3. Data analysis and figures
 
-To do. The scripts in `Python/Data Analysis/` will port the authors'
-`didplots.do`, reading the estimation file `data5` from step 2. Every
-regression has one outcome and one tariff:
+```bash
+~/.venvs/stat5200/bin/python "Data Analysis/didplots.py"
+```
 
-| Variable | Meaning | Built from |
-|---|---|---|
-| `dlv_us`, `dlv_ch`, `dlv_rw` | Log change in exporter i's exports of product h to the US, China, rest of world | Comtrade (step 2, scripts 4–5) |
-| `dlz_usch` | Change in log(1 + US tariff on China) | `z_usch_w` (step 2, script 2) |
-| `dlz_chus` | Change in log(1 + China's tariff on the US) | `z_chus_w` (step 2, script 3) |
-| `cty_iso3` × `ind9` | Exporter × sector fixed effects (Figure A3) | Country codes, sector crosswalk |
-| `hs6` | Clusters for standard errors | — |
+`didplots.py` ports the authors' `didplots.do` (5 seconds). It reads
+`data5.parquet` and writes the figures and tables listed under *What is
+replicated*. Every regression has one outcome and one tariff:
 
-Sample: the top 50 exporters, excluding the US, China and 14 oil exporters.
-Outputs will be saved to `Figures/` and `Tables/`.
+| Variable | Meaning |
+|---|---|
+| `dlv_us`, `dlv_ch`, `dlv_rw` | Log change in exporter i's exports of product h to the US, China, rest of world |
+| `dlz_usch` | Change in log(1 + US tariff on China) |
+| `dlz_chus` | Change in log(1 + China's tariff on the US) |
+| `cty_iso3` × `ind9` | Exporter × sector fixed effects (Figure A3) |
+| `hs6` | Clusters for standard errors |
+
+In the pre-war regressions, the tariff variable is the product's war-period
+tariff change, so the coefficient tests whether products later hit by
+tariffs were already growing differently.
+
+| Stata (`didplots.do`) | Python (`didplots.py`) |
+|---|---|
+| `reghdfe y x, noab cluster(hs6)` | `ols(d, y, x, cluster="hs6")` |
+| `reghdfe y x, a(cs) cluster(hs6)` | `ols(d, y, x, fe="cs", cluster="hs6")`: drops singletons, demeans within exporter × sector, applies reghdfe's small-sample correction |
+| `binscatter y x, by(t) [absorb(cs)]` | `binscatter()`: 20 bins cut as Stata's `xtile` does, bin means by period, OLS line |
+
+The authors' package saves Figures A3 and A4 as `appendix/fig_a2.pdf` and
+`appendix/fig_a3.pdf`; here they are named by the paper's numbering.
 
 ## Notes on the authors' replication package
 
@@ -247,11 +291,12 @@ Outputs will be saved to `Figures/` and `Tables/`.
 - **Weighted log changes.** In the authors' `z_usch_w.dta` and `z_chus_w.dta`,
   `dlz_usch_w` and `dlz_chus_w` are copies of the unweighted `dlz_usch` and
   `dlz_chus`, and do not follow from the files' own `z_usch_w` and `z_chus_w`
-  columns as the code computes them. They were probably saved by an earlier
-  version of the code. Our scripts follow the code as written. No analysis
-  script uses these two variables.
+  columns as the code computes them; they were probably saved by an earlier
+  version of the code. Our scripts follow the code as written. No replicated
+  result uses these two variables.
 - **Excel dates.** `z_chus.do` parses the retaliation lists' effective dates
   as text, which depends on the cell formats. Our script reads the dates
-  directly; the result matches the authors' file exactly.
+  directly.
+- **Figure numbering.** See section 3.
 - **Values only.** `build.do` keeps only trade values when it aggregates
   Comtrade, discarding quantities.

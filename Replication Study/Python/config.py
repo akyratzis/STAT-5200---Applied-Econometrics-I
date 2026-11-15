@@ -7,8 +7,6 @@ Scripts
     Python/Data Processing/        raw data -> Data/Processed (ports of the
                                    authors' data processing do-files)
     Python/Data Analysis/          Data/Processed -> Figures and Tables
-    Python/Checks/                 local only (not in the repository):
-                                   compares our results with the authors'
 
 Scripts in the subfolders import this file with
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -24,8 +22,7 @@ Data locations
    outside iCloud. Set the environment variable COMTRADE_DATA_DIR to their
    folder, or leave it unset to use ~/Downloads/Comtrade_raw.
 3. The authors' replication package (about 18 GB), kept outside the
-   repository. The pipeline reads only the two US Census files from it; the
-   local checks also read the authors' processed data, results and logs.
+   repository. The pipeline reads only the two US Census files from it.
    Set the environment variable GTW_REPLICATION_DIR to its folder, or leave it
    unset to use ~/Downloads/GTW_replication.
 """
@@ -64,8 +61,3 @@ PACKAGE_DIR = Path(os.environ.get(
 # US Census monthly HS10 trade with US tariffs (13 GB): read in place.
 # Used by Data Processing/china_weight.py and z_usch.py.
 CENSUS_DIR = PACKAGE_DIR / "data" / "raw" / "census_trade"
-
-# Authors' outputs, used only by the local scripts in Python/Checks.
-AUTHORS_PROCESSED_DIR = PACKAGE_DIR / "data" / "processed"
-AUTHORS_RESULTS_DIR = PACKAGE_DIR / "results"
-AUTHORS_LOG_DIR = PACKAGE_DIR / "code" / "logs"

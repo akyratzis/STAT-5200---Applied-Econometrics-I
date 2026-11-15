@@ -57,11 +57,10 @@ Homework Assignments/Homework 5/Output/q4_bootstrap_checkpoint.rds
 # in case a copy is placed here again.
 Replication Study/Data/Raw/Comtrade/**/*.gz
 Replication Study/Data/Raw/Comtrade/**/*.part
+# Trade flows built by Data Processing/comtrade.py: about 270 MB per year,
+# over GitHub's 100 MB file limit. Rebuilt from the Comtrade download.
+Replication Study/Data/Processed/global_trade_hs6_ct_consistent_hs12_*.parquet
 Replication Study/Paper - Replication Package/
-
-# Local checks of our rebuilt datasets against the authors' processed files.
-# They need the full authors' package, so they are kept out of the repository.
-Replication Study/Python/Checks/
 
 # Secrets. API keys live in ~/.Renviron, outside the repository; these
 # patterns are a backstop so a stray copy cannot be committed.
