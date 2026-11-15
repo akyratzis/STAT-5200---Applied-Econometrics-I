@@ -28,9 +28,9 @@ during the war (2017–19). Standard errors are clustered by product.
 | Output | File | Content |
 |---|---|---|
 | Figure 1 | `Figures/fig_1.pdf` | Bystanders' exports to the US, China and the rest of the world (RW) against US and Chinese tariffs |
-| Figure A3 | `Figures/fig_a3.pdf` | Figure 1 with exporter × sector fixed effects |
-| Figure A4 | `Figures/fig_a4.pdf` | China's exports to the US and US exports to China |
-| Table A2 | `Tables/tab_a2.csv` | Coefficients, standard errors and sample sizes behind Figures 1 and A3 |
+| Figure A3 | `Figures/fig_a3.pdf` | China's exports to the US and US exports to China |
+| Figure A4 | `Figures/fig_a4.pdf` | Figure 1 with exporter × sector fixed effects |
+| Table A2 | `Tables/tab_a2.csv` | Coefficients, standard errors and sample sizes behind Figures 1 and A4 |
 | — | `Tables/did_regressions.csv` | All 20 regressions at full precision |
 
 The main model (Figures 2–4) is not part of this replication.
@@ -52,8 +52,8 @@ parentheses; \* 10%, \*\* 5%, \*\*\* 1%):
 | | | 2015–17 | 0.11 (0.08) | 0.13\* (0.08) |
 
 - **Exports to the US** are reproduced exactly, as is China's export
-  response to US tariffs (Figure A4, Panel A): the US import data has not
-  been revised since the authors' download. US exports to China (Figure A4,
+  response to US tariffs (Figure A3, Panel A): the US import data has not
+  been revised since the authors' download. US exports to China (Figure A3,
   Panel B) change slightly, from −2.98 to −3.00 (0.42).
 - **Exports to China and to the rest of the world** differ by up to 0.05.
   Comtrade has revised part of its data since the authors downloaded it
@@ -267,7 +267,7 @@ replicated*. Every regression has one outcome and one tariff:
 | `dlv_us`, `dlv_ch`, `dlv_rw` | Log change in exporter i's exports of product h to the US, China, rest of world |
 | `dlz_usch` | Change in log(1 + US tariff on China) |
 | `dlz_chus` | Change in log(1 + China's tariff on the US) |
-| `cty_iso3` × `ind9` | Exporter × sector fixed effects (Figure A3) |
+| `cty_iso3` × `ind9` | Exporter × sector fixed effects (Figure A4) |
 | `hs6` | Clusters for standard errors |
 
 In the pre-war regressions, the tariff variable is the product's war-period
@@ -280,8 +280,10 @@ tariffs were already growing differently.
 | `reghdfe y x, a(cs) cluster(hs6)` | `ols(d, y, x, fe="cs", cluster="hs6")`: drops singletons, demeans within exporter × sector, applies reghdfe's small-sample correction |
 | `binscatter y x, by(t) [absorb(cs)]` | `binscatter()`: 20 bins cut as Stata's `xtile` does, bin means by period, OLS line |
 
-The authors' package saves Figures A3 and A4 as `appendix/fig_a2.pdf` and
-`appendix/fig_a3.pdf`; here they are named by the paper's numbering.
+The figures are numbered as in the paper, which cites Figure A.3 for US–China
+bilateral trade and Figure A.4 for the fixed-effects robustness check. The
+authors' package saves Figure A4 as `appendix/fig_a2.pdf` and Figure A3 as
+`appendix/fig_a3.pdf`.
 
 ## Notes on the authors' replication package
 

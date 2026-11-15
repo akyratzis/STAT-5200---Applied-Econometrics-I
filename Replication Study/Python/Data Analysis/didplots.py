@@ -15,12 +15,12 @@ war-period tariff change, so b tests for pre-existing trends.
 
   Figure 1   bystanders (all exporters except the US and China); standard
              errors clustered by HS6 product
-  Figure A3  as Figure 1, with exporter x sector fixed effects
-  Figure A4  China's exports to the US and US exports to China (no clusters)
-  Table A2   the 16 bystander regressions behind Figures 1 and A3
+  Figure A3  China's exports to the US and US exports to China (no clusters)
+  Figure A4  as Figure 1, with exporter x sector fixed effects
+  Table A2   the 16 bystander regressions behind Figures 1 and A4
 
-The package saves Figures A3 and A4 as appendix/fig_a2.pdf and fig_a3.pdf;
-here they are named by the paper's numbering.
+Figures are numbered as the paper cites them. The package saves Figure A4
+as appendix/fig_a2.pdf and Figure A3 as appendix/fig_a3.pdf.
 
 Input : Data/Processed/data5.parquet (from Data Processing/build.py)
 Output: Figures/fig_1.pdf, fig_a3.pdf, fig_a4.pdf
@@ -290,8 +290,8 @@ def main():
                              header=False)
 
     figures = [("fig_1", BYSTANDER, None, (7.5, 10)),
-               ("fig_a3", BYSTANDER, "cs", (7.5, 10)),
-               ("fig_a4", ["usch", "chus"], None, (10, 5))]
+               ("fig_a3", ["usch", "chus"], None, (10, 5)),
+               ("fig_a4", BYSTANDER, "cs", (7.5, 10))]
     for name, panels, fe, size in figures:
         rows = 2 if len(panels) == 4 else 1
         fig, axes = plt.subplots(rows, 2, figsize=size)
