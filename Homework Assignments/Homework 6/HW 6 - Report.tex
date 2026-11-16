@@ -160,38 +160,30 @@ IV: mother's education & 0.04653 & 0.03800 & 0.03880\\
 \bottomrule
 \end{tabular}
 \end{center}
-Assuming the instruments are valid and relevant, the lower IV estimates are
-consistent with education being endogenous and OLS overstating its effect on
-log wages. The three-instrument estimate is about $0.02870$ below OLS.
-However, these are sample estimates: differences alone do not establish
-endogeneity statistically. A formal endogeneity test would be needed for a
-test-based conclusion. The first-stage partial $F$ statistic for jointly
-excluding the three instruments is $99.94$ (three restrictions, with 419
-residual degrees of freedom), providing strong evidence of their relevance.
-This does not establish their exogeneity.
+The OLS coefficient on education is $0.1078$, compared with $0.0791$
+using three-instrument 2SLS. Assuming the instruments are valid, this
+difference suggests that education is endogenous and that OLS overestimates
+its effect on log wages.
 
 \subsection{(2)}
-The comparison suggests an upward direction of OLS bias: OLS attributes a
-larger increase in log wages to an additional year of schooling than 2SLS does.
-This direction is plausible if unobserved ability raises wages and is
-positively related to schooling after controlling for the included covariates.
-Omitting ability then places it in the structural error, making schooling
-positively correlated with that error, as discussed in Notes 6. The OLS
-coefficient consequently captures both the effect of schooling and some of the
-positive effect of ability. The comparison is compatible with this mechanism;
-it does not by itself identify ability as the source of endogeneity.
+The lower 2SLS estimate suggests that OLS overestimates the effect of
+education on log wages. This direction is plausible if, after accounting
+for the included controls, people with more schooling also have unobserved
+characteristics, such as ability or motivation, that independently increase
+their wages. OLS then attributes part of those characteristics' effects to
+education. Assuming the instruments are valid, 2SLS isolates variation in
+schooling unrelated to these unobserved wage determinants, giving a lower
+estimate. Ability and motivation are possible explanations for the upward
+bias; the estimates do not establish which mechanism is responsible.
 
 \subsection{(3)}
-I use asymptotic 95\% confidence intervals with the same normal critical value,
-$z_{0.975}=1.959964$, for both estimators. For the primary comparison I use
-conventional, homoscedastic standard errors, matching the conventional columns
-in Lab 7. The OLS interval is
+Lab 7 reports an OLS coefficient of $0.1078320$ on education and a
+standard error of $0.0144021$. The 95\% confidence interval is
 \[
-    0.10783194\ \pm\ 1.959964(0.01440208)
+    \hat\beta_{\mathrm{educ}}\pm1.96\,\mathrm{SE}(\hat\beta_{\mathrm{educ}})
+    =0.1078320\pm1.96(0.0144021)
     =\boxed{[0.07960,\ 0.13606]}.
 \]
-If schooling is endogenous, this conventional OLS interval need not provide
-95\% coverage of the structural schooling effect, even in a large sample.
 
 \subsection{(4)}
 Using mother's, father's, and husband's education as excluded instruments,
@@ -321,34 +313,206 @@ Notes 8, equations (25)--(28), and Lab 7's \code{twsls} function.
 \section{Q5}
 \label{sec:q5}
 \subsection{(1)}
-\todo{Find a qualifying published empirical paper using IV or 2SLS.}
+I selected the paper by Liu et al.\ (2026), which I read for OIDD 9400.
+It is published in \emph{Manufacturing \& Service Operations Management},
+a journal in my field of operations management, and reports empirical
+instrumental-variable results in Section 6.5. The paper explicitly discusses
+2SLS but implements two-stage residual inclusion (2SRI) because its outcome
+is binary and its main model is a fixed-effects logit. It therefore uses
+an IV approach related to the methods in this assignment, with a nonlinear
+second stage.
 
 \subsection{(2)}
-\todo{Give the full citation of the paper.}
+Liu, Blair (Lianlian), Diwas Singh KC, Bradley R. Staats, and Michael P.
+Fundora. 2026. ``Frontiers in Operations: Operational Overload: The Impact
+of Workload on High-Skilled Workforce Attrition.''
+\emph{Manufacturing \& Service Operations Management} 28(5): 1458--1473.
+\url{https://doi.org/10.1287/msom.2025.0037}.
 
 \subsection{(3)}
-\todo{Summarize the main research question in one paragraph.}
+The paper asks how different dimensions of workload affect ICU nurses'
+voluntary decisions to leave their jobs. Rather than treating workload as
+one aggregate measure, the authors distinguish a nurse's responsibility
+within a shift, overtime shifts, exposure to patient deaths, and workload
+accumulated over time. They combine operational, clinical, and HR records
+to examine whether these dimensions have different relationships with
+attrition and whether coworker support can reduce their negative effects.
+The results associate greater responsibility with lower attrition, overtime
+and exposure to patient deaths with higher attrition, and cumulative
+workload with a U-shaped relationship. The managerial question is how to
+assign work and support nurses in ways that improve retention.
 
 \subsection{(4)}
-\todo{Describe the model, outcome, regressors, number of variables, and sample size.}
+I focus on the complete baseline specification in Table 2, column (5)
+(pp.\ 1464--1466). Let $Y_{jt}$ equal one if nurse $j$ leaves the ICU
+voluntarily four to eight weeks after shift $t$, and zero otherwise.
+Writing the paper's fixed-effects logit specification as a probability
+model,
+\[
+ \Pr(Y_{jt}=1\mid\text{regressors and fixed effects})=\Lambda(\eta_{jt}),
+ \qquad \Lambda(a)=\frac{e^a}{1+e^a},
+\]
+where
+\[
+\begin{aligned}
+ \eta_{jt}
+ &=\alpha_j+\delta_{m(t)}+\tau_{y(t)}
+   +\beta_R R_{jt}+\beta_O O_{jt}+\beta_E E_{jt}\\
+ &\quad+\beta_C C_{jt}+\beta_{C^2} C_{jt}^{2}
+   +X_{jt}'\theta.
+\end{aligned}
+\]
+Here $R_{jt}$ is the proportion of ICU patients primarily assigned to
+nurse $j$ in shift $t$. The overtime variable $O_{jt}$ counts shifts
+worked beyond the normal three shifts in the week containing $t$.
+The emotional-fatigue variable $E_{jt}$ counts patient deaths under the
+nurse's primary care in the preceding two weeks. The cumulative-workload
+variable $C_{jt}$ aggregates documented care activities in the prior four
+weeks with exponential decay, using decay parameter $0.01$.
+The four controls in $X_{jt}$ are the shift-level patient--nurse ratio,
+bed occupancy rate, the nurse's unit experience, and current-shift care
+activity workload. The terms $\alpha_j$, $\delta_{m(t)}$, and
+$\tau_{y(t)}$ are nurse, month, and year fixed effects.
+Thus the specification includes nine regressor terms, counting cumulative
+workload and its square separately, in addition to the fixed effects.
+
+The operational records cover January 2021 through February 2023.
+Although the source data cover 420 full-time nurses, the estimation sample
+reported in Tables 2 and 3 contains 17,606 nurse-shift observations from
+71 nurses who voluntarily left. This is important because fixed-effects
+logit draws on nurses whose binary outcome varies over time; the main
+regression should not be described as having 420 nurses contributing to
+its estimation. HR records extending to September 2023 identify subsequent
+departures (Section 4.1).
 
 \subsection{(5)}
-\todo{Identify the endogenous variable in the main empirical model.}
+I focus on $O_{jt}$, overtime shifts, corresponding to hypothesis H2 and
+the instrument discussed in my OIDD 9400 HW3 submission. The concern is
+that overtime is correlated with unobserved factors affecting a nurse's
+decision to leave. The authors also consider nurse responsibility (H1)
+and cumulative workload (H4) potentially endogenous. In their final IV
+specification, Table 3, they retain residual-inclusion corrections for H1
+and H2; they drop the H4 residual and its square after finding those
+terms statistically insignificant in the expanded specification. This
+failure to reject does not establish that cumulative workload is exogenous.
 
 \subsection{(6)}
-\todo{Explain how endogeneity arises in the main empirical model.}
+The authors explain that changing personal circumstances can affect both
+overtime choices and attrition. For example, a nurse already planning to
+leave might accept extra shifts to build a financial cushion before
+resigning. In that case, an unobserved intention to quit helps determine
+overtime, so the estimated association between overtime and attrition
+cannot be attributed entirely to overtime causing burnout. Nurse fixed
+effects absorb persistent individual differences, but they do not remove
+such changing personal circumstances. For H1, the authors also discuss
+unobserved leadership or staffing-policy changes; for H4, nurses might
+adjust their work effort before resigning (Section 6.5, p.\ 1469).
 
 \subsection{(7)}
-\todo{Identify the instrumental variables.}
+For overtime, the instrument is
+\code{PeerSchedAbs\_PriorWeek}: the number of scheduled absences taken
+by other nurses in the same ICU during the week before the focal shift,
+excluding nurse $j$'s own absences. These include approved absences such
+as family or bereavement leave. The relevance argument is that peer
+absences create staffing gaps and increase overtime opportunities for
+the remaining nurses. The authors argue for exclusion because the
+absences are approved in advance and should affect the focal nurse's
+quit decision only through overtime.
+
+The other proposed instruments are new ICU patient arrivals in the same
+shift exactly seven days earlier for nurse responsibility, and peer
+unscheduled absences during the previous four weeks for cumulative
+workload. The latter instrument is used in the expanded correction
+before the authors drop the H4 residual terms.
+
+In 2SRI, the authors obtain first-stage fitted values and residuals, then
+include the original workload variables and the estimated residuals in
+the logit model. They do not replace overtime with fitted overtime in an
+ordinary linear second-stage regression as in conventional 2SLS.
 
 \subsection{(8)}
-\todo{Discuss the first-stage evidence for instrument relevance.}
+The authors present the first-stage specifications in Section 6.5,
+equations (1.1)--(1.3), on p.\ 1470. For overtime, the specification is
+\[
+\begin{aligned}
+ O_{jt}
+ &=\pi Z_{jt}+a_j+d_{m(t)}+q_{y(t)}
+   +\rho_R R_{jt}+\rho_E E_{jt}\\
+ &\quad+\rho_C C_{jt}+\rho_{C^2}C_{jt}^{2}
+   +X_{jt}'\kappa+v_{jt},
+\end{aligned}
+\]
+where $Z_{jt}$ denotes scheduled peer absences in the prior week.
+However, presenting a specification is different from reporting its
+estimated results. I did not find estimated instrument coefficients,
+first-stage standard errors, or excluded-instrument $F$ statistics in the
+main paper or its online appendix.\footnote{Online appendix:
+\url{https://pubsonline.informs.org/doi/suppl/10.1287/msom.2025.0037/suppl_file/msom.2025.0037.sm2.pdf}.}
+Table 3 and appendix Table A10 report
+the residual-inclusion logit results, rather than first-stage estimates.
+Thus the paper explains the operational argument for relevance, but does
+not provide these numerical first-stage diagnostics. I would want to
+see that the instrument predicts overtime conditional on the other
+regressors and fixed effects before assessing instrument strength.
 
 \subsection{(9)}
-\todo{Compare OLS and IV or 2SLS results and the implied direction of OLS bias.}
+The reported baseline is fixed-effects logit, not OLS. The IV comparison
+is therefore between the uncorrected logit in Table 2 and the 2SRI logit
+in Table 3. For overtime, the reported coefficients and standard errors
+are:
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Specification & Overtime coefficient & Standard error\\
+\midrule
+Baseline logit, Table 2(5) & 0.461 & 0.077\\
+IV-corrected logit, Table 3 & 54.28 & 9.469\\
+\bottomrule
+\end{tabular}
+\end{center}
+Both are positive and statistically significant at the 1\% level, but
+the corrected coefficient is much larger. If the instruments are valid
+and the residual-inclusion model is correctly specified, the comparison
+suggests that ignoring endogeneity understates overtime's positive effect
+on the log-odds of quitting. However, these are nonlinear-model
+coefficients from different specifications; their difference is not a
+probability effect or an estimate of OLS bias. I would compare marginal
+probability effects on a common basis before drawing conclusions about
+the magnitude of the change. The direction of bias also cannot be
+inferred from the endogeneity story alone, and the instrument-validity
+concern below limits a causal interpretation of the corrected estimate.
 
 \subsection{(10)}
-\todo{Give a plausible argument against the validity of the instruments.}
+My concern is the exclusion restriction for scheduled peer absences,
+following the argument in my handwritten OIDD 9400 HW3 submission
+(p.\ 8, Q3). Even if a nurse takes no extra shifts, working while
+coworkers are absent can mean less help with difficult tasks, less
+emotional support, and greater stress during regular shifts. These
+conditions could increase the nurse's willingness to leave independently
+of the number of overtime shifts worked. The alternative channel is
+\[
+ \begin{gathered}
+ \text{scheduled peer absences}\\
+ \downarrow\\
+ \text{less coworker support and greater regular-shift stress}\\
+ \downarrow\\
+ \text{higher likelihood of quitting}.
+ \end{gathered}
+\]
+This channel bypasses overtime. If it persists after conditioning on the
+included workload measures, staffing controls, and fixed effects, the
+instrument is related to unobserved determinants of attrition and is
+invalid for identifying overtime's effect. Staffing counts and recorded
+care activities need not fully capture emotional support or the quality
+of teamwork. The paper's own Section 7, examining coworker support as a
+buffer against attrition, makes this concern particularly relevant.
+
+Approval of absences in advance may make them less responsive to the
+focal nurse's immediate plans, but it does not rule out these other
+causal pathways. This is a plausible violation, rather than proof that
+the instrument is invalid. If the exclusion restriction fails, the
+residual-inclusion correction does not by itself deliver a causal
+overtime effect.
 
 \clearpage
 \appendix
