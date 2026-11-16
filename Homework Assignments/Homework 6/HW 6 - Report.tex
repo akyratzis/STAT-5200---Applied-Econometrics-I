@@ -142,15 +142,7 @@ exist and follows Notes 8.
 \clearpage
 \section{Q3}
 \label{sec:q3}
-All estimates below use the same 428 working women with positive wages and
-complete observations on the model variables in the Mroz data. The dependent
-variable is $\log(\text{wage})$; controls are experience, experience squared,
-age, the number of children under six, and the number aged six to eighteen.
-Every instrument set also includes an intercept and these exogenous controls.
-The calculations reproduce Lab 7 to its reported precision. The observations
-come from Stata's Wooldridge textbook data archive.\footnote{Data source:
-\url{https://www.stata.com/data/jwooldridge/eacsap/mroz.dta}. The local
-Lab 7 \code{mroz.txt} contains variable descriptions rather than observations.}
+We use the regression results reported in the Lab07 notes.
 
 \subsection{(1)}
 The estimated coefficient on education is $0.10783$ under OLS, $0.04653$
@@ -247,10 +239,8 @@ second <- lm(
   data = d, na.action = na.fail
 )
 \end{lstlisting}
-The complete reproducible implementation is included in
-Appendix~\ref{app:iv-code}.
-It constructs the sample, estimates all models, and saves the comparisons
-in \code{Output/}. Here, \code{exper2} is squared experience and
+The code for this question is included in Appendix~\ref{app:iv-code}.
+Here, \code{exper2} is squared experience and
 \code{logwage} is the natural logarithm of wage.
 
 \subsection{(2)}
@@ -362,14 +352,47 @@ Notes 8, equations (25)--(28), and Lab 7's \code{twsls} function.
 
 \clearpage
 \appendix
-\section{R code for Q3--Q4}
+\section{R code for Q4}
 \label{app:iv-code}
-\lstinputlisting[style=Rcode,caption={Reproducing the Lab 7 wage regressions,
-confidence intervals, and manual two-stage estimation.},label={lst:q3-q4-code}]{R/q3_q4_iv.R}
+The following code uses the local Mroz data to implement the two stages
+and compare the default second-stage standard errors with the correct
+2SLS standard errors. Run it from the Homework 6 folder.
+\begin{lstlisting}[style=Rcode,caption={Manual two-stage estimation and standard errors for Q4.},label={lst:q4-code}]
+raw <- read.csv("Data/mroz.csv")
+vars <- c("inlf", "wage", "educ", "exper", "age", "kidslt6",
+          "kidsge6", "motheduc", "fatheduc", "huseduc")
+keep <- complete.cases(raw[, vars]) & raw$inlf == 1 & raw$wage > 0
+d <- raw[which(keep), vars]
+d$logwage <- log(d$wage)
+d$exper2 <- d$exper^2
+
+first <- lm(educ ~ exper + exper2 + age + kidslt6 + kidsge6 +
+              motheduc + fatheduc + huseduc, data = d)
+d$educ_hat <- fitted(first)
+second <- lm(logwage ~ exper + exper2 + age + kidslt6 + kidsge6 +
+               educ_hat, data = d)
+
+X <- model.matrix(~ exper + exper2 + age + kidslt6 + kidsge6 +
+                    educ, data = d)
+Xhat <- model.matrix(second)
+beta <- coef(second)
+u_hat <- d$logwage - drop(X %*% beta)
+N <- nrow(X)
+K <- ncol(X)
+bread <- solve(crossprod(Xhat))
+V <- sum(u_hat^2) / (N - K) * bread
+scores <- Xhat * u_hat
+V_HC1 <- N / (N - K) * bread %*% crossprod(scores) %*% bread
+
+print(data.frame(estimate = beta,
+                 naive_SE = sqrt(diag(vcov(second))),
+                 correct_SE = sqrt(diag(V)),
+                 HC1_SE = sqrt(diag(V_HC1))))
+\end{lstlisting}
 
 \section*{AI usage disclosure}
 OpenAI Codex was used to help generate and adapt the R code included
-in this report, using the course lab notes as references. The reported
-numerical results were obtained by running the code.
+in this report, using the course lab notes as references. Q3 uses the regression results printed in the Lab07 notes; the code
+for Q4 was run to obtain its numerical comparisons.
 
 \end{document}
