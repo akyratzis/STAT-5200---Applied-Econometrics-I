@@ -186,25 +186,23 @@ standard error of $0.0144021$. The 95\% confidence interval is
 \]
 
 \subsection{(4)}
-Using mother's, father's, and husband's education as excluded instruments,
-the 2SLS interval is
+Using mother's, father's, and husband's education as instruments, Lab 7
+reports a 2SLS coefficient of $0.0791330188$ on education and a standard
+error of $0.0224050892$. The 95\% confidence interval is
 \[
-    0.07913301\ \pm\ 1.959964(0.02240509)
+    \hat\beta_{\mathrm{educ}}\pm1.96\,\mathrm{SE}(\hat\beta_{\mathrm{educ}})
+    =0.0791330188\pm1.96(0.0224050892)
     =\boxed{[0.03522,\ 0.12305]}.
 \]
-This interval relies on instrument validity and relevance, the usual sampling
-and regularity conditions, and homoscedasticity for the conventional standard
-error. As a sensitivity check, HC1 heteroscedasticity-robust standard errors
-give intervals $[0.08113,\ 0.13453]$ for OLS and
-$[0.03547,\ 0.12279]$ for three-instrument 2SLS. The ordering of interval
-widths is unchanged. Robust standard errors address heteroscedasticity; they
-do not correct an inconsistent estimator or invalid instruments.
 
 \subsection{(5)}
 The conventional OLS interval has width $0.05646$, compared with $0.08783$
-for 2SLS. Thus the 2SLS interval is about 56\% wider. IV uses the variation in
-education predicted by the instruments and controls, which can provide less
-precision than using all observed variation in education. Nevertheless, a
+for 2SLS. Thus the 2SLS interval is about 56\% wider. OLS has a smaller
+standard error because it uses more of the observed variation in education
+to estimate the coefficient. 2SLS relies on the variation predicted by the
+instruments, after accounting for the controls. Since the instruments
+explain only part of the variation in education, the 2SLS estimate is less
+precise. Nevertheless, a
 narrower interval is not always preferable. If education is endogenous, OLS
 can estimate the wrong population quantity very precisely, so its narrower
 interval can be misleading about the structural effect. Under valid and
