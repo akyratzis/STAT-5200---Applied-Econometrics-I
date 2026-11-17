@@ -213,11 +213,8 @@ Instrument validity and appropriate coverage matter alongside interval width.
 \section{Q4}
 \label{sec:q4}
 \subsection{(1)}
-I load the Mroz data and keep the 428 working women. The variables
-\code{lwage} and \code{expersq} already contain log wage and squared
-experience, so I copy them under the names used in HW6. I then run the
-handout's commands unchanged inside \code{with(mroz, ...)} to make the
-column names available.
+I loaded the Mroz dataset, kept the 428 working women, and executed the
+provided code.
 \begin{lstlisting}[style=Rcode]
 # Run from the Homework 6 folder.
 mroz <- read.csv("Data/mroz.csv")
@@ -235,77 +232,45 @@ mm2 = lm(logwage ~ exper + exper2 + age + kidslt6 + kidsge6 + educ_hat);
 \end{lstlisting}
 
 \subsection{(2)}
-The point estimates match the three-instrument 2SLS estimates from Q3.
-In particular, the coefficient on \code{educ\_hat} is $0.07913301$.
-The coefficients agree up to numerical rounding.
-\begin{center}
-\begin{tabular}{lrr}
-\toprule
-Regressor & Two-stage \code{lm()} & 2SLS\\
-\midrule
-Intercept & $-0.04432209$ & $-0.04432209$\\
-Experience & $0.04125802$ & $0.04125802$\\
-Experience squared & $-0.00083191$ & $-0.00083191$\\
-Age & $-0.00181008$ & $-0.00181008$\\
-Children under six & $-0.03989113$ & $-0.03989113$\\
-Children six to eighteen & $-0.02096058$ & $-0.02096058$\\
-Education / fitted education & $0.07913301$ & $0.07913301$\\
-\bottomrule
-\end{tabular}
-\end{center}
-To see why, write $X$ for the matrix of original regressors and $Z$ for
-the controls and excluded instruments. Let
+Yes, the point estimates match the three-instrument 2SLS estimates in
+Lab 7. The coefficient on education is $0.07913301$.
+
+Lab 7 uses matrix calculations. Following Notes 8, equations (18)--(20)
+on p.\ 5, these are
 \[
- P_Z=Z(Z'Z)^{-1}Z',\qquad \widehat X=P_ZX.
-\]
-The exogenous controls, including the intercept, are already in the column
-space of $Z$, so their projections equal their original values. Therefore,
-replacing only education with its first-stage fitted value produces exactly
-$\widehat X$. Since $P_Z$ is symmetric and idempotent,
-\[
+ \widehat X=Z(Z'Z)^{-1}Z'X,\qquad
  \widehat\beta_{\mathrm{2SLS}}
-   =(X'P_ZX)^{-1}X'P_Zy
+   =(\widehat X'X)^{-1}\widehat X'y
    =(\widehat X'\widehat X)^{-1}\widehat X'y.
 \]
-The right-hand expression is the OLS coefficient vector from the second
-\code{lm()} call, proving equality when the sample, controls, and instruments
-are identical and the required matrices have full rank.
+Here $y$ contains log wages, $X$ contains education and the controls,
+and $Z$ contains the instruments and the controls; both matrices include
+an intercept. The first calculation obtains fitted education and leaves
+the controls unchanged. The second obtains the wage-regression coefficients.
+Q4 performs the same steps using two \code{lm()} calls instead of matrix
+calculations. Since the sample, instruments, and controls are the same,
+the coefficients are the same. Notes 8, p.\ 10, describes this two-regression
+implementation.
 
 \subsection{(3)}
-The default standard errors do not match. For education, the second-stage
-\code{lm()} reports $0.02342310$, whereas the correct conventional 2SLS
-standard error is $0.02240509$ (the correct HC1 robust value is $0.02227623$).
-The discrepancy arises because \code{lm()} treats the second-stage equation
-as an ordinary regression and calculates residuals
+No, the standard errors differ. For education, Q4's second-stage
+\code{lm()} gives $0.02342310$, compared with Lab 7's conventional 2SLS
+standard error of $0.02240509$.
+
+As explained in Notes 8, pp.\ 9--10, the correct 2SLS standard errors
+use residuals calculated with the original regressors:
+\[
+ \widehat u=y-X\widehat\beta.
+\]
+Lab 7 calculates these residuals separately. In contrast, the second-stage
+\code{lm()} calculates residuals using fitted education:
 \[
  e=y-\widehat X\widehat\beta.
 \]
-For conventional 2SLS inference, the error variance must instead be estimated
-using the structural residuals based on the original regressors:
-\[
- \widehat u=y-X\widehat\beta,\qquad
- \widehat\sigma^2=\frac{\widehat u'\widehat u}{N-K},\qquad
- \widehat{\Var}(\widehat\beta_{\mathrm{2SLS}})
- =\widehat\sigma^2(\widehat X'\widehat X)^{-1}.
-\]
-Here $N=428$ and $K=7$, including the intercept. The naive second-stage
-residual variance is $0.492629$, compared with the correct structural
-residual variance of $0.450738$. Consequently, the naive standard error is
-about 4.54\% larger in this application. This observed direction is specific
-to the data; the key issue is that the default second-stage variance formula
-uses the wrong residuals for the structural equation.
-For heteroscedasticity-robust inference, the covariance matrix must likewise
-use the structural residuals:
-\[
- \widehat V_{\mathrm{HC1}}
- =\frac{N}{N-K}(\widehat X'\widehat X)^{-1}
- \left(\sum_{i=1}^N\widehat u_i^2\widehat x_i\widehat x_i'\right)
- (\widehat X'\widehat X)^{-1},
-\]
-where $\widehat x_i$ denotes the transposed $i$th row of $\widehat X$.
-Merely applying an ordinary robust covariance calculation to the second-stage
-\code{lm()} would still use the wrong residuals. These calculations follow
-Notes 8, equations (25)--(28), and Lab 7's \code{twsls} function.
+The different residuals give different estimates of the error variance,
+and hence different standard errors. The default standard errors from
+the second-stage \code{lm()} are therefore not the correct 2SLS standard
+errors; the correction is given in Notes 8, equations (25)--(26).
 
 \clearpage
 \section{Q5}
