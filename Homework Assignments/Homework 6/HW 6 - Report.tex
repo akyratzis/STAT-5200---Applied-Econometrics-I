@@ -213,37 +213,37 @@ Instrument validity and appropriate coverage matter alongside interval width.
 \section{Q4}
 \label{sec:q4}
 \subsection{(1)}
-I interpret ``the same data used in Q2'' as the Mroz data used in Q3,
-since Q2 contains no empirical dataset. Using the identical 428-observation
-sample, I run the supplied regressions with explicitly scoped data:
+I load the Mroz data and keep the 428 working women. The variables
+\code{lwage} and \code{expersq} already contain log wage and squared
+experience, so I copy them under the names used in HW6. I then run the
+handout's commands unchanged inside \code{with(mroz, ...)} to make the
+column names available.
 \begin{lstlisting}[style=Rcode]
-first <- lm(
-  educ ~ exper + exper2 + age + kidslt6 + kidsge6 +
-    motheduc + fatheduc + huseduc,
-  data = d, na.action = na.fail
-)
-d$educ_hat <- fitted(first)
-second <- lm(
-  logwage ~ exper + exper2 + age + kidslt6 + kidsge6 +
-    educ_hat,
-  data = d, na.action = na.fail
-)
+# Run from the Homework 6 folder.
+mroz <- read.csv("Data/mroz.csv")
+mroz <- subset(mroz, inlf == 1)
+mroz$logwage <- mroz$lwage
+mroz$exper2 <- mroz$expersq
+
+with(mroz, {
+# --- 1st stage
+mm_1 = lm(educ ~ exper + exper2 + age + kidslt6 + kidsge6 + motheduc + fatheduc + huseduc);
+educ_hat = matrix(mm_1$fitted.values); # xhat
+# --- 2nd stage
+mm2 = lm(logwage ~ exper + exper2 + age + kidslt6 + kidsge6 + educ_hat);
+})
 \end{lstlisting}
-The code for this question is included in Appendix~\ref{app:iv-code}.
-Here, \code{exper2} is squared experience and
-\code{logwage} is the natural logarithm of wage.
 
 \subsection{(2)}
 The point estimates match the three-instrument 2SLS estimates from Q3.
 In particular, the coefficient on \code{educ\_hat} is $0.07913301$.
-The largest absolute coefficient difference across all seven coefficients
-is approximately $2.4\times10^{-15}$, reflecting floating-point precision.
+The coefficients agree up to numerical rounding.
 \begin{center}
 \begin{tabular}{lrr}
 \toprule
 Regressor & Two-stage \code{lm()} & 2SLS\\
 \midrule
-Intercept & $-0.04432207$ & $-0.04432207$\\
+Intercept & $-0.04432209$ & $-0.04432209$\\
 Experience & $0.04125802$ & $0.04125802$\\
 Experience squared & $-0.00083191$ & $-0.00083191$\\
 Age & $-0.00181008$ & $-0.00181008$\\
@@ -516,40 +516,21 @@ overtime effect.
 \appendix
 \section{R code for Q4}
 \label{app:iv-code}
-The following code uses the local Mroz data to implement the two stages
-and compare the default second-stage standard errors with the correct
-2SLS standard errors. Run it from the Homework 6 folder.
-\begin{lstlisting}[style=Rcode,caption={Manual two-stage estimation and standard errors for Q4.},label={lst:q4-code}]
-raw <- read.csv("Data/mroz.csv")
-vars <- c("inlf", "wage", "educ", "exper", "age", "kidslt6",
-          "kidsge6", "motheduc", "fatheduc", "huseduc")
-keep <- complete.cases(raw[, vars]) & raw$inlf == 1 & raw$wage > 0
-d <- raw[which(keep), vars]
-d$logwage <- log(d$wage)
-d$exper2 <- d$exper^2
+Run the following code from the Homework 6 folder.
+\begin{lstlisting}[style=Rcode,caption={The HW6 Q4 commands with data loading.},label={lst:q4-code}]
+# Run from the Homework 6 folder.
+mroz <- read.csv("Data/mroz.csv")
+mroz <- subset(mroz, inlf == 1)
+mroz$logwage <- mroz$lwage
+mroz$exper2 <- mroz$expersq
 
-first <- lm(educ ~ exper + exper2 + age + kidslt6 + kidsge6 +
-              motheduc + fatheduc + huseduc, data = d)
-d$educ_hat <- fitted(first)
-second <- lm(logwage ~ exper + exper2 + age + kidslt6 + kidsge6 +
-               educ_hat, data = d)
-
-X <- model.matrix(~ exper + exper2 + age + kidslt6 + kidsge6 +
-                    educ, data = d)
-Xhat <- model.matrix(second)
-beta <- coef(second)
-u_hat <- d$logwage - drop(X %*% beta)
-N <- nrow(X)
-K <- ncol(X)
-bread <- solve(crossprod(Xhat))
-V <- sum(u_hat^2) / (N - K) * bread
-scores <- Xhat * u_hat
-V_HC1 <- N / (N - K) * bread %*% crossprod(scores) %*% bread
-
-print(data.frame(estimate = beta,
-                 naive_SE = sqrt(diag(vcov(second))),
-                 correct_SE = sqrt(diag(V)),
-                 HC1_SE = sqrt(diag(V_HC1))))
+with(mroz, {
+# --- 1st stage
+mm_1 = lm(educ ~ exper + exper2 + age + kidslt6 + kidsge6 + motheduc + fatheduc + huseduc);
+educ_hat = matrix(mm_1$fitted.values); # xhat
+# --- 2nd stage
+mm2 = lm(logwage ~ exper + exper2 + age + kidslt6 + kidsge6 + educ_hat);
+})
 \end{lstlisting}
 
 \section*{AI usage disclosure}

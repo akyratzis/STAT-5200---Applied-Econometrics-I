@@ -1,0 +1,68 @@
+HW6 Q4: supplied commands run unchanged
+Analysis observations: 428
+
+First stage
+
+Call:
+lm(formula = educ ~ exper + exper2 + age + kidslt6 + kidsge6 +
+    motheduc + fatheduc + huseduc)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-6.8021 -1.1003  0.0396  1.0583  5.6827
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept)  5.4487182  0.8045099   6.773 4.29e-11 ***
+exper        0.0364066  0.0346443   1.051 0.293925
+exper2      -0.0007485  0.0010417  -0.718 0.472866
+age          0.0071782  0.0139787   0.514 0.607868
+kidslt6      0.4652824  0.2293508   2.029 0.043121 *
+kidsge6     -0.1013401  0.0723386  -1.401 0.161980
+motheduc     0.1200425  0.0313007   3.835 0.000145 ***
+fatheduc     0.0999184  0.0295991   3.376 0.000805 ***
+huseduc      0.3679844  0.0296535  12.409  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.731 on 419 degrees of freedom
+Multiple R-squared:  0.4373,	Adjusted R-squared:  0.4266
+F-statistic: 40.71 on 8 and 419 DF,  p-value: < 2.2e-16
+
+
+Second stage
+
+Call:
+lm(formula = logwage ~ exper + exper2 + age + kidslt6 + kidsge6 +
+    educ_hat)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-3.12437 -0.33228  0.04386  0.38653  2.39975
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept) -0.0443221  0.4072636  -0.109 0.913390
+exper        0.0412580  0.0140959   2.927 0.003609 **
+exper2      -0.0008319  0.0004236  -1.964 0.050225 .
+age         -0.0018101  0.0055631  -0.325 0.745063
+kidslt6     -0.0398911  0.0941306  -0.424 0.671939
+kidsge6     -0.0209606  0.0295705  -0.709 0.478820
+educ_hat     0.0791330  0.0234231   3.378 0.000797 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.7019 on 421 degrees of freedom
+Multiple R-squared:  0.07133,	Adjusted R-squared:  0.0581
+F-statistic:  5.39 on 6 and 421 DF,  p-value: 2.218e-05
+
+
+Second-stage coefficients (additional digits)
+                    Estimate      Std. Error       t value        Pr(>|t|)
+(Intercept) -0.0443220694704 0.4072636228926 -0.1088289427 0.9133900177953
+exper        0.0412580245760 0.0140959201561  2.9269479480 0.0036085829547
+exper2      -0.0008319079309 0.0004236469267 -1.9636822043 0.0502246488721
+age         -0.0018100780035 0.0055631335598 -0.3253702224 0.7450625297294
+kidslt6     -0.0398911337104 0.0941305572628 -0.4237851647 0.6719389335986
+kidsge6     -0.0209605848926 0.0295705200661 -0.7088338266 0.4788199221430
+educ_hat     0.0791330082456 0.0234231027454  3.3784169888 0.0007969224621
