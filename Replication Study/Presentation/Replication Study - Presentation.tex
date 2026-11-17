@@ -213,10 +213,10 @@
   \end{tabular}\par}%
   \vspace{2pt}{\scriptsize\textcolor{PennRed}{Red}: differs from the paper\par}}
 
-% Replicated figures from Replication Study/Figures, copied here so the
-% presentation compiles on its own in Overleaf. Refresh these copies after
-% re-running didplots.py. Figure A.4 adds exporter x sector fixed effects.
-\newcommand{\figh}{6.0cm}    % height of the portrait figures
+% Landscape vector figures reuse the replication's bins and regression fits.
+% Rebuild with build_slide_figures.py after updating the processed data.
+% Figure A.4 adds exporter x sector fixed effects.
+\newcommand{\figh}{6.2cm}    % maximum figure height on slides 8 and 10
 
 %%% ------------------------------------------------------------------
 
@@ -374,11 +374,13 @@ errors (FE: singletons dropped, same small-sample correction).
 
 \begin{frame}{Figure 1: average export responses}
 \begin{columns}[T,onlytextwidth]
-  \begin{column}{0.57\textwidth}
+  \begin{column}{0.80\textwidth}
     \centering
-    \includegraphics[width=\linewidth,height=\figh,keepaspectratio]{figures/replication/fig_1.pdf}
+    \includegraphics[width=\linewidth,height=\figh,keepaspectratio]{figures/replication/fig_1_slides.pdf}
   \end{column}
-  \begin{column}{0.39\textwidth}
+  \begin{column}{0.18\textwidth}
+    \resizebox{\linewidth}{!}{%
+      \begin{minipage}[t]{3.6cm}
     \slopes{Post-period slope, 2017--19}{%
       A\enspace US & \pv{0.31}{***} & \pv{0.31}{***} \\
       B\enspace CH & \pv{0.01}{} & \pr{0.05}{} \\
@@ -386,6 +388,7 @@ errors (FE: singletons dropped, same small-sample correction).
       D\enspace RW & \pv{0.29}{***} & \pr{0.25}{***} \\}
     \vspace{0.5em}
     {\footnotesize\raggedright Panel A identical; B--D within 0.05\par}
+      \end{minipage}}
   \end{column}
 \end{columns}
 \note{\notehead{8. Figure 1: average export responses}{1:10}{4:35}
@@ -439,11 +442,13 @@ Replication: 102{,}903; 90{,}100; 223{,}903; 223{,}903.\par}
 
 \begin{frame}{Robustness: exporter $\times$ sector FE (Fig.\ A.4)}
 \begin{columns}[T,onlytextwidth]
-  \begin{column}{0.57\textwidth}
+  \begin{column}{0.80\textwidth}
     \centering
-    \includegraphics[width=\linewidth,height=\figh,keepaspectratio]{figures/replication/fig_a4_fe.pdf}
+    \includegraphics[width=\linewidth,height=\figh,keepaspectratio]{figures/replication/fig_a4_slides.pdf}
   \end{column}
-  \begin{column}{0.39\textwidth}
+  \begin{column}{0.18\textwidth}
+    \resizebox{\linewidth}{!}{%
+      \begin{minipage}[t]{3.6cm}
     \slopes{Post-period slope, with FE}{%
       A\enspace US & \pv{0.20}{*} & \pv{0.20}{*} \\
       B\enspace CH & \pv{$-$0.06}{} & \pr{$-$0.01}{} \\
@@ -451,6 +456,7 @@ Replication: 102{,}903; 90{,}100; 223{,}903; 223{,}903.\par}
       D\enspace RW & \pv{0.30}{***} & \pr{0.26}{***} \\}
     \vspace{0.5em}
     {\footnotesize\raggedright Same conclusions as Figure 1\par}
+      \end{minipage}}
   \end{column}
 \end{columns}
 \note{\notehead{10. Robustness: exporter $\times$ sector fixed effects}{0:45}{6:00}
