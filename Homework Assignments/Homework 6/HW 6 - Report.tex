@@ -276,14 +276,10 @@ errors; the correction is given in Notes 8, equations (25)--(26).
 \section{Q5}
 \label{sec:q5}
 \subsection{(1)}
-I selected the paper by Liu et al.\ (2026), which I read for OIDD 9400.
-It is published in \emph{Manufacturing \& Service Operations Management},
-a journal in my field of operations management, and reports empirical
-instrumental-variable results in Section 6.5. The paper explicitly discusses
-2SLS but implements two-stage residual inclusion (2SRI) because its outcome
-is binary and its main model is a fixed-effects logit. It therefore uses
-an IV approach related to the methods in this assignment, with a nonlinear
-second stage.
+I selected Liu et al.\ (2026), published in
+\emph{Manufacturing \& Service Operations Management}.
+Section 6.5 uses instrumental variables to address endogeneity in the
+relationship between workload and nurse attrition.
 
 \subsection{(2)}
 Liu, Blair (Lianlian), Diwas Singh KC, Bradley R. Staats, and Michael P.
@@ -293,189 +289,64 @@ of Workload on High-Skilled Workforce Attrition.''
 \url{https://doi.org/10.1287/msom.2025.0037}.
 
 \subsection{(3)}
-The paper asks how different dimensions of workload affect ICU nurses'
-voluntary decisions to leave their jobs. Rather than treating workload as
-one aggregate measure, the authors distinguish a nurse's responsibility
-within a shift, overtime shifts, exposure to patient deaths, and workload
-accumulated over time. They combine operational, clinical, and HR records
-to examine whether these dimensions have different relationships with
-attrition and whether coworker support can reduce their negative effects.
-The results associate greater responsibility with lower attrition, overtime
-and exposure to patient deaths with higher attrition, and cumulative
-workload with a U-shaped relationship. The managerial question is how to
-assign work and support nurses in ways that improve retention.
+The paper examines how responsibility within a shift, overtime, exposure
+to patient deaths, and cumulative workload affect ICU nurses' voluntary
+attrition. It also asks whether coworker support reduces the negative
+effects of workload, with the goal of improving staffing and retention.
 
 \subsection{(4)}
-I focus on the complete baseline specification in Table 2, column (5)
-(pp.\ 1464--1466). Let $Y_{jt}$ equal one if nurse $j$ leaves the ICU
-voluntarily four to eight weeks after shift $t$, and zero otherwise.
-Writing the paper's fixed-effects logit specification as a probability
-model,
+The main model is a fixed-effects logit (Table 2, column 5):
 \[
- \Pr(Y_{jt}=1\mid\text{regressors and fixed effects})=\Lambda(\eta_{jt}),
- \qquad \Lambda(a)=\frac{e^a}{1+e^a},
+ \Pr(Y_{jt}=1\mid x_{jt})
+ =\frac{\exp(x_{jt}'\beta)}{1+\exp(x_{jt}'\beta)}.
 \]
-where
-\[
-\begin{aligned}
- \eta_{jt}
- &=\alpha_j+\delta_{m(t)}+\tau_{y(t)}
-   +\beta_R R_{jt}+\beta_O O_{jt}+\beta_E E_{jt}\\
- &\quad+\beta_C C_{jt}+\beta_{C^2} C_{jt}^{2}
-   +X_{jt}'\theta.
-\end{aligned}
-\]
-Here $R_{jt}$ is the proportion of ICU patients primarily assigned to
-nurse $j$ in shift $t$. The overtime variable $O_{jt}$ counts shifts
-worked beyond the normal three shifts in the week containing $t$.
-The emotional-fatigue variable $E_{jt}$ counts patient deaths under the
-nurse's primary care in the preceding two weeks. The cumulative-workload
-variable $C_{jt}$ aggregates documented care activities in the prior four
-weeks with exponential decay, using decay parameter $0.01$.
-The four controls in $X_{jt}$ are the shift-level patient--nurse ratio,
-bed occupancy rate, the nurse's unit experience, and current-shift care
-activity workload. The terms $\alpha_j$, $\delta_{m(t)}$, and
-$\tau_{y(t)}$ are nurse, month, and year fixed effects.
-Thus the specification includes nine regressor terms, counting cumulative
-workload and its square separately, in addition to the fixed effects.
-
-The operational records cover January 2021 through February 2023.
-Although the source data cover 420 full-time nurses, the estimation sample
-reported in Tables 2 and 3 contains 17,606 nurse-shift observations from
-71 nurses who voluntarily left. This is important because fixed-effects
-logit draws on nurses whose binary outcome varies over time; the main
-regression should not be described as having 420 nurses contributing to
-its estimation. HR records extending to September 2023 identify subsequent
-departures (Section 4.1).
+Here $Y_{jt}=1$ if nurse $j$ voluntarily leaves four to eight weeks after
+shift $t$. The regressors are nurse responsibility, overtime shifts,
+emotional fatigue, cumulative workload and its square, plus four controls:
+patient--nurse ratio, bed occupancy, unit experience, and current-shift
+workload. This gives nine regressor terms, alongside nurse, month, and
+year fixed effects. The estimation sample contains 17,606 nurse-shift
+observations from 71 nurses who voluntarily left.
 
 \subsection{(5)}
-I focus on $O_{jt}$, overtime shifts, corresponding to hypothesis H2 and
-the instrument discussed in my OIDD 9400 HW3 submission. The concern is
-that overtime is correlated with unobserved factors affecting a nurse's
-decision to leave. The authors also consider nurse responsibility (H1)
-and cumulative workload (H4) potentially endogenous. In their final IV
-specification, Table 3, they retain residual-inclusion corrections for H1
-and H2; they drop the H4 residual and its square after finding those
-terms statistically insignificant in the expanded specification. This
-failure to reject does not establish that cumulative workload is exogenous.
+I focus on overtime shifts, which may be correlated with unobserved
+reasons for quitting. The authors also consider nurse responsibility
+and cumulative workload potentially endogenous.
 
 \subsection{(6)}
-The authors explain that changing personal circumstances can affect both
-overtime choices and attrition. For example, a nurse already planning to
-leave might accept extra shifts to build a financial cushion before
-resigning. In that case, an unobserved intention to quit helps determine
-overtime, so the estimated association between overtime and attrition
-cannot be attributed entirely to overtime causing burnout. Nurse fixed
-effects absorb persistent individual differences, but they do not remove
-such changing personal circumstances. For H1, the authors also discuss
-unobserved leadership or staffing-policy changes; for H4, nurses might
-adjust their work effort before resigning (Section 6.5, p.\ 1469).
+A nurse already planning to leave may work extra shifts to save money
+before resigning. The intention to quit then affects overtime, so the
+observed relationship need not reflect only overtime causing attrition.
 
 \subsection{(7)}
-For overtime, the instrument is
-\code{PeerSchedAbs\_PriorWeek}: the number of scheduled absences taken
-by other nurses in the same ICU during the week before the focal shift,
-excluding nurse $j$'s own absences. These include approved absences such
-as family or bereavement leave. The relevance argument is that peer
-absences create staffing gaps and increase overtime opportunities for
-the remaining nurses. The authors argue for exclusion because the
-absences are approved in advance and should affect the focal nurse's
-quit decision only through overtime.
-
-The other proposed instruments are new ICU patient arrivals in the same
-shift exactly seven days earlier for nurse responsibility, and peer
-unscheduled absences during the previous four weeks for cumulative
-workload. The latter instrument is used in the expanded correction
-before the authors drop the H4 residual terms.
-
-In 2SRI, the authors obtain first-stage fitted values and residuals, then
-include the original workload variables and the estimated residuals in
-the logit model. They do not replace overtime with fitted overtime in an
-ordinary linear second-stage regression as in conventional 2SLS.
+For overtime, the instrument is other ICU nurses' scheduled absences
+during the previous week, excluding the focal nurse. These absences can
+create staffing gaps and increase overtime opportunities; validity requires
+that they affect quitting only through overtime, conditional on the controls.
+The authors also propose lagged patient arrivals for nurse responsibility
+and prior-month unscheduled peer absences for cumulative workload.
 
 \subsection{(8)}
-The authors present the first-stage specifications in Section 6.5,
-equations (1.1)--(1.3), on p.\ 1470. For overtime, the specification is
-\[
-\begin{aligned}
- O_{jt}
- &=\pi Z_{jt}+a_j+d_{m(t)}+q_{y(t)}
-   +\rho_R R_{jt}+\rho_E E_{jt}\\
- &\quad+\rho_C C_{jt}+\rho_{C^2}C_{jt}^{2}
-   +X_{jt}'\kappa+v_{jt},
-\end{aligned}
-\]
-where $Z_{jt}$ denotes scheduled peer absences in the prior week.
-However, presenting a specification is different from reporting its
-estimated results. I did not find estimated instrument coefficients,
-first-stage standard errors, or excluded-instrument $F$ statistics in the
-main paper or its online appendix.\footnote{Online appendix:
-\url{https://pubsonline.informs.org/doi/suppl/10.1287/msom.2025.0037/suppl_file/msom.2025.0037.sm2.pdf}.}
-Table 3 and appendix Table A10 report
-the residual-inclusion logit results, rather than first-stage estimates.
-Thus the paper explains the operational argument for relevance, but does
-not provide these numerical first-stage diagnostics. I would want to
-see that the instrument predicts overtime conditional on the other
-regressors and fixed effects before assessing instrument strength.
+Section 6.5 presents first-stage equations and explains why the instruments
+should predict workload. However, the main paper and online appendix do
+not report estimated first-stage instrument coefficients or
+excluded-instrument $F$ statistics, so numerical evidence of instrument
+strength is not provided.
 
 \subsection{(9)}
-The reported baseline is fixed-effects logit, not OLS. The IV comparison
-is therefore between the uncorrected logit in Table 2 and the 2SRI logit
-in Table 3. For overtime, the reported coefficients and standard errors
-are:
-\begin{center}
-\begin{tabular}{lrr}
-\toprule
-Specification & Overtime coefficient & Standard error\\
-\midrule
-Baseline logit, Table 2(5) & 0.461 & 0.077\\
-IV-corrected logit, Table 3 & 54.28 & 9.469\\
-\bottomrule
-\end{tabular}
-\end{center}
-Both are positive and statistically significant at the 1\% level, but
-the corrected coefficient is much larger. If the instruments are valid
-and the residual-inclusion model is correctly specified, the comparison
-suggests that ignoring endogeneity understates overtime's positive effect
-on the log-odds of quitting. However, these are nonlinear-model
-coefficients from different specifications; their difference is not a
-probability effect or an estimate of OLS bias. I would compare marginal
-probability effects on a common basis before drawing conclusions about
-the magnitude of the change. The direction of bias also cannot be
-inferred from the endogeneity story alone, and the instrument-validity
-concern below limits a causal interpretation of the corrected estimate.
+The baseline is logit rather than OLS; the IV correction uses residual
+inclusion in the logit model. The overtime coefficient rises from $0.461$
+(Table 2, column 5) to $54.28$ (Table 3), suggesting that ignoring
+endogeneity understates the positive effect on the reported coefficient
+scale, assuming valid instruments and a correctly specified model.
+These coefficients describe log-odds, not changes in probability.
 
 \subsection{(10)}
-My concern is the exclusion restriction for scheduled peer absences,
-following the argument in my handwritten OIDD 9400 HW3 submission
-(p.\ 8, Q3). Even if a nurse takes no extra shifts, working while
-coworkers are absent can mean less help with difficult tasks, less
-emotional support, and greater stress during regular shifts. These
-conditions could increase the nurse's willingness to leave independently
-of the number of overtime shifts worked. The alternative channel is
-\[
- \begin{gathered}
- \text{scheduled peer absences}\\
- \downarrow\\
- \text{less coworker support and greater regular-shift stress}\\
- \downarrow\\
- \text{higher likelihood of quitting}.
- \end{gathered}
-\]
-This channel bypasses overtime. If it persists after conditioning on the
-included workload measures, staffing controls, and fixed effects, the
-instrument is related to unobserved determinants of attrition and is
-invalid for identifying overtime's effect. Staffing counts and recorded
-care activities need not fully capture emotional support or the quality
-of teamwork. The paper's own Section 7, examining coworker support as a
-buffer against attrition, makes this concern particularly relevant.
-
-Approval of absences in advance may make them less responsive to the
-focal nurse's immediate plans, but it does not rule out these other
-causal pathways. This is a plausible violation, rather than proof that
-the instrument is invalid. If the exclusion restriction fails, the
-residual-inclusion correction does not by itself deliver a causal
-overtime effect.
+Scheduled peer absences may leave a nurse with less help, less emotional
+support, and greater stress during regular shifts, even without overtime.
+These conditions could increase the likelihood of quitting independently
+of overtime. If this channel remains after accounting for the controls,
+the exclusion restriction fails and the instrument is invalid.
 
 \clearpage
 \appendix
