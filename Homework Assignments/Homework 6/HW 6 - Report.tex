@@ -289,10 +289,15 @@ of Workload on High-Skilled Workforce Attrition.''
 \url{https://doi.org/10.1287/msom.2025.0037}.
 
 \subsection{(3)}
-The paper examines how responsibility within a shift, overtime, exposure
-to patient deaths, and cumulative workload affect ICU nurses' voluntary
-attrition. It also asks whether coworker support reduces the negative
-effects of workload, with the goal of improving staffing and retention.
+The paper examines how different dimensions of workload affect ICU nurses'
+voluntary decisions to leave their jobs, with the goal of improving
+staffing and retention. It distinguishes responsibility within a shift,
+overtime, exposure to patient deaths, and cumulative workload. The results
+associate greater responsibility with lower attrition, while overtime and
+exposure to patient deaths increase attrition. Cumulative workload has a
+U-shaped relationship with attrition: moderate increases initially reduce
+quitting, but excessive workload increases it. The authors also find that
+coworker support can reduce some of the negative effects of workload.
 
 \subsection{(4)}
 The main model is a fixed-effects logit (Table 2, column 5):
@@ -335,11 +340,19 @@ strength is not provided.
 
 \subsection{(9)}
 The baseline is logit rather than OLS; the IV correction uses residual
-inclusion in the logit model. The overtime coefficient rises from $0.461$
-(Table 2, column 5) to $54.28$ (Table 3), suggesting that ignoring
-endogeneity understates the positive effect on the reported coefficient
-scale, assuming valid instruments and a correctly specified model.
-These coefficients describe log-odds, not changes in probability.
+inclusion in the logit model. The coefficient on \emph{overtime shifts}
+rises from $0.461$ (Table 2, column 5) to $54.28$ (Table 3). Assuming
+valid instruments and a correctly specified model, this suggests downward
+bias in the uncorrected overtime coefficient: ignoring endogeneity
+understates overtime's positive effect on the log-odds of quitting.
+
+In a logit model, the coefficient measures the change in
+$\log[p/(1-p)]$ from one additional overtime shift, holding the other
+regressors fixed, where $p$ is the probability of quitting and $p/(1-p)$
+is the odds of quitting. Thus, $0.461$ does not mean a 46.1-percentage-point
+increase in quitting probability. The probability change depends on the
+starting probability and the other regressors, so the coefficient comparison
+alone does not quantify how much the probability effect is understated.
 
 \subsection{(10)}
 Scheduled peer absences may leave a nurse with less help, less emotional
